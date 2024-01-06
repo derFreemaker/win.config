@@ -51,6 +51,7 @@ lspconfig["cssls"].setup({
 lspconfig["lua_ls"].setup({
     capabilities = capabilities,
     on_attach = on_attach,
+    single_file_support = false,
     settings = {
         Lua = {
             runtime = {

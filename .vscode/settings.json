@@ -11,11 +11,5 @@
 		"git": true,
 		"configstore": true
 	},
-	"vim.insertModeKeyBindings": [
-		{
-			"before": ["k", "j"],
-			"after": ["<Esc>"]
-		}
-	],
 }
  

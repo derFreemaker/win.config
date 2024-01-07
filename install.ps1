@@ -16,6 +16,9 @@ Install-Module -Name Terminal-Icons -Force
 Install-Module -Name PSReadLine -Force
 Write-Warning "setted up terminal!"
 
+Write-Warning "loading powershell profile..."
+Invoke-Expression ". $PROFILE"
+
 # Write-Warning "setting up neovim..."
 # Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 # Invoke-Expression 'choco install ripgrep fd gsudo make nodejs.install neovim -y'
@@ -29,5 +32,4 @@ Write-Warning "setted up terminal!"
 
 # Write-Warning "setted up neovim"
 
-Write-Warning "loading powershell profile..."
-$PROFILE
+Write-Warning "finished!"

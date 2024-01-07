@@ -18,6 +18,7 @@
 # )
 
 # Write-Warning "removed neovim!"
+
 Write-Warning "removing oh-my-posh..."
 
 if (Test-Path -Path $PROFILE)
@@ -27,8 +28,11 @@ if (Test-Path -Path $PROFILE)
 
 Invoke-Expression 'winget uninstall JanDeDobbeleer.OhMyPosh -s winget'
 Uninstall-Module -Name Terminal-Icons
+Uninstall-Module -Name PSReadLine
 
 Write-Warning "removed oh-my-poshs!"
 
 Write-Warning "removing enviorment variables..."
 [Environment]::SetEnvironmentVariable("USERCONFIG", "", "Machine")
+
+Write-Warning "finished!"

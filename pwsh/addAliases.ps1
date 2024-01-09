@@ -21,6 +21,3 @@ New-Alias -Name gco -Value Get-GitCheckout -Force
 New-Alias -Name gb -Value Get-GitBranch -Force
 New-Alias -Name gr -Value Get-GitRemote -Force
 New-Alias -Name gsbu -Value Update-GitSubmodules -Force
-
-
-Invoke-Expression -Command "$env:USERCONFIG\pwsh\init.ps1"

@@ -16,6 +16,31 @@ Install-Module -Name Terminal-Icons -Force
 Install-Module -Name PSReadLine -Force
 Write-Warning "setted up terminal!"
 
+Write-Warning "adding aliases..."
+function Get-GitStatus { & git status -sb $args }
+function Get-GitCommit { & git commit -ev $args }
+function Get-GitAdd { & git add --all $args }
+function Get-GitTree { & git log --graph --oneline --decorate $args }
+function Get-GitPush { & git push $args }
+function Get-GitPull { & git pull $args }
+function Get-GitFetch { & git fetch $args }
+function Get-GitCheckout { & git checkout $args }
+function Get-GitBranch { & git branch $args }
+function Get-GitRemote { & git remote -v $args }
+function Update-GitSubmodules { & git submodule update --remote $args }
+
+New-Alias -Name gs -Value Get-GitStatus -Force -Option AllScope
+New-Alias -Name gc -Value Get-GitCommit -Force -Option AllScope
+New-Alias -Name ga -Value Get-GitAdd -Force -Option AllScope
+New-Alias -Name gt -Value Get-GitTree -Force -Option AllScope
+New-Alias -Name gps -Value Get-GitPush -Force -Option AllScope
+New-Alias -Name gpl -Value Get-GitPull -Force -Option AllScope
+New-Alias -Name gf -Value Get-GitFetch -Force -Option AllScope
+New-Alias -Name gco -Value Get-GitCheckout -Force -Option AllScope
+New-Alias -Name gb -Value Get-GitBranch -Force -Option AllScope
+New-Alias -Name gr -Value Get-GitRemote -Force -Option AllScope
+New-Alias -Name gsbu -Value Update-GitSubmodules -Force -Option AllScope
+
 Write-Warning "loading powershell profile..."
 Invoke-Expression ". $PROFILE"
 

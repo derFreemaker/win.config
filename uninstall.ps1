@@ -5,7 +5,6 @@
 
 # Remove-Item -Force -Recurse "$env:LOCALAPPDATA\nvim" -ErrorAction Ignore
 # Remove-Item -Force -Recurse "$env:LOCALAPPDATA\nvim-data" -ErrorAction Ignore
-# Remove-Item -Force -Recurse "$env:ChocolateyInstall" -ErrorAction Ignore
 
 # Write-Warning "cleaning up path enviorment variable..."
 # Remove unwanted elements
@@ -19,7 +18,7 @@
 
 # Write-Warning "removed neovim!"
 
-Write-Warning "removing oh-my-posh..."
+Write-Warning "removing terminal setup..."
 
 if (Test-Path -Path $PROFILE)
 {
@@ -30,9 +29,13 @@ Invoke-Expression 'winget uninstall JanDeDobbeleer.OhMyPosh -s winget'
 Uninstall-Module -Name Terminal-Icons
 Uninstall-Module -Name PSReadLine
 
-Write-Warning "removed oh-my-poshs!"
+Write-Warning "uninstalling tools..."
+Invoke-Expression 'choco uninstall gsudo make -y'
 
+Write-Warning "removing Chocolatey..."
+Remove-Item -Force -Recurse "$env:ChocolateyInstall" -ErrorAction Ignore
+    
 Write-Warning "removing enviorment variables..."
-[Environment]::SetEnvironmentVariable("USERCONFIG", "", "Machine")
-
+[Environment]::SetEnvironmentVariable("USERCONFIG", "", "User")
+    
 Write-Warning "finished!"

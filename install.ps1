@@ -7,6 +7,9 @@ if ([Environment]::GetEnvironmentVariable("USERCONFIG", "User") -isnot [string])
     [Environment]::SetEnvironmentVariable("USERCONFIG", "$env:USERPROFILE\.config", "User")
 }
 
+Write-Warning "installing Chocolatey..."
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
 Write-Warning "installing oh-my-posh..."
 Invoke-Expression 'winget install JanDeDobbeleer.OhMyPosh -s winget'
 Copy-Item -Path "$env:USERCONFIG\pwsh\entry.ps1" -Destination $PROFILE
@@ -21,9 +24,11 @@ Write-Warning "setted up terminal!"
 Write-Warning "loading powershell profile..."
 Invoke-Expression ". $PROFILE"
 
+Write-Warning "setting up some tools..."
+Invoke-Expression 'choco install gsudo make -y'
+
 # Write-Warning "setting up neovim..."
-# Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-# Invoke-Expression 'choco install ripgrep fd gsudo make nodejs.install neovim -y'
+# Invoke-Expression 'choco install ripgrep fd nodejs.install neovim -y'
 
 # Write-Warning "adding config..."
 # if (!(Test-Path -Path "$env:LOCALAPPDATA\nvim"))

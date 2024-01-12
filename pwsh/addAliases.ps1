@@ -20,4 +20,4 @@ New-Alias -Name gf -Value Get-GitFetch -Force
 New-Alias -Name gco -Value Get-GitCheckout -Force
 New-Alias -Name gb -Value Get-GitBranch -Force
 New-Alias -Name gr -Value Get-GitRemote -Force
-New-Alias -Name gsbu -Value Update-GitSubmodules -Force
+New-Alias -Name gsmu -Value Update-GitSubmodules -Force

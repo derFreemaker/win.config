@@ -28,11 +28,6 @@ function Remove-ENV {
     }
 }
 
-$scriptPath = $MyInvocation.MyCommand.Path
-$scriptDirectory = Split-Path $scriptPath -Parent
-
-Invoke-Expression $scriptDirectory\utils.ps1
-
 # Write-Warning "removing neovim..."
 # Invoke-Expression 'choco uninstall neovim nodejs.install make fd ripgrep gsudo -y'
 

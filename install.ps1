@@ -27,6 +27,10 @@ function Set-ENV {
 }
 
 Write-Warning "setting up enviorment variables..."
+
+# can be removed when path gets added with install
+Add-ENV -VariableName "Path" -Value "C:\Program Files\CMake\bin"
+
 Add-ENV -VariableName "Path" -Value "C:\Users\oskar\.config\scripts"
 Set-ENV -VariableName "USERCONFIG" -Value "$env:USERPROFILE\.config", "User"
 
@@ -44,7 +48,7 @@ Write-Warning "setted up terminal!"
 
 Write-Warning "installing some tools..."
 Invoke-Expression "choco install make gsudo ripgrep fd nodejs.install -y"
-Invoke-Expression 'choco install cmake.install --installargs "ADD_CMAKE_TO_PATH=User" -y'
+Invoke-Expression 'choco install cmake.install cmake --installargs "ADD_CMAKE_TO_PATH=User" -y'
 
 # Write-Warning "setting up neovim..."
 # Invoke-Expression 'choco install neovim -y'

@@ -58,11 +58,11 @@ Uninstall-Module -Name Terminal-Icons
 Uninstall-Module -Name PSReadLine
 
 Write-Warning "uninstalling tools..."
-Invoke-Expression "choco uninstall make cmake.install gsudo ripgrep fd nodejs.install -y"
+Invoke-Expression "choco uninstall make cmake cmake.install gsudo ripgrep fd nodejs.install -y"
 
 Write-Warning "removing Chocolatey..."
 Remove-Item -Force -Recurse "$env:ChocolateyInstall" -ErrorAction Ignore
-    
+
 Write-Warning "removing enviorment variables..."
 Remove-ENV -VariableName "Path" -Value "$env:USERCONFIG\scripts"
 Remove-ENV -VariableName "Path" -Value "C:\Program Files\CMake\bin"

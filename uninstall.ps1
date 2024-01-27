@@ -1,5 +1,10 @@
 #Requires -RunAsAdministrator
 
+$scriptPath = $MyInvocation.MyCommand.Path
+$scriptDirectory = Split-Path $scriptPath -Parent
+
+Invoke-Expression $scriptDirectory\utils.ps1
+
 # Write-Warning "removing neovim..."
 # Invoke-Expression 'choco uninstall neovim nodejs.install make fd ripgrep gsudo -y'
 
@@ -30,12 +35,14 @@ Uninstall-Module -Name Terminal-Icons
 Uninstall-Module -Name PSReadLine
 
 Write-Warning "uninstalling tools..."
-Invoke-Expression 'choco uninstall gsudo make -y'
+Invoke-Expression 'choco uninstall make cmake gsudo ripgrep fd nodejs.install -y'
 
 Write-Warning "removing Chocolatey..."
 Remove-Item -Force -Recurse "$env:ChocolateyInstall" -ErrorAction Ignore
     
 Write-Warning "removing enviorment variables..."
-[Environment]::SetEnvironmentVariable("USERCONFIG", "", "User")
-    
+Remove-ENV -VariableName "Path" -Value "$env:USERCONFIG\scripts"
+Remove-ENV -VariableName "Path" -Value "C:\Program Files\CMake\bin"
+Set-ENV -VariableName "USERCONFIG" -Value ""
+
 Write-Warning "finished!"

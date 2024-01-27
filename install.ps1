@@ -1,5 +1,31 @@
 #Requires -RunAsAdministrator
 
+function Add-ENV {
+    param(
+        [string]$VariableName,
+        [string]$Value
+    )
+
+    $current = [System.Environment]::GetEnvironmentVariable($VariableName, [System.EnvironmentVariableTarget]::User)
+
+    if ($current -notlike "*$Value*") {
+        [System.Environment]::SetEnvironmentVariable($VariableName, "$current;$Value", [System.EnvironmentVariableTarget]::User)
+    }
+}
+
+function Set-ENV {
+    param(
+        [string]$VariableName,
+        [string]$Value
+    )
+
+    $currentValue = [System.Environment]::GetEnvironmentVariable($VariableName, [System.EnvironmentVariableTarget]::User)
+
+    if ($currentValue -eq $null) {
+        [System.Environment]::SetEnvironmentVariable($VariableName, $Value, [System.EnvironmentVariableTarget]::User)
+    }
+}
+
 $scriptPath = $MyInvocation.MyCommand.Path
 $scriptDirectory = Split-Path $scriptPath -Parent
 

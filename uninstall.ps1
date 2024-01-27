@@ -1,5 +1,33 @@
 #Requires -RunAsAdministrator
 
+function Set-ENV {
+    param(
+        [string]$VariableName,
+        [string]$Value
+    )
+
+    $currentValue = [System.Environment]::GetEnvironmentVariable($VariableName, [System.EnvironmentVariableTarget]::User)
+
+    if ($currentValue -eq $null) {
+        [System.Environment]::SetEnvironmentVariable($VariableName, $Value, [System.EnvironmentVariableTarget]::User)
+    }
+}
+
+function Remove-ENV {
+    param(
+        [string]$VariableName,
+        [string]$Value
+    )
+
+    $current = [System.Environment]::GetEnvironmentVariable($VariableName, [System.EnvironmentVariableTarget]::User)
+
+    if ($current -like "*$Value*") {
+        $new = $current -replace [regex]::Escape($Value), ""
+        $new = $new -replace ";;", ";"
+        [System.Environment]::SetEnvironmentVariable($VariableName, $new, [System.EnvironmentVariableTarget]::User)
+    }
+}
+
 $scriptPath = $MyInvocation.MyCommand.Path
 $scriptDirectory = Split-Path $scriptPath -Parent
 
@@ -35,7 +63,7 @@ Uninstall-Module -Name Terminal-Icons
 Uninstall-Module -Name PSReadLine
 
 Write-Warning "uninstalling tools..."
-Invoke-Expression 'choco uninstall make cmake gsudo ripgrep fd nodejs.install -y'
+Invoke-Expression choco uninstall make cmake.install gsudo ripgrep fd nodejs.install -y
 
 Write-Warning "removing Chocolatey..."
 Remove-Item -Force -Recurse "$env:ChocolateyInstall" -ErrorAction Ignore

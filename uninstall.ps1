@@ -63,7 +63,7 @@ Uninstall-Module -Name Terminal-Icons
 Uninstall-Module -Name PSReadLine
 
 Write-Warning "uninstalling tools..."
-Invoke-Expression choco uninstall make cmake.install gsudo ripgrep fd nodejs.install -y
+Invoke-Expression "choco uninstall make cmake.install gsudo ripgrep fd nodejs.install -y"
 
 Write-Warning "removing Chocolatey..."
 Remove-Item -Force -Recurse "$env:ChocolateyInstall" -ErrorAction Ignore

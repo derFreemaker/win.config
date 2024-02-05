@@ -1,0 +1,1 @@
+Copy-Item -Path "$currentDirPath\pwsh\entry.ps1" -Destination $PROFILE

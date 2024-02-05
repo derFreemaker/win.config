@@ -1,71 +1,10 @@
 #Requires -RunAsAdministrator
+. .\utils.ps1
 
-function Add-ENV {
-    param(
-        [string]$VariableName,
-        [string]$Value
-    )
+. .\chocolatey\install.ps1
 
-    $current = [System.Environment]::GetEnvironmentVariable($VariableName, [System.EnvironmentVariableTarget]::User)
+. .\pwsh\install.ps1
 
-    if ($current -notlike "*$Value*") {
-        [System.Environment]::SetEnvironmentVariable($VariableName, "$current;$Value", [System.EnvironmentVariableTarget]::User)
-    }
-}
+. .\tools\install.ps1
 
-function Set-ENV {
-    param(
-        [string]$VariableName,
-        [string]$Value
-    )
-
-    $currentValue = [System.Environment]::GetEnvironmentVariable($VariableName, [System.EnvironmentVariableTarget]::User)
-
-    if ($currentValue -eq $null) {
-        [System.Environment]::SetEnvironmentVariable($VariableName, $Value, [System.EnvironmentVariableTarget]::User)
-    }
-}
-
-Write-Warning "setting up enviorment variables..."
-
-# can be removed when path gets added with install
-Add-ENV -VariableName "Path" -Value "C:\Program Files\CMake\bin"
-
-Add-ENV -VariableName "Path" -Value "C:\Users\oskar\.config\scripts"
-Set-ENV -VariableName "USERCONFIG" -Value "$env:USERPROFILE\.config", "User"
-
-Write-Warning "installing Chocolatey..."
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-
-Write-Warning "installing oh-my-posh..."
-Invoke-Expression "winget install JanDeDobbeleer.OhMyPosh -s winget"
-Copy-Item -Path "$env:USERCONFIG\pwsh\entry.ps1" -Destination $PROFILE
-
-Write-Warning "installing modules..."
-Install-Module -Name Terminal-Icons -Force
-Install-Module -Name PSReadLine -Force
-Write-Warning "setted up terminal!"
-
-Write-Warning "installing some tools..."
-Invoke-Expression "choco install make gsudo ripgrep fd nodejs.install -y"
-Invoke-Expression 'choco install cmake.install cmake --installargs "ADD_CMAKE_TO_PATH=User" -y'
-
-# Write-Warning "setting up neovim..."
-# Invoke-Expression 'choco install neovim -y'
-
-# Write-Warning "adding config..."
-# if (!(Test-Path -Path "$env:LOCALAPPDATA\nvim"))
-# {
-#   New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\nvim"
-# }
-# Copy-Item -Path "$env:USERCONFIG\nvim\entry.lua" -Destination "$env:LOCALAPPDATA\nvim\init.lua"
-
-# Write-Warning "setted up neovim"
-
-Write-Warning "loading powershell profile..."
-Invoke-Expression ". $PROFILE"
-
-Write-Warning "reloading enviorment..."
-Invoke-Expression "refreshenv"
-
-Write-Warning "finished!"
+Write-Host "complete!"

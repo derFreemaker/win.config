@@ -15,7 +15,9 @@ $env:USERCONFIG = "$env:USERPROFILE\.config"
 Add-ENV -VariableName "Path" -Value "$env:USERCONFIG\scripts"
 $env:PATH = "$env:PATH;$env:USERCONFIG\scripts"
 
-Invoke-Expression ".\pwsh\setup.ps1"
+. .\pwsh\setup.ps1
 
-Write-Host "reloading enviorment..."
-Invoke-Expression "refreshenv"
+. .\nvim\setup.ps1
+
+Write-Host "reloading profile..."
+Invoke-Expression ". $PROFILE"

@@ -1,0 +1,76 @@
+format = """
+[](#383e4c)\
+$os\
+$username\
+[](fg:#383e4c bg:#209db6)\
+$directory\
+[](fg:#209db6 bg:#125b69)\
+$git_branch\
+$git_status\
+[](fg:#125b69 bg:#1b1e25)\
+$time\
+[](fg:#1b1e25)
+[](#209db6) \
+"""
+
+# Disable the blank line at the start of the prompt
+add_newline = false
+
+# An alternative to the username module which displays a symbol that
+# represents the current operating system
+[os]
+format = "[$symbol ]($style)"
+style = "bg:#383e4c"
+disabled = false
+
+# You can also replace your username with a neat symbol like   or disable this
+# and use the os module below
+[username]
+show_always = true
+style_user = "bg:#383e4c"
+style_root = "bg:#383e4c fg:#ff0a0a"
+format = '[$user ]($style)'
+
+[directory]
+style = "bg:#209db6"
+format = "[ $path ]($style)"
+truncate_to_repo = true
+truncation_length = 10
+truncation_symbol = "…/"
+use_os_path_sep = false
+
+[directory.substitutions]
+"~" = " "
+".config" = " "
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+[git_branch]
+symbol = ""
+style = "bg:#125b69"
+format = '[ $symbol $branch]($style)'
+
+[git_status]
+style = "bg:#125b69"
+format = '[$modified$untracked$renamed$deleted$staged$conflicted$ahead_behind ]($style)'
+ahead = ' ⇡${count}'
+diverged = ' ⇕⇡${ahead_count}⇣${behind_count}'
+behind = ' ⇣${count}'
+conflicted = ' 󰷋 ${count}'
+untracked = ' 󱝵 ${count}'
+stashed = ' 󰸩 ${count}'
+modified = ' 󱇨 ${count}'
+staged = '  $count'
+renamed = '  ${count}'
+deleted = ' 󱀷 ${count}'
+
+[time]
+disabled = false
+time_format = "%R"          # Hour:Minute Format
+style = "bg:#1b1e25"
+format = '[ $time]($style)'
+
+[os.symbols]
+Windows = ""

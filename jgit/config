@@ -1,0 +1,9 @@
+[filesystem "JetBrains s.r.o.|17.0.9|-2042005596"]
+	timestampResolution = 1506 microseconds
+	minRacyThreshold = 0 nanoseconds
+[filesystem "JetBrains s.r.o.|17.0.9|-827327204"]
+	timestampResolution = 1003 microseconds
+	minRacyThreshold = 0 nanoseconds
+[filesystem "JetBrains s.r.o.|21.0.2|-2042005596"]
+	timestampResolution = 1334 microseconds
+	minRacyThreshold = 0 nanoseconds

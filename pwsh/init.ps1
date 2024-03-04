@@ -30,4 +30,12 @@ Import-Module "C:\Program Files\PowerToys\WinUI3Apps\..\WinGetCommandNotFound.ps
 
 Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 
-oh-my-posh init pwsh --config "$env:USERCONFIG/pwsh/oh-my-posh.theme.json" | Invoke-Expression
+# oh-my-posh init pwsh --config "$env:USERCONFIG/pwsh/oh-my-posh.theme.json" | Invoke-Expression
+
+function Invoke-Starship-TransientFunction {
+    &starship module character
+}
+
+$ENV:STARSHIP_CONFIG = "$HOME\.config\pwsh\starship.toml"
+Invoke-Expression (&starship init powershell)
+Enable-TransientPrompt

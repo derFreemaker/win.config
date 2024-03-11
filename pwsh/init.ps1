@@ -1,3 +1,7 @@
+if ($Global:DEFINE_INIT -eq 1) {
+    exit
+}
+
 function Get-GitStatus { & git status -sb $args }
 function Get-GitCommit { & git commit -ev $args }
 function Get-GitAdd { & git add --all $args }
@@ -39,3 +43,5 @@ function Invoke-Starship-TransientFunction {
 $ENV:STARSHIP_CONFIG = "$env:USERCONFIG\pwsh\starship.toml"
 Invoke-Expression (&starship init powershell)
 Enable-TransientPrompt
+
+$Global:DEFINE_INIT = 1

@@ -37,8 +37,8 @@ Write-Warning "removing Chocolatey..."
 Remove-Item -Force -Recurse "$env:ChocolateyInstall" -ErrorAction Ignore
 
 Write-Warning "removing enviorment variables..."
-Remove-ENV -VariableName "Path" -Value "$env:USERCONFIG\scripts"
+Remove-ENV -VariableName "Path" -Value "$env:USERCONFIG_FREEMAKER\scripts"
 Remove-ENV -VariableName "Path" -Value "C:\Program Files\CMake\bin"
-Set-ENV -VariableName "USERCONFIG" -Value ""
+Set-ENV -VariableName "USERCONFIG_FREEMAKER" -Value ""
 
 Write-Warning "finished!"

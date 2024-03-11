@@ -1,1 +1,1 @@
-. $env:USERCONFIG\pwsh\init.ps1
+. $env:USERCONFIG_FREEMAKER\pwsh\init.ps1

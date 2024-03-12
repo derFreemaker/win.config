@@ -1,4 +1,4 @@
-if ($Global:DEFINE_INIT -eq 1) {
+if ($Global:USERCONFIG_FREEMAKER_INIT -eq 1) {
     exit
 }
 
@@ -29,10 +29,16 @@ New-Alias -Name gsmu -Value Update-GitSubmodules -Force
 New-Alias -Name grst -Value Restore-Git -Force
 
 Import-Module -Name Terminal-Icons
-Import-Module -Name PSReadLine
-Import-Module "C:\Program Files\PowerToys\WinUI3Apps\..\WinGetCommandNotFound.psd1"
 
-if ($null -eq $env:ChocolateyInstall) {
+if ($null -eq (Get-Module PSReadLine)) {
+    Import-Module -Name PSReadLine
+}
+
+if ([System.IO.File]::Exists("C:\Program Files\PowerToys\WinUI3Apps\..\WinGetCommandNotFound.psd1")) {
+    Import-Module "C:\Program Files\PowerToys\WinUI3Apps\..\WinGetCommandNotFound.psd1"
+}
+
+if ($null -ne $env:ChocolateyInstall) {
     Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 }
 else {
@@ -49,4 +55,4 @@ $ENV:STARSHIP_CONFIG = "$env:USERCONFIG_FREEMAKER\pwsh\starship.toml"
 Invoke-Expression (&starship init powershell)
 Enable-TransientPrompt
 
-$Global:DEFINE_INIT = 1
+$Global:USERCONFIG_FREEMAKER_INIT = 1

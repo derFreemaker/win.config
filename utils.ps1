@@ -1,15 +1,8 @@
 function Get-ENV {
-<<<<<<< HEAD
     param (
         [string]$VariableName
     )
-    
-=======
-    param(
-        [string]$VariableName
-    )
 
->>>>>>> 3fe9a9ee58b7c0295a94d126cdb19e2151db4706
     return [System.Environment]::GetEnvironmentVariable($VariableName, [System.EnvironmentVariableTarget]::User)
 }
 

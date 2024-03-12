@@ -6,6 +6,15 @@ function Get-ENV {
     return [System.Environment]::GetEnvironmentVariable($VariableName, [System.EnvironmentVariableTarget]::User)
 }
 
+function Set-ENV {
+    param(
+        [string]$VariableName,
+        [string]$Value
+    )
+
+    [System.Environment]::SetEnvironmentVariable($VariableName, $Value, [System.EnvironmentVariableTarget]::User)
+}
+
 function Add-ENV {
     param(
         [string]$VariableName,
@@ -17,15 +26,6 @@ function Add-ENV {
     if ($current -notlike "*$Value*") {
         [System.Environment]::SetEnvironmentVariable($VariableName, "$current;$Value", [System.EnvironmentVariableTarget]::User)
     }
-}
-
-function Set-ENV {
-    param(
-        [string]$VariableName,
-        [string]$Value
-    )
-
-    [System.Environment]::SetEnvironmentVariable($VariableName, $Value, [System.EnvironmentVariableTarget]::User)
 }
 
 function Remove-From-ENV {

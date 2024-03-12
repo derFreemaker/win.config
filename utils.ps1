@@ -1,3 +1,11 @@
+function Get-ENV {
+    param (
+        [string]$VariableName
+    )
+    
+    return [System.Environment]::GetEnvironmentVariable($VariableName, [System.EnvironmentVariableTarget]::User)
+}
+
 function Add-ENV {
     param(
         [string]$VariableName,

@@ -3,7 +3,7 @@ if ($Global:USERCONFIG_FREEMAKER_PORTABLE_INIT -eq 1) {
 }
 
 if ($null -eq $env:USERCONFIG_FREEMAKER_PORTABLE) {
-    . "$PSScriptRoot/../portable/setup.ps1"
+    . "$PSScriptRoot/../../portable/setup.ps1"
 }
 
 . "$PSScriptRoot/../core_init.ps1"

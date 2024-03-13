@@ -51,8 +51,7 @@ function Remove-From-ENV {
     Set-ENV -VariableName $VariableName -Value ($new -join ";")
 }
 
-if ($null -eq (Get-Command Update-SessionEnvironment)) {
-
+if ($null -eq (Get-Command -Name "Update-SessionEnvironment" -ErrorAction SilentlyContinue)) {
     
     function Update-SessionEnvironment {
 <#

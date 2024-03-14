@@ -61,7 +61,7 @@ format = '[ $symbol $branch]($style)'
 
 [git_status]
 style = "bg:#125b69"
-format = '[$modified$untracked$renamed$deleted$staged$conflicted$ahead$behind$diverged]($style)'
+format = '[$modified$untracked$renamed$deleted$staged$conflicted$ahead_behind]($style)'
 ahead = ' ⇡${count}'
 diverged = ' ⇕⇡$a{head_count}⇣${behind_count}'
 behind = ' ⇣${count}'

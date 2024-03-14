@@ -13,7 +13,8 @@ for ($i = 0; $i -lt $paths.Count; $i++) {
     Add-ENV -VariableName "PATH" -Value $paths[$i]
 }
 
-Set-ENV -VariableName "USERCONFIG_FREEMAKER_PORTABLE" -Value ("$driveLetter\.config")
+Set-ENV -VariableName "USERCONFIG_FREEMAKER_PORTABLE" -Value "$driveLetter\.config"
+Set-ENV -VariableName "TOOLS_FREEMAKER_PORTABLE" -Value "$driveLetter\Tools"
 
 if (($null -eq (Get-Env -VariableName "ChocolateyInstall")) -and ($null -eq (Get-Item "$driveLetter\Tools\chocolatey"))) {
     # install Chocolatey

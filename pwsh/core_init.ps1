@@ -47,6 +47,6 @@ function Invoke-Starship-TransientFunction {
     &starship module character
 }
 
-$ENV:STARSHIP_CONFIG = "$env:USERCONFIG_FREEMAKER\pwsh\starship.toml"
+$env:STARSHIP_CONFIG = "$env:USERCONFIG_FREEMAKER\pwsh\starship.toml"
 Invoke-Expression (&starship init powershell)
 Enable-TransientPrompt

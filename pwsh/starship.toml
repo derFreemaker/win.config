@@ -7,6 +7,7 @@ $directory\
 [](fg:#209db6 bg:#125b69)\
 $git_branch\
 $git_status\
+[ ](bg:#125b69)\
 [](fg:#125b69 bg:#1b1e25)\
 $time\
 [](fg:#1b1e25)
@@ -16,6 +17,11 @@ $time\
 
 # Disable the blank line at the start of the prompt
 add_newline = false
+continuation_prompt = '▶▶ '
+
+[character]
+success_symbol = "[󰁕](bold #209db6)"
+error_symbol = "[](bold red)"
 
 # An alternative to the username module which displays a symbol that
 # represents the current operating system
@@ -55,17 +61,17 @@ format = '[ $symbol $branch]($style)'
 
 [git_status]
 style = "bg:#125b69"
-format = '[$modified$untracked$renamed$deleted$staged$conflicted$ahead_behind ]($style)'
-ahead = ' ⇡$count'
-diverged = ' ⇕⇡$ahead_count⇣$behind_count'
-behind = ' ⇣$count'
-conflicted = ' 󰷋 $count'
-untracked = ' 󱝵 $count'
-stashed = ' 󰸩 $count'
-modified = ' 󱇨 $count'
-staged = '  $count'
-renamed = '  $count'
-deleted = ' 󱀷 $count'
+format = '[$modified$untracked$renamed$deleted$staged$conflicted$ahead$behind$diverged]($style)'
+ahead = ' ⇡${count}'
+diverged = ' ⇕⇡$a{head_count}⇣${behind_count}'
+behind = ' ⇣${count}'
+conflicted = ' 󰷋 ${count}'
+untracked = ' 󱝵 ${count}'
+stashed = ' 󰸩 ${count}'
+modified = ' 󱇨 ${count}'
+staged = '  ${count}'
+renamed = '  ${count}'
+deleted = ' 󱀷 ${count}'
 
 [time]
 disabled = false
@@ -75,3 +81,4 @@ format = '[ $time]($style)'
 
 [os.symbols]
 Windows = ""
+

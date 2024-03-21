@@ -38,10 +38,8 @@ if ($null -ne $env:ChocolateyInstall) {
     Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 }
 else {
-    . "$env:USERCONFIG_FREEMAKER/tools/Update-SessionEnvironment.ps1"
+    . "$env:USERCONFIG_FREEMAKER/scripts/Update-SessionEnvironment.ps1"
 }
-
-# oh-my-posh init pwsh --config "$env:USERCONFIG_FREEMAKER/pwsh/oh-my-posh.theme.json" | Invoke-Expression
 
 function Invoke-Starship-TransientFunction {
     &starship module character
@@ -50,3 +48,5 @@ function Invoke-Starship-TransientFunction {
 $env:STARSHIP_CONFIG = "$env:USERCONFIG_FREEMAKER\pwsh\starship.toml"
 Invoke-Expression (&starship init powershell)
 Enable-TransientPrompt
+
+# oh-my-posh init pwsh --config "$env:USERCONFIG_FREEMAKER/pwsh/oh-my-posh.theme.json" | Invoke-Expression

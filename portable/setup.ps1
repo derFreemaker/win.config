@@ -28,4 +28,5 @@ if (($null -eq (Get-Env -VariableName "ChocolateyInstall")) -and ($null -eq (Get
     Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
     Write-Host "reloading environment..."
+    Update-SessionEnvironment
 }

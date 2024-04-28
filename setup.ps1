@@ -9,7 +9,7 @@ Write-Host "setting up enviorment variables..."
 
 # user config folder
 $env:USERCONFIG_FREEMAKER = "$env:USERPROFILE\.config"
-Set-ENV -VariableName "USERCONFIG_FREEMAKER" -Value $env:USERCONFIG_FREEMAKER, "User"
+Set-ENV -VariableName "USERCONFIG_FREEMAKER" -Value $env:USERCONFIG_FREEMAKER
 
 # user scripts
 # Add-ENV -VariableName "Path" -Value "$env:USERCONFIG_FREEMAKER\scripts"

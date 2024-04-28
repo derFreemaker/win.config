@@ -8,18 +8,20 @@ Add-ENV -VariableName "Path" -Value "C:\Program Files\CMake\bin"
 $env:PATH = "$env:PATH;C:\Program Files\CMake\bin"
 
 # Git & co
-Invoke-Expression winget install --id Git.Git
-Invoke-Expression winget install --id GitHub.GitHubDesktop
-Invoke-Expression winget install --id Axosoft.GitKraken
-Invoke-Expression winget install --id GitHub.cli
+Write-Host "installing git tools..."
+Invoke-Expression "winget install --id Git.Git"
+Invoke-Expression "winget install --id GitHub.GitHubDesktop"
+Invoke-Expression "winget install --id Axosoft.GitKraken"
+Invoke-Expression "winget install --id GitHub.cli"
 
 # some other Programs
-Invoke-Expression winget install --id 7zip.7zip
-Invoke-Expression winget install --id Brave.Brave
-Invoke-Expression winget install --id Notepad++.Notepad++
-Invoke-Expression winget install --id JetBrains.Toolbox
-Invoke-Expression winget install --id Postman.Postman
-Invoke-Expression winget install --id Balena.Etcher
-Invoke-Expression winget install --id AnyDeskSoftwareGmbH.AnyDesk
-Invoke-Expression winget install --id Docker.DockerDesktop
-Invoke-Expression winget install --id OpenWhisperSystems.Signal
+Write-Host "installing some other programs..."
+Invoke-Expression "winget install --id 7zip.7zip"
+Invoke-Expression "winget install --id Brave.Brave"
+Invoke-Expression "winget install --id Notepad++.Notepad++"
+Invoke-Expression "winget install --id JetBrains.Toolbox"
+Invoke-Expression "winget install --id Postman.Postman"
+Invoke-Expression "winget install --id Balena.Etcher"
+Invoke-Expression "winget install --id AnyDeskSoftwareGmbH.AnyDesk"
+Invoke-Expression "winget install --id Docker.DockerDesktop"
+Invoke-Expression "winget install --id OpenWhisperSystems.Signal"

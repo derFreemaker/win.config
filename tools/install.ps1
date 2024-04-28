@@ -13,11 +13,13 @@ Invoke-Expression winget install --id GitHub.GitHubDesktop
 Invoke-Expression winget install --id Axosoft.GitKraken
 Invoke-Expression winget install --id GitHub.cli
 
-# 7zip
+# some other Programs
 Invoke-Expression winget install --id 7zip.7zip
-
-# Brave
 Invoke-Expression winget install --id Brave.Brave
-
-# JetBrains
+Invoke-Expression winget install --id Notepad++.Notepad++
 Invoke-Expression winget install --id JetBrains.Toolbox
+Invoke-Expression winget install --id Postman.Postman
+Invoke-Expression winget install --id Balena.Etcher
+Invoke-Expression winget install --id AnyDeskSoftwareGmbH.AnyDesk
+Invoke-Expression winget install --id Docker.DockerDesktop
+Invoke-Expression winget install --id OpenWhisperSystems.Signal

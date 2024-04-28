@@ -7,6 +7,6 @@
 
 . .\tools\install.ps1
 
-# . .\nvim\install.ps1
+. .\nvim\install.ps1
 
 Write-Host "complete!"

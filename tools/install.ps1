@@ -13,6 +13,9 @@ Invoke-Expression winget install --id GitHub.GitHubDesktop
 Invoke-Expression winget install --id Axosoft.GitKraken
 Invoke-Expression winget install --id GitHub.cli
 
+# 7zip
+Invoke-Expression winget install --id 7zip.7zip
+
 # Brave
 Invoke-Expression winget install --id Brave.Brave
 

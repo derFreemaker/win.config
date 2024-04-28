@@ -1,2 +1,2 @@
-# Write-Host "installing neovim..."
-# Invoke-Expression 'choco install neovim -y'
+Write-Host "installing neovim..."
+Invoke-Expression 'choco install neovim -y'

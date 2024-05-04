@@ -17,6 +17,7 @@ $time\
 # Disable the blank line at the start of the prompt
 add_newline = false
 continuation_prompt = '▶▶ '
+command_timeout = 1000
 
 [character]
 success_symbol = "[󰁕](bold #209db6)"

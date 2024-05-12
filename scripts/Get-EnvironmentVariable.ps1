@@ -75,7 +75,7 @@ Get-EnvironmentVariableNames
         }
     }
     catch {
-        Write-Debug "Unable to retrieve the $Name environment variable. Details: $_"
+        Write-Output "Unable to retrieve the $Name environment variable. Details: $_"
     }
     finally {
         if ($win32RegistryKey -ne $null) {

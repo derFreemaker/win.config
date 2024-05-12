@@ -9,4 +9,9 @@
 
 . .\nvim\install.ps1
 
+Write-Output "refresh session environment..."
+Update-SessionEnvironment
+
+. .\reg\apply_regedits.ps1
+
 Write-Host "complete!"

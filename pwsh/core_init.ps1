@@ -3,7 +3,7 @@ function Get-GitCommit { & git commit -ev $args }
 function Get-GitAdd { & git add --all $args }
 function Get-GitTree { & git log --graph --oneline --decorate $args }
 function Get-GitPush { & git push $args }
-function Get-GitPull { & git pull $args }
+function Get-GitPull { & git pull --rebase $args }
 function Get-GitFetch { & git fetch $args }
 function Get-GitCheckout { & git checkout $args }
 function Get-GitBranch { & git branch $args }

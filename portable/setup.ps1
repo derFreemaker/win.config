@@ -1,5 +1,8 @@
 Write-Output "setting up..."
 
+# Set execution policy to avoid errors because of not digitally signed
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
 . "$PSScriptRoot/../utils.ps1"
 
 $driveLetter = $pwd.drive.name + ":"

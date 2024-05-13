@@ -14,5 +14,3 @@ for ($i = 0; $i -lt $paths.Count; $i++) {
 }
 
 Set-ENV -VariableName "USERCONFIG_FREEMAKER_PORTABLE"
-Set-ENV -VariableName "ChocolateyInstall"
-Set-ENV -VariableName "ChocolateyToolsLocation"

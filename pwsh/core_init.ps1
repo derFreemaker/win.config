@@ -41,4 +41,4 @@ else {
     . "$env:USERCONFIG_FREEMAKER/scripts/Update-SessionEnvironment.ps1"
 }
 
-oh-my-posh init pwsh --config "$env:USERCONFIG_FREEMAKER/pwsh/theme.toml" | Invoke-Expression
+oh-my-posh init pwsh --config "$env:USERCONFIG_FREEMAKER/pwsh/oh-my-posh.toml" | Invoke-Expression

@@ -12,8 +12,6 @@ if ($null -eq $env:USERCONFIG_FREEMAKER_PORTABLE) {
 Update-SessionEnvironment
 
 $env:USERCONFIG_FREEMAKER = $env:USERCONFIG_FREEMAKER_PORTABLE
-$env:ChocolateyInstall = Get-ENV -VariableName "ChocolateyInstall"
-$env:ChocolateyToolsLocation = Get-ENV -VariableName "ChocolateyToolsLocation"
 
 . "$PSScriptRoot/../core_init.ps1"
 

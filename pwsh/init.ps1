@@ -3,8 +3,8 @@ if ($Global:USERCONFIG_FREEMAKER_INIT -eq 1) {
 }
 
 if ($null -ne $env:USERCONFIG_FREEMAKER_PORTABLE) {
-    Write-Warning "portable modus is still active!"
-    Write-Warning "This is NOT the portable terminal."
+    Write-Warning "portable mode is active"
+    . "$PSScriptRoot/portable/init.ps1"
 }
 
 . "$PSScriptRoot/core_init.ps1"

@@ -41,12 +41,4 @@ else {
     . "$env:USERCONFIG_FREEMAKER/scripts/Update-SessionEnvironment.ps1"
 }
 
-function Invoke-Starship-TransientFunction {
-    &starship module character
-}
-
-$env:STARSHIP_CONFIG = "$env:USERCONFIG_FREEMAKER\pwsh\starship.toml"
-Invoke-Expression (&starship init powershell)
-Enable-TransientPrompt
-
-# oh-my-posh init pwsh --config "$env:USERCONFIG_FREEMAKER/pwsh/oh-my-posh.theme.json" | Invoke-Expression
+oh-my-posh init pwsh --config "$env:USERCONFIG_FREEMAKER/pwsh/theme.toml" | Invoke-Expression

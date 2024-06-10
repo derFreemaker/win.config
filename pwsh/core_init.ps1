@@ -24,6 +24,8 @@ New-Alias -Name gr -Value Get-GitRemote -Force
 New-Alias -Name gsmu -Value Update-GitSubmodules -Force
 New-Alias -Name grst -Value Restore-Git -Force
 
+New-Alias -Name vim -Value nvim
+
 Import-Module -Name Terminal-Icons
 
 if ($null -eq (Get-Module PSReadLine)) {

@@ -11,7 +11,7 @@ return require('packer').startup(function(use)
 
 	use('folke/tokyonight.nvim')
 
-	use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})	
+	use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
 	use('nvim-treesitter/playground')
 	use('theprimeagen/harpoon')
 	use('mbbill/undotree')
@@ -31,6 +31,6 @@ return require('packer').startup(function(use)
 			{'L3MON4D3/LuaSnip'},
 		}
 	})
-	
+
 end)
 

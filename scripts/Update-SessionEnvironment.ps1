@@ -21,11 +21,12 @@ any environment variable changes that may have occurred.
     $userName = $env:USERNAME
     $architecture = $env:PROCESSOR_ARCHITECTURE
     
-    $ScopeList = 'Process', 'Machine'
     #ordering is important here, $user should override $machine...
     if ('SYSTEM', "${env:COMPUTERNAME}`$" -notcontains $userName) {
         # but only if not running as the SYSTEM/machine in which case user can be ignored.
-        $ScopeList += 'User'
+        $ScopeList = 'User', 'Process', 'Machine'
+    } else {
+        $ScopeList = 'Process', 'Machine'
     }
     foreach ($Scope in $ScopeList) {
         Get-EnvironmentVariableNames -Scope $Scope |

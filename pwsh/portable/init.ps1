@@ -14,7 +14,7 @@ Update-SessionEnvironment
 $env:USERCONFIG_FREEMAKER = $env:USERCONFIG_FREEMAKER_PORTABLE
 
 $env:ChocolateyInstall = "$env:DRIVE_FREEMAKER_PORTABLE\Tools\Chocolatey"
-$env:Path = "$env:ChocolateyInstall\bin;$env:Path"
+# $env:Path = "$env:ChocolateyInstall\bin;$env:Path"
 
 . "$PSScriptRoot/../core_init.ps1"
 

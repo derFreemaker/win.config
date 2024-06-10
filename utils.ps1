@@ -13,6 +13,7 @@ function Set-ENV {
     )
 
     [System.Environment]::SetEnvironmentVariable($VariableName, $Value, [System.EnvironmentVariableTarget]::User)
+    Set-Item "Env:$VariableName" -Value "$Value"
 }
 
 function Add-ENV {
@@ -24,7 +25,8 @@ function Add-ENV {
     $current = [System.Environment]::GetEnvironmentVariable($VariableName, [System.EnvironmentVariableTarget]::User)
 
     if ($current -notlike "*$Value*") {
-        [System.Environment]::SetEnvironmentVariable($VariableName, "$current;$Value", [System.EnvironmentVariableTarget]::User)
+        [System.Environment]::SetEnvironmentVariable($VariableName, "$Value;$current", [System.EnvironmentVariableTarget]::User)
+        Set-Item "Env:$VariableName" -Value "$Value;$current"
     }
 }
 

@@ -14,3 +14,5 @@ Invoke-Expression "winget upgrade --id JetBrains.Toolbox"
 Invoke-Expression "winget upgrade --id Postman.Postman"
 Invoke-Expression "winget upgrade --id Balena.Etcher"
 Invoke-Expression "winget upgrade --id AnyDeskSoftwareGmbH.AnyDesk"
+Invoke-Expression "winget upgrade --id LocalSend.LocalSend"
+

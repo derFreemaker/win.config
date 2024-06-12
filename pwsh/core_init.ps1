@@ -10,6 +10,7 @@ function Get-GitBranch { & git branch $args }
 function Get-GitRemote { & git remote -v $args }
 function Update-GitSubmodules { & git submodule update --remote --recursive $args }
 function Restore-Git { & git restore $args }
+function Git-Cherry-Pick { & git cherry-pick $args }
 
 New-Alias -Name gs -Value Get-GitStatus -Force
 New-Alias -Name gc -Value Get-GitCommit -Force
@@ -23,6 +24,7 @@ New-Alias -Name gb -Value Get-GitBranch -Force
 New-Alias -Name gr -Value Get-GitRemote -Force
 New-Alias -Name gsmu -Value Update-GitSubmodules -Force
 New-Alias -Name grst -Value Restore-Git -Force
+New-Alias -Name gcp -Value Git-Cherry-Pick -Force
 
 New-Alias -Name vim -Value nvim
 

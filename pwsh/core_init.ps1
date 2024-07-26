@@ -11,7 +11,6 @@ function Get-GitRemote { & git remote -v $args }
 function Update-GitSubmodules { & git submodule update --remote --recursive $args }
 function Restore-Git { & git restore $args }
 function Git-Cherry-Pick { & git cherry-pick $args }
-
 New-Alias -Name gs -Value Get-GitStatus -Force
 New-Alias -Name gc -Value Get-GitCommit -Force
 New-Alias -Name ga -Value Get-GitAdd -Force
@@ -26,7 +25,16 @@ New-Alias -Name gsmu -Value Update-GitSubmodules -Force
 New-Alias -Name grst -Value Restore-Git -Force
 New-Alias -Name gcp -Value Git-Cherry-Pick -Force
 
-New-Alias -Name vim -Value nvim
+# bazel
+function Bazel-Build { & bazel build $args }
+function Bazel-Run { & bazel run $args }
+function Bazel-Clean { & bazel clean $args }
+New-Alias -Name bbuild -Value Bazel-Build -Force
+New-Alias -Name brun -Value Bazel-Run -Force
+New-Alias -Name bclean -Value Bazel-Clean -Force
+
+# Neovim
+New-Alias -Name vim -Value nvim -Force
 
 Import-Module -Name Terminal-Icons
 

@@ -1,3 +1,7 @@
+# Chocolatey
+Write-Host "upgrade chocolatey packages..."
+Invoke-Expression "choco upgrade mingw make gsudo ripgrep fd nodejs.install bazelisk buildifier -y"
+
 # Git & co
 Write-Host "upgrading git tools..."
 Invoke-Expression "winget upgrade --id Git.Git"

@@ -1,5 +1,5 @@
 Write-Host "installing some tools..."
-Invoke-Expression "choco install mingw make gsudo ripgrep fd nodejs.install -y"
+Invoke-Expression "choco install mingw make gsudo ripgrep fd nodejs.install bazelisk buildifier -y"
 
 # cmake
 Invoke-Expression 'choco install cmake.install cmake -y'

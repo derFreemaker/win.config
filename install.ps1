@@ -14,7 +14,14 @@ if ($CurrentDir -eq $PSScriptRoot) {
 
 . ".\tools\install.ps1"
 
+Write-Output "refresh session environment..."
+Update-SessionEnvironment
+
 . ".\nvim\install.ps1"
+
+. ".\powertoys\install.ps1"
+
+. ".\everything\install.ps1"
 
 . ".\glazewm\install.ps1"
 
@@ -24,6 +31,9 @@ Write-Output "refresh session environment..."
 Update-SessionEnvironment
 
 . ".\reg\apply_regedits.ps1"
+
+Write-Output "refresh session environment..."
+Update-SessionEnvironment
 
 Write-Host "complete!"
 

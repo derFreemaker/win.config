@@ -59,5 +59,17 @@ function Install-Font {
     )
 
     $Destination = (New-Object -ComObject Shell.Application).Namespace(0x14)
-    $Destination.CopyHere($Path,0x10)
+    $Destination.CopyHere($Path, 0x10)
+}
+
+function New-Shortcut {
+    param(
+        [string]$Path,
+        [string]$Target
+    )
+
+    $shell = New-Object -ComObject WScript.Shell
+    $shortcut = $shell.CreateShortcut($Path)
+    $shortcut.TargetPath = $Target
+    $shortcut.Save()
 }

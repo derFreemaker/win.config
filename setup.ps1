@@ -17,6 +17,8 @@ Set-ENV -VariableName "USERCONFIG_FREEMAKER" -Value $env:USERCONFIG_FREEMAKER
 
 . ".\pwsh\setup.ps1"
 
+. ".\glazewm\setup.ps1"
+
 # . ".\nvim\setup.ps1"
 
 Write-Host "reloading profile..."

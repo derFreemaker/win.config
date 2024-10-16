@@ -26,15 +26,17 @@ if (Test-Path -Path $PROFILE)
     Remove-Item -Path $PROFILE -ErrorAction Ignore
 }
 
-Invoke-Expression 'winget uninstall JanDeDobbeleer.OhMyPosh -s winget'
-Uninstall-Module -Name Terminal-Icons
-Uninstall-Module -Name PSReadLine
+. ".\explorer_blur\uninstall.ps1"
 
-Write-Warning "uninstalling tools..."
-Invoke-Expression "choco uninstall make cmake cmake.install gsudo ripgrep fd nodejs.install -y"
+. ".\glazewm\uninstall.ps1"
 
-Write-Warning "removing Chocolatey..."
-Remove-Item -Force -Recurse "$env:ChocolateyInstall" -ErrorAction Ignore
+. ".\tools\uninstall.ps1"
+
+. ".\chocolatey\uninstall.ps1"
+
+. ".\pwsh\uninstall.ps1"
+
+. ".\reg\remove_regedits.ps1"
 
 Write-Warning "removing enviorment variables..."
 Remove-ENV -VariableName "Path" -Value "$env:USERCONFIG_FREEMAKER\scripts"

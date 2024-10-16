@@ -1,10 +1,5 @@
 . .\utils.ps1
 
-$currentDir = Get-Location
-$currentDirPath = $currentDir.Path
-
-Write-Output "Current Directory: $currentDirPath"
-
 Write-Host "setting up enviorment variables..."
 
 # user config folder

@@ -1,1 +1,0 @@
-[2m2024-10-16T11:50:11.075650Z[0m [31mERROR[0m [2mglazewm::common::commands::shell_exec[0m[2m:[0m [3merr_message[0m[2m=[0m"Failed to execute 'zebar'.\n\nError: The operation was canceled by the user. (0x800704C7)"

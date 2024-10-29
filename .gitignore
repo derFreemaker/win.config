@@ -1,4 +1,4 @@
 # editor
 .vscode
 
-glazewm/errors.log
+*.log

@@ -73,3 +73,38 @@ function New-Shortcut {
     $shortcut.TargetPath = $Target
     $shortcut.Save()
 }
+
+function Get-Device-File-Path {
+    param(
+        [string]$directory,
+        [string]$file
+    )
+    if (-not $directory.EndsWith("\")) {
+        $directory += "\"
+    }
+
+    $computer_name = ($env:COMPUTERNAME).ToLower()
+
+    if ((Test-Path -Path ($directory + $computer_name) -PathType Container) -and
+        (Test-Path -Path ($directory + $computer_name + "\" + $file) -PathType Leaf)) {
+        return $directory + $computer_name + "\" + $file
+    }
+
+    return $directory + $file
+}
+
+function Get-Device-Directory-Path {
+    param(
+        [string]$path
+    )
+    if (-not $path.EndsWith("\")) {
+        $path += "\"
+    }
+
+    $computer_name = ($env:COMPUTERNAME).ToLower()
+
+    if ((Test-Path -Path ($path + $computer_name) -PathType Container)) {
+        return $path + $computer_name + "\"
+    }
+    return $path
+}

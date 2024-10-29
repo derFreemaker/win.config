@@ -99,19 +99,48 @@ window_behavior:
 
 workspaces:
   - name: '1'
+    bind_to_monitor: 0
+    keep_alive: true
   - name: '2'
+    bind_to_monitor: 1
   - name: '3'
+    bind_to_monitor: 1
   - name: '4'
+    bind_to_monitor: 1
   - name: '5'
+    bind_to_monitor: 1
   - name: '6'
+    bind_to_monitor: 1
   - name: '7'
+    bind_to_monitor: 1
   - name: '8'
+    bind_to_monitor: 1
   - name: '9'
+    bind_to_monitor: 1
   - name: '0'
+    display_name: "utils"
+    bind_to_monitor: 0
 
 window_rules:
+  # Move specific windows to specific workspaces
+  - commands: ['move --workspace 1']
+    match:
+      - window_process: { equals: 'Discord' }
+
+  - commands: ['move --workspace 9']
+    match:
+      - window_title: { regex: 'Steam.*' }
+
+  - commands: ['move --workspace 0']
+    match:
+      - window_process: { regex: 'Spotify.*' }
+      - window_title: { regex: 'SteelSeries.*' }
+
   - commands: ['ignore']
     match:
+      # Ignores Medal Overlay
+      - window_title: { equals: 'Medal Overlay' }
+
       # Ignores any Zebar windows.
       - window_process: { equals: 'zebar' }
 

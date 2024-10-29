@@ -121,6 +121,9 @@ workspaces:
 window_rules:
   - commands: ['ignore']
     match:
+      # Ignores Medal Overlay
+      - window_title: { equals: 'Medal Overlay' }
+
       # Ignores any Zebar windows.
       - window_process: { equals: 'zebar' }
 

@@ -30,7 +30,7 @@ function Add-ENV {
     }
 }
 
-function Remove-From-ENV {
+function Remove-FromENV {
     param(
         [string]$VariableName,
         [string]$Value

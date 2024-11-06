@@ -1,0 +1,80 @@
+"$schema" = "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json"
+final_space = true
+version = 2
+console_title_template = "{{ .Shell } in {{ .Folder }}"
+
+[palette]
+    prompt_arrow = "#36A5D5"
+    path = "#548af7"
+    git_head = "#747fce"
+    git_behind_ahead = "#a9abea"
+    execution_time = "yellow"
+
+[[blocks]]
+    type = "prompt"
+    alignment = "left"
+    newline = true
+
+    [[blocks.segments]]
+        type = "path"
+        style = "plain"
+        background = "transparent"
+        foreground = "p:path"
+        template = "{{ .Path }}"
+
+        [blocks.segments.properties]
+            style = "full"
+
+    [[blocks.segments]]
+        type = "git"
+        style = "plain"
+        background = "transparent"
+        foreground = "p:git_head"
+        template = " {{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{end}} <p:git_behind_ahead>{{ if gt .Behind 0 }}{{end}}{{ if gt .Ahead 0 }}{{end}}</>"
+
+        [blocks.segments.properties]
+            branch_icon = ""
+            commit_icon = "@"
+            fetch_status = true
+
+[[blocks]]
+    type = "rprompt"
+    overflow = "hidden"
+
+    [[blocks.segments]]
+        type = "executiontime"
+        style = "plain"
+        background = "transparent"
+        foreground = "p:execution_time"
+        template = "{{ .FormattedMs }}"
+
+        [blocks.segments.properties]
+            threshold = 5000
+
+[[blocks]]
+    type = "prompt"
+    alignment = "left"
+    newline = true
+
+    [[blocks.segments]]
+        type = "text"
+        style = "plain"
+        background = "transparent"
+        foreground_templates = [
+            "{{if gt .Code 0}}red{{end}}",
+            "{{if eq .Code 0}}p:prompt_arrow{{end}}",
+        ]
+        template = ""
+
+[transient_prompt]
+    background = "transparent"
+    foreground_templates = [
+        "{{if gt .Code 0}}red{{end}}",
+        "{{if eq .Code 0}}p:prompt_arrow{{end}}",
+    ]
+    template = " "
+
+[secondary_prompt]
+    background = "transparent"
+    foreground = "p:prompt_arrow"
+    template = " "

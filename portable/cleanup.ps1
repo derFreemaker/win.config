@@ -9,3 +9,6 @@ Set-ENV -VariableName "PATH_FREEMAKER_PORTABLE" -Value $null
 
 Set-ENV -VariableName "USERCONFIG_FREEMAKER_PORTABLE" -Value $null
 Set-ENV -VariableName "DRIVE_FREEMAKER_PORTABLE" -Value $null
+
+# window manger
+. "$PSScriptRoot/../glazewm/portable/cleanup.ps1"

@@ -129,7 +129,7 @@ window_rules:
 
   - commands: ['move --workspace 9']
     match:
-      - window_title: { equals: 'Steam' }
+      - window_title: { regex: 'Steam.*' }
 
   - commands: ['move --workspace 0']
     match:

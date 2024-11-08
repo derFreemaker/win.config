@@ -14,7 +14,7 @@ $paths_str = $paths -join ";"
 Add-ENV -VariableName "PATH" -Value $paths_str
 Set-ENV -VariableName "PATH_FREEMAKER_PORTABLE" -Value $paths_str
 
-Set-ENV -VariableName "USERCONFIG_FREEMAKER_PORTABLE" -Value "$driveLetter\.config"
+Set-ENV -VariableName "USERCONFIG_FREEMAKER_PORTABLE" -Value "$driveLetter/.config"
 Set-ENV -VariableName "DRIVE_FREEMAKER_PORTABLE" -Value "$driveLetter"
 
 # window manger

@@ -1,0 +1,3 @@
+[submodule "lua-config"]
+	path = lua-config
+	url = https://github.com/derFreemaker/lua-config.git

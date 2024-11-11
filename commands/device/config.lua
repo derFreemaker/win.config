@@ -1,5 +1,7 @@
+local t = {}
+
 ---@param command argparse.Command
-return function(command)
+function t.config(command)
     command:command_target("device_command")
 
     local device_commands_path = "./commands/device/commands/"
@@ -10,7 +12,11 @@ return function(command)
             command:command(file, "run " .. file .. " scripts")
         end
     end
-end, function()
+end
+
+function t.execute()
     print("running in device mode")
     require("commands.device.commands." .. config.args.device_command)
 end
+
+return t

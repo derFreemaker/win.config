@@ -12,16 +12,22 @@ for dir in lfs.dir("./commands") do
         goto continue
     end
 
-    local command_config, command_init = require("commands." .. dir .. ".config")
+    local command_config = require("commands." .. dir .. ".config")
     local command = config.args_parser
         :command(dir)
-    command_config(command)
+    command_config.config(command)
+    commands[dir] = command_config.execute
 
-    commands[dir] = command_init
     ::continue::
 end
 
 config.parse_args()
+
+---@param ... any
+function fatal(...)
+    print(...)
+    os.exit(1)
+end
 
 -- execute chosen command init
 commands[config.args.command]()

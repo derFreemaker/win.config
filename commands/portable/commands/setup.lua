@@ -26,10 +26,11 @@ print("setting up...")
 --  <drive>
 --      .config -- config root
 --      tools
---          <tools...>
---              .config
---                  setup.lua
---                  cleanup.lua
+--          <tool...>
+--              .config -- if not present ignores tool
+--                  .disable -- if present ignores tool scripts
+--                  [setup.lua]
+--                  [cleanup.lua]
 
 local tools_dir = config.root_path .. "../tools/"
 if not lfs.exists(tools_dir) or lfs.attributes(tools_dir).mode ~= "directory" then
@@ -42,6 +43,25 @@ for tool in lfs.dir(tools_dir) do
     if not attr or attr.mode ~= "directory" or tool == "." or tool == ".." then
         goto continue
     end
+
+    local tool_config_path = tool_path .. "/.config/"
+    if not lfs.exists(tool_config_path) then
+        goto continue
+    end
+
+    local tool_setup_path = tool_config_path .. "setup.lua"
+    if not lfs.exists(tool_setup_path) then
+        goto continue
+    end
+
+    local setup_func, err_msg = loadfile(tool_setup_path)
+    if not setup_func then
+        print("unable to load setup file for tool '" .. tool .. "'\n" .. err_msg)
+        goto continue
+    end
+
+    print("setting up tool '" .. tool "'...")
+    setup_func()
 
     ::continue::
 end

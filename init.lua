@@ -1,4 +1,5 @@
 config.args_parser:command_target("command")
+config.args_parser:flag("-v --verbose")
 
 ---@type table<string, fun()>
 local commands = {}
@@ -22,6 +23,16 @@ for dir in lfs.dir("./commands") do
 end
 
 config.parse_args()
+
+local _verbose = config.args.verbose
+---@param ... any
+function verbose(...)
+    if not _verbose then
+        return
+    end
+
+    print(...)
+end
 
 ---@param ... any
 function fatal(...)

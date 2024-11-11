@@ -15,6 +15,12 @@ for tool in lfs.dir(tools_dir) do
         goto continue
     end
 
+    local disable_path = tool_config_path .. ".disable"
+    if lfs.exists(disable_path) then
+        print("tool '" .. tool .. "' is disabled")
+        goto continue
+    end
+
     local tool_cleanup_path = tool_config_path .. "cleanup.lua"
     if not lfs.exists(tool_cleanup_path) then
         goto continue

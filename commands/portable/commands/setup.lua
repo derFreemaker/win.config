@@ -22,15 +22,7 @@
 
 print("setting up...")
 
--- we are expecting that the portable medium has following file structure
---  <drive>
---      .config -- config root
---      tools
---          <tool...>
---              .config -- if not present ignores tool
---                  .disable -- if present ignores tool scripts
---                  [setup.lua] -- gets executed if present
---                  [cleanup.lua] -- gets executed if present
+config.env.set("USERCONFIG_FREEMAKER_PORTABLE", config.root_path)
 
 local pos = config.root_path:reverse():find("/", 2, true)
 local drive = config.root_path:sub(0, config.root_path:len() - pos + 1)
@@ -39,8 +31,11 @@ if not lfs.exists(tools_dir) or lfs.attributes(tools_dir).mode ~= "directory" th
     fatal("no tools directory found: " .. tools_dir)
 end
 
+config.env.set("TOOLS_FREEMAKER_PORTABLE", tools_dir)
+
 ---@class config.portable
 ---@field package current_tool string
+---@field package paths string[]
 portable = {
     paths = {}
 }
@@ -50,6 +45,7 @@ function portable.get_current_tool()
     return portable.current_tool
 end
 
+---@package
 ---@param tool string
 function portable.set_current_tool(tool)
     portable.current_tool = tool
@@ -105,9 +101,11 @@ end
 
 if #portable.paths > 0 then
     local paths_str = table.concat(portable.paths, ";") .. ";"
-    -- config.env.set("PATH",table.concat(portable.paths, ";")
-    --     .. ";" .. config.env.get("PATH"), "user")
-    print(paths_str)
+
+    -- config.env.set("PATH",paths_str
+    --     .. config.env.get("PATH"), "user")
+
+    -- config.env.set("PATHS_FREEMAKER_PORTABLE", paths_str, "user")
 end
 
 print("done setting up!")

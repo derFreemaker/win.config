@@ -34,8 +34,10 @@ end
 config.env.set("TOOLS_FREEMAKER_PORTABLE", tools_dir)
 
 ---@class config.portable
----@field package current_tool string
 ---@field package paths string[]
+---
+---@field package current_tool_path string
+---@field package current_tool string
 portable = {
     paths = {}
 }
@@ -45,10 +47,15 @@ function portable.get_current_tool()
     return portable.current_tool
 end
 
+function portable.get_current_tool_path()
+    return portable.current_tool_path
+end
+
 ---@package
 ---@param tool string
 function portable.set_current_tool(tool)
     portable.current_tool = tool
+    portable.current_tool_path = tools_dir .. tool .. "/"
 end
 
 ---@param path string | nil
@@ -79,7 +86,7 @@ for tool in lfs.dir(tools_dir) do
         print("tool '" .. tool .. "' is disabled")
         goto continue
     end
-    
+
     local tool_setup_path = tool_config_path .. "setup.lua"
     if not lfs.exists(tool_setup_path) then
         verbose("tool '" .. tool .. "' has no 'setup.lua' script in '.config' directory")
@@ -94,6 +101,7 @@ for tool in lfs.dir(tools_dir) do
 
     print("tool '" .. tool .. "'...")
     portable.set_current_tool(tool)
+    portable.current_tool_path = tool_path .. "/"
     setup_func()
 
     ::continue::

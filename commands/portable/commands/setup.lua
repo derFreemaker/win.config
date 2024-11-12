@@ -39,11 +39,13 @@ end
 ---@param path string | nil
 function portable.add_tool_to_path(path)
     if not path then
-        table.insert(portable.paths, tools_dir .. portable.current_tool)
+        local windows_conform_path = (tools_dir .. portable.current_tool):gsub("/", "\\")
+        table.insert(portable.paths, windows_conform_path)
         return
     end
 
-    table.insert(portable.paths, tools_dir .. portable.current_tool .. "/" .. path)
+    local windows_conform_path = (tools_dir .. portable.current_tool .. "/" .. path):gsub("/", "\\")
+    table.insert(portable.paths, windows_conform_path)
 end
 
 for tool in lfs.dir(tools_dir) do

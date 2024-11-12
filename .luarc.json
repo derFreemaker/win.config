@@ -6,5 +6,8 @@
         "fatal",
         "portable",
         "verbose"
+    ],
+    "workspace.library": [
+        "lua-config"
     ]
 }

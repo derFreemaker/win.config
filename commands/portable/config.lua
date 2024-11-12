@@ -17,7 +17,7 @@ function t.config(command)
     local device_commands_path = "./commands/portable/commands/"
     for file in lfs.dir(device_commands_path) do
         local attr = lfs.attributes(device_commands_path .. file)
-        if attr.mode == "file" then
+        if attr and attr.mode == "file" then
             file = file:match("(.+)%..+$") or file
             command:command(file, "run " .. file .. " scripts")
         end

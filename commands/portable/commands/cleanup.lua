@@ -58,4 +58,6 @@ if paths_str then
     config.env.remove("PATHS_FREEMAKER_PORTABLE", "user")
 end
 
+config.env.remove("USERCONFIG_FREEMAKER_PORTABLE", "user")
+
 print("done cleaning up!")

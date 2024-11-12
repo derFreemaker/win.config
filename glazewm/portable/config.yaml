@@ -99,15 +99,25 @@ window_behavior:
 
 workspaces:
   - name: '1'
+    bind_to_monitor: 0
   - name: '2'
+    bind_to_monitor: 0
   - name: '3'
+    bind_to_monitor: 0
   - name: '4'
+    bind_to_monitor: 0
   - name: '5'
+    bind_to_monitor: 0
   - name: '6'
+    bind_to_monitor: 0
   - name: '7'
+    bind_to_monitor: 0
   - name: '8'
+    bind_to_monitor: 0
   - name: '9'
+    bind_to_monitor: 0
   - name: '0'
+    bind_to_monitor: 1
 
 window_rules:
   - commands: ['ignore']
@@ -235,7 +245,7 @@ keybindings:
   # Launch CMD terminal. Alternatively, use `shell-exec wt` or
   # `shell-exec %ProgramFiles%/Git/git-bash.exe` to start Windows
   # Terminal and Git Bash respectively.
-  - commands: ['shell-exec wt']
+  - commands: ['shell-exec powershell']
     bindings: ['alt+enter']
 
   # Focus the next/previous workspace defined in `workspaces` config.

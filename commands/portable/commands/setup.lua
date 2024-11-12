@@ -88,7 +88,9 @@ end
 if #portable.paths > 0 then
     local paths_str = table.concat(portable.paths, ";") .. ";"
 
-    config.env.set("PATH",paths_str
+    print(paths_str .. config.env.get("PATH"))
+
+    config.env.set("PATH", paths_str
         .. config.env.get("PATH"), "user")
 
     config.env.set("PATHS_FREEMAKER_PORTABLE", paths_str, "user")

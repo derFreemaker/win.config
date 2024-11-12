@@ -218,11 +218,11 @@ keybindings:
 
   # Close focused window.
   - commands: ['close']
-    bindings: ['alt+shift+q']
+    bindings: ['alt+shift+c']
 
   # Kill GlazeWM process safely.
   - commands: ['wm-exit']
-    bindings: ['alt+shift+e']
+    bindings: ['alt+shift+m']
 
   # Re-evaluate configuration file.
   - commands: ['wm-reload-config']
@@ -236,7 +236,7 @@ keybindings:
   # `shell-exec %ProgramFiles%/Git/git-bash.exe` to start Windows
   # Terminal and Git Bash respectively.
   - commands: ['shell-exec wt']
-    bindings: ['alt+enter']
+    bindings: ['alt+q']
 
   # Focus the next/previous workspace defined in `workspaces` config.
   # - commands: ['focus --next-workspace']

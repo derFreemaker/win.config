@@ -23,4 +23,3 @@ Invoke-Expression "winget install --id Balena.Etcher"
 Invoke-Expression "winget install --id AnyDeskSoftwareGmbH.AnyDesk"
 Invoke-Expression "winget install --id Docker.DockerDesktop"
 Invoke-Expression "winget install --id LocalSend.LocalSend" 
-

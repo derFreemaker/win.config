@@ -38,7 +38,7 @@ for tool in lfs.dir(tools_dir) do
     ::continue::
 end
 
-local paths_str = config.env.get("PATHS_FREEMAKER_PORTABLE")
+local paths_str = config.env.get("PATH_FREEMAKER_PORTABLE")
 if paths_str then
     local path = config.env.get("PATH")
     if not path then
@@ -55,9 +55,10 @@ if paths_str then
     config.env.set("PATH", front .. back, "user")
     ::skip::
 
-    config.env.remove("PATHS_FREEMAKER_PORTABLE", "user")
+    config.env.remove("PATH_FREEMAKER_PORTABLE", "user")
 end
 
+config.env.remove("TOOLS_FREEMAKER_PORTABLE", "user")
 config.env.remove("USERCONFIG_FREEMAKER_PORTABLE", "user")
 
 print("done cleaning up!")

@@ -1,9 +1,9 @@
 if not config.env.is_windows then
-    return
+    error("chocolatey.install is windows only")
 end
 
 print("installing chocolatey...")
-local success, _, output = config.env.execute_in_pwsh("./chocolatey/install.ps1")
+local success, _, output = config.env.execute("./chocolatey/install.ps1")
 if not success then
     print(output)
 end

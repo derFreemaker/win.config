@@ -1,23 +1,47 @@
 local winget = require("scripts.winget")
 local tools = require("scripts.tools")
 
+-- chocolatey
+tools.add_tool({
+    name = "chocolatey",
+    handler = {
+        upgrade = function(tool_config)
+            return config.env.execute("choco upgrade chocolatey -y")
+        end
+    }
+})
+
+-- wezterm
+tools.use_winget("wez.wezterm")
+
 -- powershell
 tools.add_tool({
     name = "powershell",
     handler = {},
-    after = {
-        setup = function(tool_config)
-            config.env.execute("Copy-Item -Path \"" .. config.root_path .. "/pwsh/entry.ps1\" -Destination $PROFILE -Force")
-        end
-    }
+    setup = function(tool_config)
+        local success = config.env.execute("Copy-Item -Path \"" ..
+            config.root_path .. "/pwsh/entry.ps1\" -Destination $PROFILE -Force")
+        return success
+    end
 })
 tools.use_choco("oh-my-posh")
 tools.add_tool({
     name = "powershell.modules",
     handler = {
         install = function(tool_config)
-            config.env.execute("Install-Module -Name Terminal-Icons -Force")
-            config.env.execute("Install-Module -Name PSReadLine -Force")
+            local success, exitcode, output
+
+            success, exitcode, output = config.env.execute("Install-Module -Name Terminal-Icons -Force")
+            if not success then
+                return success, exitcode, output
+            end
+
+            success, exitcode, output = config.env.execute("Install-Module -Name PSReadLine -Force")
+            if not success then
+                return success, exitcode, output
+            end
+
+            return success, 0, ""
         end
     }
 })
@@ -38,7 +62,8 @@ tools.add_tool({
     handler = "chocolatey",
     after = {
         install = function(tool_config)
-            config.env.add("PATH", "C:/Program Files/CMake/bin", "machine", true)
+            config.env.add("PATH", config.env.get("PROGRAMFILES") .. "/CMake/bin", "machine", true)
+            return true
         end
     }
 })
@@ -54,7 +79,9 @@ tools.add_tool({
     handler = {
         install = function(tool_config)
             print("installing powertoys plugin for " .. tool_config.name)
-            config.env.execute("\"" .. config.root_path .. "/powertoys/plugins/chatgpt/install.ps1\"")
+
+            local command = "$temp = New-TemporaryFile;Invoke-WebRequest -Uri \"https://github.com/ferraridavide/ChatGPTPowerToys/releases/download/v0.85.1/Community.PowerToys.Run.Plugin.ChatGPT.x64.zip\" -OutFile $temp;Invoke-Expression \"7z e $temp -o'$env:LOCALAPPDATA/Microsoft/PowerToys/PowerToys Run/Plugins/ChatGPT'\""
+            return config.env.execute(command)
         end
     }
 })
@@ -71,15 +98,30 @@ tools.add_tool({
             if lfs.exists(path) then
                 config.env.execute("Remove-Item -Path \"" .. path .. "\" -Recurse -Force")
             end
-        end,
-        setup = function(tool_config)
-            local userprofile = config.env.get("USERPROFILE")
-            lfs.mkdir(userprofile .. "/.glzr")
-            local glazewm_dir = config.path.add_hostname_if_found(config.root_path .. "/glazewm")
-            config.path.create_junction(userprofile .. "/.glzr/glazewm", glazewm_dir)
-            config.path.create_shortcut()
+
+            return true
         end
-    }
+    },
+    setup = function(tool_config)
+        local userprofile = config.env.get("USERPROFILE")
+        local glzr_dir = userprofile .. "/.glzr"
+        if not lfs.exists(glzr_dir) and not lfs.mkdir(glzr_dir) then
+            return false
+        end
+
+        local glazewm_dir = config.path.add_hostname_if_found(config.root_path .. "/glazewm")
+        if not config.path.create_junction(glzr_dir .. "/glazewm", glazewm_dir) then
+            return false
+        end
+
+        local shortcut_path = config.env.get("APPDATA") .. "/Microsoft/Windows/Start Menu/Programs/Startup/GlazeWM.lnk"
+        local shortcut_target = config.env.get("PROGRAMFILES") .. "/glzr.io/GlazeWM/glazewm.exe"
+        if not config.path.create_shortcut(shortcut_path, shortcut_target) then
+            return false
+        end
+
+        return true
+    end
 })
 
 -- explorer blur
@@ -87,10 +129,10 @@ tools.add_tool({
     name = "explorer_blur",
     handler = {
         install = function()
-            config.env.execute("./explorer_blur/register.cmd")
+            return config.env.execute("./explorer_blur/register.cmd")
         end,
         uninstall = function()
-            config.env.execute("./explorer_blur/uninstall.cmd")
+            return config.env.execute("./explorer_blur/uninstall.cmd")
         end
     }
 })

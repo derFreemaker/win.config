@@ -9,13 +9,20 @@ function t.config(command)
         local attr = lfs.attributes(device_commands_path .. file)
         if attr.mode == "file" then
             file = file:match("(.+)%..+$") or file
-            command:command(file, "run " .. file .. " scripts")
+            command
+                :command(file, "run " .. file .. " scripts")
+                :option("-n --name", "name of the program to be actioned on")
         end
     end
 end
 
 function t.execute()
     print("running in device mode")
+
+    -- register all tools
+    require("register")
+
+    -- call command
     require("commands.device.commands." .. config.args.device_command)
 end
 

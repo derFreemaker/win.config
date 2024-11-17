@@ -11,111 +11,195 @@ local choco = require("scripts.chocolatey")
 ---|config.tool_handler
 
 ---@class config.tool_handler
----@field install (fun(tool_config: config.tool_config)) | nil
----@field uninstall (fun(tool_config: config.tool_config)) | nil
----@field upgrade (fun(tool_config: config.tool_config)) | nil
+---@field install (fun(tool_config: config.tool_config) : boolean, integer, string) | nil
+---@field uninstall (fun(tool_config: config.tool_config) : boolean, integer, string) | nil
+---@field upgrade (fun(tool_config: config.tool_config) : boolean, integer, string) | nil
 
----@class config.tool_handler.after : config.tool_handler
----@field setup (fun(tool_config: config.tool_config)) | nil
+---@class config.tool_handler.after
+---@field install (fun(tool_config: config.tool_config)  : boolean) | nil
+---@field uninstall (fun(tool_config: config.tool_config)  : boolean) | nil
+---@field upgrade (fun(tool_config: config.tool_config)  : boolean) | nil
 
 ---@class config.tool_config
 ---@field name string
 ---@field handler config.tool_handler.type
 ---@field after config.tool_handler.after | nil
+---@field setup (fun(tool_config: config.tool_config) : boolean) | nil
 
 ---@class config.tools
----@field package configs config.tool_config[]
+---@field package configs table<string, config.tool_config>
 local tools = {
     configs = {}
 }
 
-function tools.install()
-    for _, config in pairs(tools.configs) do
-        print("installing '" .. config.name .. "'...")
+---@param name string
+---@return boolean
+function tools.install_tool(name)
+    local config = tools.configs[name]
+    if not config then
+        return false
+    end
 
-        if config.handler == "winget" then
-            winget.install(config.name)
-        elseif config.handler == "chocolatey" then
-            choco.install(config.name)
-        elseif type(config.handler) == "table" then
-            local handler = config.handler
-            ---@cast handler -string
-            if handler.install then
-                handler.install(config)
-            end
-        end
+    print("installing '" .. name .. "'...")
 
-        if config.after then
-            if config.after.install then
-                config.after.install(config)
-            end
+    local success, exitcode, output
+    if config.handler == "winget" then
+        success, exitcode, output = winget.install(config.name)
+    elseif config.handler == "chocolatey" then
+        success, exitcode, output = choco.install(config.name)
+    elseif type(config.handler) == "table" then
+        local handler = config.handler
+        ---@cast handler -string
+        if handler.install then
+            success, exitcode, output = handler.install(config)
         end
     end
+
+    if not success then
+        print(string.format("exitcode: %s\n%s", tostring(exitcode), tostring(output)))
+        return false
+    end
+
+    if config.after then
+        if config.after.install then
+            success = config.after.install(config)
+        end
+    end
+
+    return success
+end
+
+function tools.install()
+    for name in pairs(tools.configs) do
+        if not tools.install_tool(name) then
+            print("failed to install '" .. name .. "'")
+        end
+    end
+end
+
+---@param name string
+---@return boolean
+function tools.uninstall_tool(name)
+    local config = tools.configs[name]
+    if not config then
+        return false
+    end
+
+    print("uninstalling '" .. name .. "'...")
+
+    local success, exitcode, output
+    if config.handler == "winget" then
+        success, exitcode, output = winget.uninstall(config.name)
+    elseif config.handler == "chocolatey" then
+        success, exitcode, output = choco.uninstall(config.name)
+    elseif type(config.handler) == "table" then
+        local handler = config.handler
+        ---@cast handler -string
+        if handler.uninstall then
+            success, exitcode, output = handler.uninstall(config)
+        end
+    end
+
+    if not success then
+        print(string.format("exitcode: %s\n%s", tostring(exitcode), tostring(output)))
+        return false
+    end
+
+    if config.after then
+        if config.after.uninstall then
+            success = config.after.uninstall(config)
+        end
+    end
+
+    return success
 end
 
 function tools.uninstall()
-    for _, config in pairs(tools.configs) do
-        print("uninstalling '" .. config.name .. "'...")
-
-        if config.handler == "winget" then
-            winget.uninstall(config.name)
-        elseif config.handler == "chocolatey" then
-            choco.uninstall(config.name)
-        elseif type(config.handler) == "table" then
-            local handler = config.handler
-            ---@cast handler -string
-            if handler.uninstall then
-                handler.uninstall(config)
-            end
-        end
-
-        if config.after then
-            if config.after.uninstall then
-                config.after.uninstall(config)
-            end
+    for name in pairs(tools.configs) do
+        if not tools.uninstall_tool(name) then
+            print("failed to uninstall '" .. name .. "'")
         end
     end
+end
+
+---@param name string
+---@return boolean
+function tools.upgrade_tool(name)
+    local config = tools.configs[name]
+    if not config then
+        return false
+    end
+
+    print("upgrading '" .. name .. "'...")
+
+    local success, exitcode, output
+    if config.handler == "winget" then
+        success, exitcode, output = winget.upgrade(config.name)
+    elseif config.handler == "chocolatey" then
+        success, exitcode, output = choco.upgrade(config.name)
+    elseif type(config.handler) == "table" then
+        local handler = config.handler
+        ---@cast handler -string
+        if handler.upgrade then
+            success, exitcode, output = handler.upgrade(config)
+        else
+            success = false
+            exitcode = 1
+            output = "no upgrade handler"
+        end
+    end
+
+    if not success then
+        print(string.format("exitcode: %s\n%s", tostring(exitcode), tostring(output)))
+        return false
+    end
+
+    if config.after then
+        if config.after.upgrade then
+            success = config.after.upgrade(config)
+        end
+    end
+
+    return success
 end
 
 function tools.upgrade()
-    for _, config in pairs(tools.configs) do
-        print("upgrading '" .. config.name .. "'...")
-
-        if config.handler == "winget" then
-            winget.upgrade(config.name)
-        elseif config.handler == "chocolatey" then
-            choco.upgrade(config.name)
-        elseif type(config.handler) == "table" then
-            local handler = config.handler
-            ---@cast handler -string
-            if handler.upgrade then
-                handler.upgrade(config)
-            end
-        end
-
-        if config.after then
-            if config.after.upgrade then
-                config.after.upgrade(config)
-            end
+    for name in pairs(tools.configs) do
+        if not tools.upgrade_tool(name) then
+            print("failed to upgrade '" .. name .. "'")
         end
     end
 end
 
-function tools.setup()
-    for _, config in pairs(tools.configs) do
-        print("setting up '" .. config.name .. "'...")
+---@param name string
+---@return boolean
+function tools.setup_tool(name)
+    local config = tools.configs[name]
+    if not config then
+        return false
+    end
 
-        if config.after then
-            if config.after.setup then
-                config.after.setup(config)
-            end
+    print("setting up '" .. name .. "' ")
+
+    local success = true
+    if config.setup then
+        success = config.setup(config)
+    end
+
+    return success
+end
+
+function tools.setup()
+    for name in pairs(tools.configs) do
+        if not tools.setup_tool(name) then
+            print("failed to setup '" .. name .. "'")
         end
     end
 end
 
 ---@param tool_config config.tool_config
 function tools.add_tool(tool_config)
-    table.insert(tools.configs, tool_config)
+    tools.configs[tool_config.name] = tool_config
 end
 
 ---@param name string
@@ -133,7 +217,5 @@ function tools.use_choco(name)
         handler = "chocolatey"
     })
 end
-
-require("register")
 
 return tools

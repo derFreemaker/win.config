@@ -30,7 +30,7 @@ Update-SessionEnvironment
 Write-Output "refresh session environment..."
 Update-SessionEnvironment
 
-. ".\reg\apply_regedits.ps1"
+. ".\registry\apply_regedits.ps1"
 
 Write-Output "refresh session environment..."
 Update-SessionEnvironment

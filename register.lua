@@ -2,6 +2,15 @@ local winget = require("scripts.winget")
 local tools = require("scripts.tools")
 
 -- powershell
+tools.add_tool({
+    name = "powershell",
+    handler = {},
+    after = {
+        setup = function(tool_config)
+            config.env.execute("Copy-Item -Path \"" .. config.root_path .. "/pwsh/entry.ps1\" -Destination $PROFILE -Force")
+        end
+    }
+})
 tools.use_choco("oh-my-posh")
 tools.add_tool({
     name = "powershell.modules",
@@ -62,6 +71,13 @@ tools.add_tool({
             if lfs.exists(path) then
                 config.env.execute("Remove-Item -Path \"" .. path .. "\" -Recurse -Force")
             end
+        end,
+        setup = function(tool_config)
+            local userprofile = config.env.get("USERPROFILE")
+            lfs.mkdir(userprofile .. "/.glzr")
+            local glazewm_dir = config.path.add_hostname_if_found(config.root_path .. "/glazewm")
+            config.path.create_junction(userprofile .. "/.glzr/glazewm", glazewm_dir)
+            config.path.create_shortcut()
         end
     }
 })

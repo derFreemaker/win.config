@@ -15,10 +15,13 @@ local choco = require("scripts.chocolatey")
 ---@field uninstall (fun(tool_config: config.tool_config)) | nil
 ---@field upgrade (fun(tool_config: config.tool_config)) | nil
 
+---@class config.tool_handler.after : config.tool_handler
+---@field setup (fun(tool_config: config.tool_config)) | nil
+
 ---@class config.tool_config
 ---@field name string
 ---@field handler config.tool_handler.type
----@field after config.tool_handler | nil
+---@field after config.tool_handler.after | nil
 
 ---@class config.tools
 ---@field package configs config.tool_config[]
@@ -93,6 +96,18 @@ function tools.upgrade()
         if config.after then
             if config.after.upgrade then
                 config.after.upgrade(config)
+            end
+        end
+    end
+end
+
+function tools.setup()
+    for _, config in pairs(tools.configs) do
+        print("setting up '" .. config.name .. "'...")
+
+        if config.after then
+            if config.after.setup then
+                config.after.setup(config)
             end
         end
     end

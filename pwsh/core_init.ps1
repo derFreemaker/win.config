@@ -22,12 +22,14 @@ function Get-GitBranch { & git branch $args }
 New-Alias -Name gb -Value Get-GitBranch -Force
 function Get-GitRemote { & git remote -v $args }
 New-Alias -Name gr -Value Get-GitRemote -Force
-function Update-GitSubmodules { & git submodule update --remote --recursive $args }
-New-Alias -Name gsmu -Value Update-GitSubmodules -Force
+function Update-GitSubmodules { & git submodule update --init --recursive $args }
+New-Alias -Name gsmup -Value Update-GitSubmodules -Force
+function Upgrade-GitSubmodules { & git submodule update --remote --recursive $args }
+New-Alias -Name gsmug -Value Upgrade-GitSubmodules -Force
 function Restore-Git { & git restore $args }
 New-Alias -Name grst -Value Restore-Git -Force
-function Git-Cherry-Pick { & git cherry-pick $args }
-New-Alias -Name gcp -Value Git-Cherry-Pick -Force
+function CherryPick-GitCommit { & git cherry-pick $args }
+New-Alias -Name gcp -Value CherryPick-GitCommit -Force
 
 # Neovim
 New-Alias -Name vim -Value nvim -Force

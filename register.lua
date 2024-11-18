@@ -56,7 +56,8 @@ tools.add_tool({
     name = "powershell.modules",
     handler = {
         install = function(tool_config)
-            return config.env.execute("Import-Module PowerShellGet;"
+            return config.env.execute("PowerShell -ExecutionPolicy Bypass;"
+                .. "Import-Module PowerShellGet;"
                 .. "Install-Module -Name Terminal-Icons -Force;"
                 .. "Install-Module -Name PSReadLine -Force;")
         end

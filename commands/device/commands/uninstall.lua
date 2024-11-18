@@ -10,4 +10,3 @@ if config.args.name then
 end
 
 tools.uninstall()
-require("chocolatey.uninstall")

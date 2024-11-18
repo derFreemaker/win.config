@@ -52,6 +52,10 @@ function tools.install_tool(name)
         ---@cast handler -string
         if handler.install then
             success, exitcode, output = handler.install(config)
+        else
+            success = false
+            exitcode = 1
+            output = "no install handler"
         end
     end
 
@@ -97,6 +101,10 @@ function tools.uninstall_tool(name)
         ---@cast handler -string
         if handler.uninstall then
             success, exitcode, output = handler.uninstall(config)
+        else
+            success = false
+            exitcode = 1
+            output = "no uninstall handler"
         end
     end
 

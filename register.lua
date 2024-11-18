@@ -5,6 +5,14 @@ local tools = require("scripts.tools")
 tools.add_tool({
     name = "chocolatey",
     handler = {
+        install = function(tool_config)
+            return config.env.execute("Set-ExecutionPolicy Bypass -Scope Process -Force;"
+                .. "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;"
+                .. "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))")
+        end,
+        uninstall = function (tool_config)
+            return config.env.execute("Remove-Item -Force -Recurse \"$env:ChocolateyInstall\" -ErrorAction Ignore")
+        end,
         upgrade = function(tool_config)
             return config.env.execute("choco upgrade chocolatey -y")
         end
@@ -146,3 +154,17 @@ tools.use_winget("Balena.Etcher")
 tools.use_winget("AnyDeskSoftwareGmbH.Anydesk")
 -- tools.use_winget("Docker.DockerDesktop")
 -- tools.use_winget("LocalSend.LocalSend")
+
+if config.env.is_windows then
+    tools.add_tool({
+        name = "registry",
+        handler = {
+            install = function(tool_config)
+                return config.env.execute("./registry/apply_regedits.ps1")
+            end,
+            uninstall = function(tool_config)
+                return config.env.execute("./registry/remove_regedits.ps1")
+            end
+        }
+    })
+end

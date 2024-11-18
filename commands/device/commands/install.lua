@@ -9,7 +9,4 @@ if config.args.name then
     return
 end
 
-require("chocolatey.install")
 tools.install()
-
-require("registry.apply")

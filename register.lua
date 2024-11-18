@@ -1,6 +1,25 @@
 local winget = require("scripts.winget")
 local tools = require("scripts.tools")
 
+-- environment variables
+tools.add_tool({
+    name = "env",
+    handler = {
+        install = function(tool_config)
+            if not config.env.set("USERCONFIG_FREEMAKER", config.root_path, "user") then
+                return false, 1, "unable to set environment variable"
+            end
+            return true, 0, ""
+        end,
+        uninstall = function(tool_config)
+            if not config.env.remove("USERCONFIG_FREEMAKER", "user") then
+                return false, 1, "unable to remove environment variable"
+            end
+            return true, 0, ""
+        end
+    }
+})
+
 -- chocolatey
 tools.add_tool({
     name = "chocolatey",

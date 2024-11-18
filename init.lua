@@ -1,3 +1,8 @@
+if not config.env.is_windows then
+    print("my config is windows only")
+    os.exit(1)
+end
+
 config.args_parser:command_target("command")
 config.args_parser:flag("-v --verbose")
 

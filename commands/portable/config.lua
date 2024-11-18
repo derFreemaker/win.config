@@ -24,11 +24,6 @@ function t.config(command)
     end
 end
 function t.execute()
-    if not config.env.is_windows then
-        print("portable mode is only supported on windows")
-        os.exit(1)
-    end
-
     print("running in portable mode")
     require("commands.portable.commands." .. config.args.portable_command)
 end

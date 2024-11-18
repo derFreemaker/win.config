@@ -27,7 +27,7 @@ tools.add_tool({
     name = "powershell",
     handler = {},
     setup = function(tool_config)
-        local success = config.env.execute("pwsh -Command \"New-Item -ItemType Directory -Path (Split-Path -Parent $PROFILE) -Force | Out-Null;"
+        local success = config.env.execute("pwsh -Command \"New-Item -ItemType Directory -Path (Split-Path -Parent $PROFILE) -Force;"
             .. "Copy-Item -Path './pwsh/entry.ps1' -Destination $PROFILE -Force\"")
         return success
     end

@@ -56,19 +56,9 @@ tools.add_tool({
     name = "powershell.modules",
     handler = {
         install = function(tool_config)
-            local success, exitcode, output
-
-            success, exitcode, output = config.env.execute("Install-Module -Name Terminal-Icons -Force")
-            if not success then
-                return success, exitcode, output
-            end
-
-            success, exitcode, output = config.env.execute("Install-Module -Name PSReadLine -Force")
-            if not success then
-                return success, exitcode, output
-            end
-
-            return success, 0, ""
+            return config.env.execute("Import-Module PowerShellGet;"
+                .. "Install-Module -Name Terminal-Icons -Force;"
+                .. "Install-Module -Name PSReadLine -Force;")
         end
     }
 })

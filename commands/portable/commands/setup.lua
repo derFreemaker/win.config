@@ -80,7 +80,9 @@ for tool in lfs.dir(tools_dir) do
 
     print("tool '" .. tool .. "'...")
     portable.set_current_tool(tool)
-    portable.current_tool_path = tool_path .. "/"
+
+    -- change into tool dir for easy relativ pathing
+    lfs.chdir(portable.current_tool_path)
 
     local tool_thread = coroutine.create(setup_func)
     local success, err_msg = coroutine.resume(tool_thread)
@@ -91,6 +93,9 @@ for tool in lfs.dir(tools_dir) do
 
     ::continue::
 end
+
+-- get back to config dir
+lfs.chdir(config.root_path)
 
 local bin_dir = tools_dir .. "bin/"
 if not lfs.exists(bin_dir) then

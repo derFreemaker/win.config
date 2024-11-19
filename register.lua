@@ -12,7 +12,7 @@ tools.add_tool({
             return true, 0, ""
         end,
         uninstall = function(tool_config)
-            if not config.env.remove("USERCONFIG_FREEMAKER", "user") then
+            if not config.env.unset("USERCONFIG_FREEMAKER", "user") then
                 return false, 1, "unable to remove environment variable"
             end
             return true, 0, ""

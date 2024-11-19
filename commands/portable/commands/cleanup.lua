@@ -1,4 +1,6 @@
-local tools_dir = config.root_path .. "../tools/"
+local pos = config.root_path:reverse():find("/", 2, true)
+local drive = config.root_path:sub(0, config.root_path:len() - pos + 1)
+local tools_dir = drive .. "tools/"
 if not lfs.exists(tools_dir) or lfs.attributes(tools_dir).mode ~= "directory" then
     fatal("no tools directory found: " .. tools_dir)
 end
@@ -38,27 +40,9 @@ for tool in lfs.dir(tools_dir) do
     ::continue::
 end
 
-local paths_str = config.env.get("PATH_FREEMAKER_PORTABLE")
-if paths_str then
-    local path = config.env.get("PATH")
-    if not path then
-        goto skip
-    end
+config.env.remove("PATH", tools_dir .. "bin;", "user")
 
-    local start_pos, end_pos = path:find(paths_str, nil, true)
-    if not start_pos or not end_pos then
-        goto skip
-    end
-
-    local front = path:sub(0, start_pos - 1)
-    local back = path:sub(end_pos + 1)
-    config.env.set("PATH", front .. back, "user")
-    ::skip::
-
-    config.env.remove("PATH_FREEMAKER_PORTABLE", "user")
-end
-
-config.env.remove("TOOLS_FREEMAKER_PORTABLE", "user")
-config.env.remove("USERCONFIG_FREEMAKER_PORTABLE", "user")
+config.env.unset("TOOLS_FREEMAKER_PORTABLE", "user")
+config.env.unset("USERCONFIG_FREEMAKER_PORTABLE", "user")
 
 print("done cleaning up!")

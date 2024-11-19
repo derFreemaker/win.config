@@ -97,7 +97,7 @@ end
 -- get back to config dir
 lfs.chdir(config.root_path)
 
-local bin_dir = tools_dir .. "bin/"
+local bin_dir = tools_dir .. "bin"
 if not lfs.exists(bin_dir) then
     lfs.mkdir(bin_dir)
 end
@@ -117,7 +117,6 @@ for name, path in pairs(portable.paths) do
 end
 
 local bin_path = tools_dir:gsub("/", "\\") .. "bin;"
-config.env.set("PATH_FREEMAKER_PORTABLE", bin_path, "user")
-config.env.set("PATH", bin_path .. (config.env.get("PATH") or ""), "user")
+config.env.set("PATH", bin_path .. config.env.get("PATH"), "user")
 
 print("done setting up!")

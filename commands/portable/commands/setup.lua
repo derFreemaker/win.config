@@ -1,6 +1,6 @@
 print("setting up...")
 
-config.env.set("USERCONFIG_FREEMAKER_PORTABLE", config.root_path)
+config.env.set("USERCONFIG_FREEMAKER_PORTABLE", config.root_path, "user")
 
 local pos = config.root_path:reverse():find("/", 2, true)
 local drive = config.root_path:sub(0, config.root_path:len() - pos + 1)
@@ -9,7 +9,7 @@ if not lfs.exists(tools_dir) or lfs.attributes(tools_dir).mode ~= "directory" th
     fatal("no tools directory found: " .. tools_dir)
 end
 
-config.env.set("TOOLS_FREEMAKER_PORTABLE", tools_dir:gsub("/", "\\"))
+config.env.set("TOOLS_FREEMAKER_PORTABLE", tools_dir:gsub("/", "\\"), "user")
 
 ---@class config.portable
 ---@field package paths string[]

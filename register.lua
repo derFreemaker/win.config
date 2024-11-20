@@ -1,5 +1,5 @@
-local winget = require("scripts.winget")
-local tools = require("scripts.tools")
+local winget = require("tools.winget")
+local tools = require("tools.tools")
 
 -- environment variables
 tools.add_tool({

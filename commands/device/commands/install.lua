@@ -1,6 +1,6 @@
 config.env.check_admin()
 
-local tools = require("scripts.tools")
+local tools = require("tools.tools")
 
 if config.args.name then
     if not tools.install_tool(config.args.name) then

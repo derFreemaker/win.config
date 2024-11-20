@@ -3,6 +3,10 @@ if not config.env.is_windows then
     os.exit(1)
 end
 
+local term = require("tools.term")
+terminal = term.terminal.stdout()
+terminal:overrite_print()
+
 config.args_parser:command_target("command")
 config.args_parser:flag("-v --verbose")
 

@@ -6,8 +6,11 @@ local install = "winget install --disable-interactivity --id \"%s\""
 ---@return integer exitcode
 ---@return string output
 function winget.install(id)
-    print("installing '" .. id .. "' with winget...")
-    return config.env.execute(install:format(id))
+    local seg = terminal:print("installing '" .. id .. "' with winget...")
+    local success, exitcode, output = config.env.execute(install:format(id))
+    seg:remove()
+
+    return success, exitcode, output
 end
 
 local uninstall = "winget uninstall --disable-interactivity --id \"%s\""
@@ -16,8 +19,11 @@ local uninstall = "winget uninstall --disable-interactivity --id \"%s\""
 ---@return integer exitcode
 ---@return string output
 function winget.uninstall(id)
-    print("uninstalling '" .. id .. "' with winget...")
-    return config.env.execute(uninstall:format(id))
+    local seg = terminal:print("uninstalling '" .. id .. "' with winget...")
+    local success, exitcode, output = config.env.execute(uninstall:format(id))
+    seg:remove()
+
+    return success, exitcode, output
 end
 
 local upgrade = "winget upgrade --disable-interactivity --id \"%s\""
@@ -26,8 +32,11 @@ local upgrade = "winget upgrade --disable-interactivity --id \"%s\""
 ---@return integer exitcode
 ---@return string output
 function winget.upgrade(id)
-    print("upgrading '" .. id .. "' with winget...")
-    return config.env.execute(upgrade:format(id))
+    local seg = terminal:print("upgrading '" .. id .. "' with winget...")
+    local success, exitcode, output = config.env.execute(upgrade:format(id))
+    seg:remove()
+
+    return success, exitcode, output
 end
 
 return winget

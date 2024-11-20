@@ -5,7 +5,8 @@
         "vim",
         "fatal",
         "portable",
-        "verbose"
+        "verbose",
+        "terminal"
     ],
     "workspace.library": [
         "lua-config"

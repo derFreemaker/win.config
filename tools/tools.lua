@@ -1,9 +1,7 @@
-if not config.env.is_windows then
-    error("")
-end
+local term = require("tools.term")
 
-local winget = require("scripts.winget")
-local choco = require("scripts.chocolatey")
+local winget = require("tools.winget")
+local choco = require("tools.chocolatey")
 
 ---@alias config.tool_handler.type
 ---|"winget"
@@ -74,11 +72,20 @@ function tools.install_tool(name)
 end
 
 function tools.install()
+    local install_loading = term.components.loading.new("install_loading", terminal)
+
+    local one_item_percent = 100 / #tools.configs
     for name in pairs(tools.configs) do
         if not tools.install_tool(name) then
             print("failed to install '" .. name .. "'")
         end
+
+        install_loading:changed_relativ(one_item_percent)
+        terminal:update()
     end
+
+    install_loading:remove()
+    terminal:update()
 end
 
 ---@param name string
@@ -123,11 +130,20 @@ function tools.uninstall_tool(name)
 end
 
 function tools.uninstall()
+    local uninstall_loading = term.components.loading.new("uninstall_loading", terminal)
+
+    local one_item_percent = 100 / #tools.configs
     for name in pairs(tools.configs) do
         if not tools.uninstall_tool(name) then
             print("failed to uninstall '" .. name .. "'")
         end
+
+        uninstall_loading:changed_relativ(one_item_percent)
+        terminal:update()
     end
+
+    uninstall_loading:remove()
+    terminal:update()
 end
 
 ---@param name string
@@ -172,11 +188,20 @@ function tools.upgrade_tool(name)
 end
 
 function tools.upgrade()
+    local upgrade_loading = term.components.loading.new("upgrade_loading", terminal)
+
+    local one_item_percent = 100 / #tools.configs
     for name in pairs(tools.configs) do
         if not tools.upgrade_tool(name) then
             print("failed to upgrade '" .. name .. "'")
         end
+
+        upgrade_loading:changed_relativ(one_item_percent)
+        terminal:update()
     end
+
+    upgrade_loading:remove()
+    terminal:update()
 end
 
 ---@param name string
@@ -198,11 +223,20 @@ function tools.setup_tool(name)
 end
 
 function tools.setup()
+    local setup_loading = term.components.loading.new("setup_loading", terminal)
+
+    local one_item_percent = 100 / #tools.configs
     for name in pairs(tools.configs) do
         if not tools.setup_tool(name) then
             print("failed to setup '" .. name .. "'")
         end
+
+        setup_loading:changed_relativ(one_item_percent)
+        terminal:update()
     end
+
+    setup_loading:remove()
+    terminal:update()
 end
 
 ---@param tool_config config.tool_config

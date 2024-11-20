@@ -142,19 +142,6 @@ tools.add_tool({
     end
 })
 
--- explorer blur
-tools.add_tool({
-    name = "explorer_blur",
-    handler = {
-        install = function()
-            return config.env.execute("./explorer_blur/register.cmd")
-        end,
-        uninstall = function()
-            return config.env.execute("./explorer_blur/uninstall.cmd")
-        end
-    }
-})
-
 -- some other Programs
 tools.use_winget("7zip.7zip")
 tools.use_winget("Brave.Brave")

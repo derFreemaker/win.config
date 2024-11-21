@@ -1,1 +1,1 @@
-start pwsh %USERCONFIG_FREEMAKER%/glazewm/mybuild11/startup.ps1 --no-profile
+start "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\SteelSeries\SteelSeries GG\SteelSeries GG.lnk"

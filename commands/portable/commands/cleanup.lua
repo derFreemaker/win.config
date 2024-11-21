@@ -57,6 +57,7 @@ config.env.remove("PATH", tools_dir .. "bin;", "user")
 
 config.env.unset("TOOLS_FREEMAKER_PORTABLE", "user")
 config.env.unset("USERCONFIG_FREEMAKER_PORTABLE", "user")
+config.env.unset("DRIVE_FREEMAKER_PORTABLE", "user")
 
 cleanup_throbber:remove()
 

@@ -1,4 +1,10 @@
 # editor
 .vscode
 
+# git
+git
+
+# JetBrains
+jgit
+
 *.log

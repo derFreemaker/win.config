@@ -104,6 +104,9 @@ tools.add_tool({
     }
 })
 
+-- everything
+tools.use_winget("voidtools.Everything")
+
 -- glazewm
 tools.add_tool({
     name = "glzr-io.glazewm",

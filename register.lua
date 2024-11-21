@@ -29,7 +29,7 @@ tools.add_tool({
                 .. "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;"
                 .. "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))")
         end,
-        uninstall = function (tool_config)
+        uninstall = function(tool_config)
             return config.env.execute("Remove-Item -Force -Recurse \"$env:ChocolateyInstall\" -ErrorAction Ignore")
         end,
         upgrade = function(tool_config)
@@ -46,8 +46,9 @@ tools.add_tool({
     name = "powershell",
     handler = {},
     setup = function(tool_config)
-        local success = config.env.execute("pwsh -Command \"New-Item -ItemType Directory -Path (Split-Path -Parent $PROFILE) -Force;"
-            .. "Copy-Item -Path './pwsh/entry.ps1' -Destination $PROFILE -Force\"")
+        local success = config.env.execute(
+            "pwsh -Command \"New-Item -ItemType Directory -Path (Split-Path -Parent $PROFILE) -Force;"
+            .. "Copy-Item -Path './pwsh/entry.ps1' -Destination $PROFILE -Force\"", true)
         return success
     end
 })
@@ -98,7 +99,8 @@ tools.add_tool({
         install = function(tool_config)
             print("installing powertoys plugin for " .. tool_config.name)
 
-            local command = "$temp = New-TemporaryFile;Invoke-WebRequest -Uri \"https://github.com/ferraridavide/ChatGPTPowerToys/releases/download/v0.85.1/Community.PowerToys.Run.Plugin.ChatGPT.x64.zip\" -OutFile $temp;Invoke-Expression \"7z e $temp -o'$env:LOCALAPPDATA/Microsoft/PowerToys/PowerToys Run/Plugins/ChatGPT'\""
+            local command =
+            "$temp = New-TemporaryFile;Invoke-WebRequest -Uri \"https://github.com/ferraridavide/ChatGPTPowerToys/releases/download/v0.85.1/Community.PowerToys.Run.Plugin.ChatGPT.x64.zip\" -OutFile $temp;Invoke-Expression \"7z e $temp -o'$env:LOCALAPPDATA/Microsoft/PowerToys/PowerToys Run/Plugins/ChatGPT'\""
             return config.env.execute(command)
         end
     }
@@ -135,14 +137,28 @@ tools.add_tool({
             return false
         end
 
-        local shortcut_path = config.env.get("APPDATA") .. "/Microsoft/Windows/Start Menu/Programs/Startup/GlazeWM.lnk"
-        local shortcut_target = config.env.get("PROGRAMFILES") .. "/glzr.io/GlazeWM/glazewm.exe"
+        local shortcut_path = config.env.get("APPDATA")
+            .. "/Microsoft/Windows/Start Menu/Programs/Startup/GlazeWM.lnk"
+        local shortcut_target = config.env.get("PROGRAMFILES")
+            .. "/glzr.io/GlazeWM/glazewm.exe"
         if not config.path.create_shortcut(shortcut_path, shortcut_target) then
             return false
         end
 
         return true
     end
+})
+
+tools.add_tool({
+    name = "registry",
+    handler = {
+        install = function(tool_config)
+            return config.env.execute("./registry/apply_regedits.ps1")
+        end,
+        uninstall = function(tool_config)
+            return config.env.execute("./registry/remove_regedits.ps1")
+        end
+    }
 })
 
 -- some other Programs
@@ -154,17 +170,3 @@ tools.use_winget("Balena.Etcher")
 tools.use_winget("AnyDeskSoftwareGmbH.Anydesk")
 -- tools.use_winget("Docker.DockerDesktop")
 -- tools.use_winget("LocalSend.LocalSend")
-
-if config.env.is_windows then
-    tools.add_tool({
-        name = "registry",
-        handler = {
-            install = function(tool_config)
-                return config.env.execute("./registry/apply_regedits.ps1")
-            end,
-            uninstall = function(tool_config)
-                return config.env.execute("./registry/remove_regedits.ps1")
-            end
-        }
-    })
-end

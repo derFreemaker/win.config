@@ -1,3 +1,4 @@
+---@type lua-term
 local term = require("tools.term")
 
 local winget = require("tools.winget")
@@ -72,7 +73,7 @@ function tools.install_tool(name)
 end
 
 function tools.install()
-    local install_loading = term.components.loading.new("install_loading", terminal)
+    local install_loading = term.components.loading.new("install_loading", terminal_footer)
 
     local one_item_percent = 100 / #tools.configs
     for name in pairs(tools.configs) do
@@ -81,11 +82,9 @@ function tools.install()
         end
 
         install_loading:changed_relativ(one_item_percent)
-        terminal:update()
     end
 
     install_loading:remove()
-    terminal:update()
 end
 
 ---@param name string
@@ -130,7 +129,7 @@ function tools.uninstall_tool(name)
 end
 
 function tools.uninstall()
-    local uninstall_loading = term.components.loading.new("uninstall_loading", terminal)
+    local uninstall_loading = term.components.loading.new("uninstall_loading", terminal_footer)
 
     local one_item_percent = 100 / #tools.configs
     for name in pairs(tools.configs) do
@@ -139,11 +138,9 @@ function tools.uninstall()
         end
 
         uninstall_loading:changed_relativ(one_item_percent)
-        terminal:update()
     end
 
     uninstall_loading:remove()
-    terminal:update()
 end
 
 ---@param name string
@@ -188,7 +185,7 @@ function tools.upgrade_tool(name)
 end
 
 function tools.upgrade()
-    local upgrade_loading = term.components.loading.new("upgrade_loading", terminal)
+    local upgrade_loading = term.components.loading.new("upgrade_loading", terminal_footer)
 
     local one_item_percent = 100 / #tools.configs
     for name in pairs(tools.configs) do
@@ -197,11 +194,9 @@ function tools.upgrade()
         end
 
         upgrade_loading:changed_relativ(one_item_percent)
-        terminal:update()
     end
 
     upgrade_loading:remove()
-    terminal:update()
 end
 
 ---@param name string
@@ -223,7 +218,7 @@ function tools.setup_tool(name)
 end
 
 function tools.setup()
-    local setup_loading = term.components.loading.new("setup_loading", terminal)
+    local setup_loading = term.components.loading.new("setup_loading", terminal_footer)
 
     local one_item_percent = 100 / #tools.configs
     for name in pairs(tools.configs) do
@@ -232,11 +227,9 @@ function tools.setup()
         end
 
         setup_loading:changed_relativ(one_item_percent)
-        terminal:update()
     end
 
     setup_loading:remove()
-    terminal:update()
 end
 
 ---@param tool_config config.tool_config

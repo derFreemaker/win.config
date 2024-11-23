@@ -6,7 +6,7 @@ local install = "winget install --disable-interactivity --id \"%s\""
 ---@return integer exitcode
 ---@return string output
 function winget.install(id)
-    local seg = terminal:print("installing '" .. id .. "' with winget...")
+    local seg = terminal_body:print("installing '" .. id .. "' with winget...")
     local success, exitcode, output = config.env.execute(install:format(id))
     seg:remove()
 
@@ -19,7 +19,7 @@ local uninstall = "winget uninstall --disable-interactivity --id \"%s\""
 ---@return integer exitcode
 ---@return string output
 function winget.uninstall(id)
-    local seg = terminal:print("uninstalling '" .. id .. "' with winget...")
+    local seg = terminal_body:print("uninstalling '" .. id .. "' with winget...")
     local success, exitcode, output = config.env.execute(uninstall:format(id))
     seg:remove()
 
@@ -32,7 +32,7 @@ local upgrade = "winget upgrade --disable-interactivity --id \"%s\""
 ---@return integer exitcode
 ---@return string output
 function winget.upgrade(id)
-    local seg = terminal:print("upgrading '" .. id .. "' with winget...")
+    local seg = terminal_body:print("upgrading '" .. id .. "' with winget...")
     local success, exitcode, output = config.env.execute(upgrade:format(id))
     seg:remove()
 

@@ -3,9 +3,11 @@ if not config.env.is_windows then
     os.exit(1)
 end
 
+---@type lua-term
 local term = require("tools.term")
 terminal = term.terminal.stdout()
-terminal:overrite_print()
+terminal_body = term.components.group.new("body", terminal)
+terminal_footer = term.components.group.new("footer", terminal)
 
 config.args_parser:command_target("command")
 config.args_parser:flag("-v --verbose")
@@ -40,12 +42,15 @@ function verbose(...)
         return
     end
 
+    terminal:update()
     print(...)
 end
 
 ---@param ... any
 function fatal(...)
+    terminal:update()
     print(...)
+
     os.exit(1)
 end
 

@@ -6,7 +6,10 @@
         "fatal",
         "portable",
         "verbose",
-        "terminal"
+
+        "terminal",
+        "terminal_body",
+        "terminal_footer"
     ],
     "workspace.library": [
         "lua-config"

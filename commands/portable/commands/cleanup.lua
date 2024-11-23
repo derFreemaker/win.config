@@ -1,7 +1,8 @@
+---@type lua-term
 local term = require("tools.term")
 
-print("cleaning up...")
-local cleanup_throbber = term.components.throbber.new("cleanup_throbber", terminal)
+terminal:print("cleaning up...")
+local cleanup_throbber = term.components.throbber.new("cleanup_throbber", terminal_footer)
 terminal:update()
 
 local pos = config.root_path:reverse():find("/", 2, true)
@@ -14,7 +15,7 @@ cleanup_throbber:rotate()
 
 local function cleanup_tool(tool)
     local tool_path = tools_dir .. tool
-    local tool_seg = terminal:print("cleaning up tool '" .. tool .. "'")
+    local tool_seg = terminal_body:print("cleaning up tool '" .. tool .. "'")
 
     local attr = lfs.attributes(tool_path)
     if not attr or attr.mode ~= "directory" or tool == "." or tool == ".." then

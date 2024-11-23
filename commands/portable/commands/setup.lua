@@ -1,7 +1,8 @@
+---@type lua-term
 local term = require("tools.term")
 
-print("setting up...")
-local setup_throbber = term.components.throbber.new("setup_throbber", terminal)
+terminal:print("setting up...")
+local setup_throbber = term.components.throbber.new("setup_throbber", terminal_footer)
 terminal:update()
 
 config.env.set("USERCONFIG_FREEMAKER_PORTABLE", config.root_path, "user")
@@ -55,6 +56,8 @@ end
 ---@param tool string
 local function setup_tool(tool)
     local tool_path = tools_dir .. tool
+    local tool_seg = terminal_body:print("tool '" .. tool .. "'...")
+
     local attr = lfs.attributes(tool_path)
     if not attr
         or attr.mode ~= "directory"
@@ -91,9 +94,7 @@ local function setup_tool(tool)
     end
     setup_throbber:rotate()
 
-    local tool_seg = terminal:print("tool '" .. tool .. "'...")
     portable.set_current_tool(tool)
-
     -- change into tool dir for easy relativ pathing
     lfs.chdir(portable.current_tool_path)
 
@@ -148,7 +149,6 @@ local bin_path = tools_dir:gsub("/", "\\") .. "bin"
 config.env.add("PATH", bin_path, "user", true, ";")
 
 config.env.set("PATH_FREEMAKER_PORTABLE", bin_path, "user")
-
 
 setup_throbber:remove()
 print("done setting up!")

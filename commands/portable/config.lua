@@ -24,7 +24,9 @@ function t.config(command)
     end
 end
 function t.execute()
-    print("running in portable mode")
+    terminal:print("running in portable mode")
+
+    -- call command
     require("commands.portable.commands." .. config.args.portable_command)
 end
 

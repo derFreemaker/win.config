@@ -1,6 +1,6 @@
 local winget = {}
 
-local install = "winget install --disable-interactivity --id \"%s\""
+local install = "winget install --disable-interactivity --id \"%s\" -e"
 ---@param id string
 ---@return boolean success
 ---@return integer exitcode
@@ -13,7 +13,7 @@ function winget.install(id)
     return success, exitcode, output
 end
 
-local uninstall = "winget uninstall --disable-interactivity --id \"%s\""
+local uninstall = "winget uninstall --disable-interactivity --id \"%s\" -e"
 ---@param id string
 ---@return boolean success
 ---@return integer exitcode
@@ -26,7 +26,7 @@ function winget.uninstall(id)
     return success, exitcode, output
 end
 
-local upgrade = "winget upgrade --disable-interactivity --id \"%s\""
+local upgrade = "winget upgrade --disable-interactivity --id \"%s\" -e"
 ---@param id string
 ---@return boolean success
 ---@return integer exitcode

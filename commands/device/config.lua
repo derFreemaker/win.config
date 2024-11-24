@@ -11,13 +11,14 @@ function t.config(command)
             file = file:match("(.+)%..+$") or file
             command
                 :command(file, "run " .. file .. " scripts")
-                :option("-n --name", "name of the program to be actioned on")
+                :argument("tools", "All the tools the command should act on.")
+                    :args("*")
         end
     end
 end
 
 function t.execute()
-    terminal:print("running in device mode")
+    terminal_body:print("running in device mode")
 
     -- register all tools
     require("register")

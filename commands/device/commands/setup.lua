@@ -1,10 +1,12 @@
 local tools = require("tools.tools")
 
-if config.args.name then
-    if not tools.setup_tool(config.args.name) then
-        terminal_body:print("failed to setup '" .. config.args.name .. "'")
-    end
+if not config.args.tools or #config.args.tools == 0 then
+    tools.setup()
     return
 end
 
-tools.setup()
+for _, tool in ipairs(config.args.tools) do
+    if not tools.setup_tool(tool) then
+        terminal_body:print("failed to setup '" .. tool .. "'")
+    end
+end

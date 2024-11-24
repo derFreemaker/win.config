@@ -1,4 +1,3 @@
-local winget = require("tools.winget")
 local tools = require("tools.tools")
 
 -- environment variables
@@ -39,7 +38,7 @@ tools.add_tool({
 })
 
 -- wezterm
-tools.use_winget("wez.wezterm")
+tools.use_winget("WezTerm", "wez.wezterm")
 
 -- powershell
 tools.add_tool({
@@ -66,10 +65,10 @@ tools.add_tool({
 })
 
 -- Git & co
-tools.use_winget("Git.Git")
-tools.use_winget("GitHub.GitHubDesktop")
+tools.use_winget("Git", "Git.Git")
+tools.use_winget("Github Desktop", "GitHub.GitHubDesktop")
 -- tools.use_winget("Axosoft.GitKraken")
-tools.use_winget("GitHub.cli")
+tools.use_winget("Github CLI", "GitHub.cli")
 
 tools.use_choco("mingw")
 tools.use_choco("make")
@@ -77,8 +76,9 @@ tools.use_choco("gsudo")
 
 -- cmake
 tools.add_tool({
-    name = "cmake.install",
-    handler = "chocolatey",
+    name = "CMake",
+    id = "cmake.install",
+    handler = tools.chocolatey,
     after = {
         install = function(tool_config)
             config.env.add("PATH", config.env.get("PROGRAMFILES") .. "/CMake/bin", "machine", true)
@@ -91,7 +91,7 @@ tools.add_tool({
 tools.use_choco("neovim")
 
 -- powertoys & co
-tools.use_winget("microsoft.powertoys")
+tools.use_winget("Powertoys", "microsoft.powertoys")
 tools.use_choco("everythingpowertoys")
 tools.add_tool({
     name = "chatgptpowertoys",
@@ -107,15 +107,16 @@ tools.add_tool({
 })
 
 -- everything
-tools.use_winget("voidtools.Everything")
+tools.use_winget("Everything", "voidtools.Everything")
 
 -- glazewm
 tools.add_tool({
-    name = "glzr-io.glazewm",
-    handler = "winget",
+    name = "Glazewm",
+    id = "glzr-io.glazewm",
+    handler = tools.winget,
     after = {
         install = function(tool_config)
-            winget.uninstall("glzr-io.zebar")
+            tools.winget.uninstall({ name = "zebar", id = "glzr-io.zebar" })
 
             local path = config.env.get("USERPROFILE") .. "/.glzr"
             if lfs.exists(path) then
@@ -162,12 +163,16 @@ tools.add_tool({
 })
 
 -- some other Programs
-tools.use_winget("7zip.7zip")
-tools.use_winget("Brave.Brave")
-tools.use_winget("Notepad++.Notepad++")
-tools.use_winget("Postman.Postman")
-tools.use_winget("Balena.Etcher")
-tools.use_winget("AnyDeskSoftwareGmbH.Anydesk")
+tools.use_winget("7zip", "7zip.7zip")
+tools.use_winget("Brave", "Brave.Brave")
+tools.use_winget("Notepad++", "Notepad++.Notepad++")
+tools.use_winget("BalenaEtcher", "Balena.Etcher")
+tools.use_winget("Anydesk", "AnyDeskSoftwareGmbH.Anydesk")
+
+
+tools.use_winget("WinToys", "9p8ltpgcbzxd")
+
 -- tools.use_winget("Zen-Team.Zen-Browser")
+-- tools.use_winget("Postman", "Postman.Postman")
 -- tools.use_winget("Docker.DockerDesktop")
 -- tools.use_winget("LocalSend.LocalSend")

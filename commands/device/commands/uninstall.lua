@@ -2,11 +2,13 @@ config.env.check_admin()
 
 local tools = require("tools.tools")
 
-if config.args.name then
-    if not tools.uninstall_tool(config.args.name) then
-        terminal_body:print("failed to uninstall '" .. config.args.name .. "'")
-    end
+if not config.args.tools or #config.args.tools == 0 then
+    tools.uninstall()
     return
 end
 
-tools.uninstall()
+for _, tool in ipairs(config.args.tools) do
+    if not tools.uninstall_tool(tool) then
+        terminal_body:print("failed to uninstall '" .. tool .. "'")
+    end
+end

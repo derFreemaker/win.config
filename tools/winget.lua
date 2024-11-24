@@ -1,7 +1,7 @@
 ---@class config.winget : config.tool_handler
 local winget = {}
 
-local install = "winget install --disable-interactivity --id \"%s\" -e"
+local install = "winget install --disable-interactivity --accept-source-agreements --accept-package-agreements --id \"%s\" -e"
 ---@param tool_config config.tool_config
 ---@return boolean success
 ---@return integer exitcode
@@ -27,7 +27,7 @@ function winget.uninstall(tool_config)
     return success, exitcode, output
 end
 
-local upgrade = "winget upgrade --disable-interactivity --id \"%s\" -e"
+local upgrade = "winget upgrade --disable-interactivity --accept-source-agreements --accept-package-agreements --id \"%s\" -e"
 ---@param tool_config config.tool_config
 ---@return boolean success
 ---@return integer exitcode

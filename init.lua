@@ -9,6 +9,10 @@ terminal = term.terminal.stdout()
 terminal_body = term.components.group.new("body", terminal)
 terminal_footer = term.components.group.new("footer", terminal)
 
+function print(...)
+    terminal_body:print(...)
+end
+
 config.args_parser:command_target("command")
 config.args_parser:flag("-v --verbose")
 

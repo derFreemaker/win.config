@@ -18,7 +18,7 @@ function t.config(command)
 end
 
 function t.execute()
-    terminal_body:print("running in device mode")
+    print("running in device mode")
 
     -- register all tools
     require("register")

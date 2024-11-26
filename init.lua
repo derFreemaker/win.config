@@ -3,19 +3,6 @@ if not config.env.is_windows then
     os.exit(1)
 end
 
----@type lua-term
-local term = require("tools.term")
-terminal = term.terminal.stdout()
-terminal_body = term.components.group.new("body", terminal)
-terminal_footer = term.components.group.new("footer", terminal)
-
-terminal.show_ids = true
-terminal.show_lines = true
-
-function print(...)
-    terminal_body:print(...)
-end
-
 config.args_parser:command_target("command")
 config.args_parser:flag("-v --verbose")
 
@@ -59,6 +46,19 @@ function fatal(...)
     print(...)
 
     os.exit(1)
+end
+
+---@type lua-term
+local term = require("tools.term")
+terminal = term.terminal.stdout()
+terminal_body = term.components.group.new("body", terminal)
+terminal_footer = term.components.group.new("footer", terminal)
+
+terminal.show_ids = true
+terminal.show_lines = true
+
+function print(...)
+    terminal_body:print(...)
 end
 
 -- execute chosen command init

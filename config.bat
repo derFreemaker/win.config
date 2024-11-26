@@ -1,6 +1,2 @@
 @echo off
-
-set SCRIPT_DIR=%~dp0
-set PATH=%SCRIPT_DIR%lua\;%PATH%
-
-%SCRIPT_DIR%/lua-config/bin/lua-config.bat %*
+powershell -NoProfile %~dp0/config.ps1 %*

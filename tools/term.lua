@@ -73,7 +73,6 @@ function __bundler__.__main__()
 		print("error in bundle loading thread:\n"
 			.. debug.traceback(loading_thread, items[1]))
 	end
-	coroutine.close(loading_thread)
 	__bundler__.__cleanup__()
 	return table.unpack(items)
 end
@@ -191,7 +190,6 @@ __bundler__.__files__["misc.utils"] = function()
 			print("error in bundle loading thread:\n"
 				.. debug.traceback(loading_thread, items[1]))
 		end
-		coroutine.close(loading_thread)
 		__bundler__.__cleanup__()
 		return table.unpack(items)
 	end
@@ -957,7 +955,6 @@ __bundler__.__files__["src.segment.init"] = function()
 				debug_traceback(pre_render_thread, str_or_err_msg),
 				string_rep("-", 80))
 		end
-		coroutine.close(pre_render_thread)
 
 		if not str_or_err_msg then
 			return {}, 0

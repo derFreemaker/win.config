@@ -54,7 +54,7 @@ terminal = term.terminal.stdout()
 terminal_body = term.components.group.new("body", terminal)
 terminal_footer = term.components.group.new("footer", terminal)
 
-terminal.show_ids = true
+-- terminal.show_ids = true
 terminal.show_lines = true
 
 function print(...)

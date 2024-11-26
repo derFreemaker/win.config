@@ -12,14 +12,14 @@ local choco = {}
 local function execute(action, name, command)
     local handle = config.env.start_execute(command)
 
-    -- local group = term.components.group.new(action .. "-chocolatey", terminal_body)
-    -- group:print(("%s '%s' with cocolatey...\n> %s"):format(action, name, command))
+    local group = term.components.group.new(action .. "-chocolatey", terminal_body)
+    group:print(("%s '%s' with cocolatey...\n> %s"):format(action, name, command))
     -- local stream = term.components.stream.new("execute", group, handle, {
     --     before = term.colors.foreground_24bit(59, 59, 59) .. "> ",
     --     after = tostring(term.colors.reset)
     -- })
     -- stream:read_all()
-    -- group:remove()
+    group:remove()
 
     return config.env.end_execute(handle)
 end

@@ -168,8 +168,6 @@ tools.use_winget("Brave", "Brave.Brave")
 tools.use_winget("Notepad++", "Notepad++.Notepad++")
 tools.use_winget("BalenaEtcher", "Balena.Etcher")
 tools.use_winget("Anydesk", "AnyDeskSoftwareGmbH.Anydesk")
-
-
 tools.use_winget("WinToys", "9p8ltpgcbzxd")
 
 -- tools.use_winget("Zen-Team.Zen-Browser")

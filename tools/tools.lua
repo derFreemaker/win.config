@@ -53,11 +53,11 @@ function tools.install_tool(name)
     else
         success = false
         exitcode = 1
-        output = "no install handler"
+        print("no install handler")
     end
 
     if not success then
-        print(string.format("exitcode: %s\n%s", tostring(exitcode), tostring(output)))
+        print("exitcode: " .. tostring(exitcode))
         return false
     end
 
@@ -101,11 +101,11 @@ function tools.uninstall_tool(name)
     else
         success = false
         exitcode = 1
-        output = "no uninstall handler"
+        print("no uninstall handler")
     end
 
     if not success then
-        print(string.format("exitcode: %s\n%s", tostring(exitcode), tostring(output)))
+        print("exitcode: " .. tostring(exitcode))
         return false
     end
 
@@ -149,11 +149,11 @@ function tools.upgrade_tool(name)
     else
         success = false
         exitcode = 1
-        output = "no upgrade handler"
+        print("no upgrade handler")
     end
 
     if not success then
-        print(string.format("exitcode: %s\n%s", tostring(exitcode), tostring(output)))
+        print("exitcode: " .. tostring(exitcode))
         return false
     end
 

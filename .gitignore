@@ -8,3 +8,6 @@ git
 jgit
 
 *.log
+
+# binaries
+bin

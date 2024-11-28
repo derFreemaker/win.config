@@ -58,6 +58,7 @@ function tools.install_tool(name)
 
     if not success then
         print("exitcode: " .. tostring(exitcode))
+        print(output)
         return false
     end
 
@@ -106,6 +107,7 @@ function tools.uninstall_tool(name)
 
     if not success then
         print("exitcode: " .. tostring(exitcode))
+        print(output)
         return false
     end
 
@@ -154,6 +156,7 @@ function tools.upgrade_tool(name)
 
     if not success then
         print("exitcode: " .. tostring(exitcode))
+        print(output)
         return false
     end
 

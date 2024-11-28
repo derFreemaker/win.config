@@ -1816,7 +1816,7 @@ end
 function screen_class:to_string()
 	local pos_y = 0
 	local result = {}
-	for y, row in pairs(self.m_screen) do
+	for y, row in ipairs(self.m_screen) do
 		while pos_y < y do
 			pos_y = pos_y + 1
 			if not result[pos_y] then
@@ -1826,7 +1826,7 @@ function screen_class:to_string()
 
 		local pos_x = 0
 		local line = {}
-		for x, char in pairs(row) do
+		for x, char in ipairs(row) do
 			while pos_x < x do
 				pos_x = pos_x + 1
 				if not line[pos_x] then

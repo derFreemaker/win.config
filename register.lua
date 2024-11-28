@@ -9,12 +9,22 @@ tools.add_tool({
             if not config.env.set("USERCONFIG_FREEMAKER", config.root_path, "user") then
                 return false, 1, "unable to set environment variable"
             end
+
+            if not config.env.add("PATH", config.root_path .. "bin", "user", true, ";") then
+                return false, 1, "unable to add '.../.config/bin' to PATH env var"
+            end
+
             return true, 0, ""
         end,
         uninstall = function(tool_config)
             if not config.env.unset("USERCONFIG_FREEMAKER", "user") then
                 return false, 1, "unable to remove environment variable"
             end
+
+            if not config.env.remove("PATH", config.root_path .. "bin;", "user") then
+                return false, 1, "unable to remove '.../.config/bin' from PATH env var"
+            end
+
             return true, 0, ""
         end
     }
@@ -180,13 +190,3 @@ tools.use_winget("Rust", "Rustlang.Rustup")
 
 -- tools
 tools.use_choco("wget", "wget")
-
--- Editor
-tools.add_tool {
-    name = "Zed",
-    handler = {
-        install = function(tool_config)
-            utils.display_execute("wget ")
-        end
-    }
-}

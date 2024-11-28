@@ -19,7 +19,11 @@ function utils.display_execute(command, display)
     })
     stream:read_all()
 
-    return config.env.end_execute(handle)
+    local success, exitcode = config.env.end_execute(handle)
+    ---@diagnostic disable-next-line: invisible
+    local output = stream.m_screen:to_string()
+
+    return success, exitcode, output
 end
 
 return utils

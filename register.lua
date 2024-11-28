@@ -170,7 +170,9 @@ tools.use_winget("BalenaEtcher", "Balena.Etcher")
 tools.use_winget("Anydesk", "AnyDeskSoftwareGmbH.Anydesk")
 tools.use_winget("WinToys", "9p8ltpgcbzxd")
 
--- tools.use_winget("Zen-Team.Zen-Browser")
+tools.use_winget("Zen", "Zen-Team.Zen-Browser")
+tools.use_winget("Rust", "Rustlang.Rustup")
+
 -- tools.use_winget("Postman", "Postman.Postman")
 -- tools.use_winget("Docker.DockerDesktop")
 -- tools.use_winget("LocalSend.LocalSend")

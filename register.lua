@@ -1,4 +1,5 @@
 local tools = require("tools.tools")
+local utils = require("tools.utils")
 
 -- environment variables
 tools.add_tool({
@@ -176,3 +177,16 @@ tools.use_winget("Rust", "Rustlang.Rustup")
 -- tools.use_winget("Postman", "Postman.Postman")
 -- tools.use_winget("Docker.DockerDesktop")
 -- tools.use_winget("LocalSend.LocalSend")
+
+-- tools
+tools.use_choco("wget", "wget")
+
+-- Editor
+tools.add_tool {
+    name = "Zed",
+    handler = {
+        install = function(tool_config)
+            utils.display_execute("wget ")
+        end
+    }
+}

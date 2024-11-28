@@ -1,5 +1,6 @@
 ---@type lua-term
 local term = require("tools.term")
+local utils = require("tools.utils")
 
 ---@class config.winget : config.tool_handler
 local winget = {}
@@ -10,18 +11,9 @@ local winget = {}
 ---@return integer exitcode
 ---@return string output
 local function execute(action, name, command)
-    local handle = config.env.start_execute(command)
-
     local group = term.components.group.new(action .. "-winget", terminal_body)
     group:print(("%s '%s' with winget...\n> %s"):format(action, name, command))
-    local stream = term.components.stream.new("execute", group, handle, {
-        before = term.colors.foreground_24bit(100, 100, 100) .. "> ",
-        after = tostring(term.colors.reset)
-    })
-    stream:read_all()
-    group:remove()
-
-    return config.env.end_execute(handle)
+    return utils.display_execute(command, group)
 end
 
 local install = "winget install --disable-interactivity --accept-source-agreements --accept-package-agreements --id \"%s\" -e"

@@ -42,6 +42,7 @@ local tools = {
 function tools.install_tool(name)
     local config = tools.m_configs[name]
     if not config then
+        print("no config for '" .. name .. "'")
         return false
     end
 
@@ -91,10 +92,11 @@ end
 function tools.uninstall_tool(name)
     local config = tools.m_configs[name]
     if not config then
+        print("no config for '" .. name .. "'")
         return false
     end
 
-    terminal_body:print("uninstalling '" .. name .. "'...")
+    print("uninstalling '" .. name .. "'...")
 
     local success, exitcode, output
     if config.handler and config.handler.uninstall then
@@ -140,6 +142,7 @@ end
 function tools.upgrade_tool(name)
     local config = tools.m_configs[name]
     if not config then
+        print("no config for '" .. name .. "'")
         return false
     end
 
@@ -189,6 +192,7 @@ end
 function tools.setup_tool(name)
     local config = tools.m_configs[name]
     if not config then
+        print("no config for '" .. name .. "'")
         return false
     end
 

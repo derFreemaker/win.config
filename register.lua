@@ -103,15 +103,11 @@ tools.add_tool({
     handler = tools.chocolatey,
     setup = function(tool_config)
         local config_folder_path = config.env.get("LOCALAPPDATA") .. "/nvim"
-        if lfs.exists(config_folder_path) then
-            return false, "unable to setup neovim since config directory already exists"
-        end
-
         if not config.path.create_junction(config_folder_path, config.root_path .. "/editor/nvim") then
-            return false, "unable to create config folder junction"
+            return false, "unable to create config junction"
         end
 
-        local success, _, output = utils.display_execute("git clone https://github.com/wbthomason/packer.nvim '$env:LOCALAPPDATA/nvim-data/site/pack/packer/start/packer.nvim'")
+        local success, _, output = utils.display_execute("git clone https://github.com/wbthomason/packer.nvim '" .. config.env.get("LOCALAPPDATA") .. "/nvim-data/site/pack/packer/start/packer.nvim'")
         return success, output
     end
 })

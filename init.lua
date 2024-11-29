@@ -60,3 +60,5 @@ end
 
 -- execute chosen command init
 commands[config.args.command]()
+
+print("finished")

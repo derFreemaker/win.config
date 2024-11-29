@@ -54,7 +54,6 @@ tools.use_winget("WezTerm", "wez.wezterm")
 -- powershell
 tools.add_tool({
     name = "powershell",
-    handler = {},
     setup = function(tool_config)
         local success = config.env.execute(
             "pwsh -Command \"New-Item -ItemType Directory -Path (Split-Path -Parent $PROFILE) -Force;"
@@ -98,8 +97,33 @@ tools.add_tool({
     }
 })
 
--- neovim
-tools.use_choco("neovim")
+-- editor
+tools.add_tool({
+    name = "neovim",
+    handler = tools.chocolatey,
+    setup = function(tool_config)
+        local config_folder_path = config.env.get("LOCALAPPDATA") .. "/nvim"
+        if lfs.exists(config_folder_path) then
+            return false, "unable to setup neovim since config directory already exists"
+        end
+
+        if not config.path.create_junction(config_folder_path, config.root_path .. "/editor/nvim") then
+            return false, "unable to create config folder junction"
+        end
+
+        local success, _, output = utils.display_execute("git clone https://github.com/wbthomason/packer.nvim '$env:LOCALAPPDATA/nvim-data/site/pack/packer/start/packer.nvim'")
+        return success, output
+    end
+})
+tools.add_tool({
+    name = "Zed",
+    setup = function(tool_config)
+        if not config.path.create_junction(config.env.get("APPDATA") .. "/Zed", config.root_path .. "editor/zed") then
+            return false, "unable to create config junction"
+        end
+        return true
+    end
+})
 
 -- powertoys & co
 tools.use_winget("Powertoys", "microsoft.powertoys")

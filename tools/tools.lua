@@ -16,7 +16,7 @@ local term = require("tools.term")
 ---@field id string | nil
 ---@field handler config.tool_handler | nil
 ---@field after config.tool_handler.after | nil
----@field setup (fun(tool_config: config.tool_config) : boolean) | nil
+---@field setup (fun(tool_config: config.tool_config) : boolean, string | nil) | nil
 
 ---@class config.tool_config
 ---@field name string
@@ -48,7 +48,7 @@ function tools.install_tool(name)
     terminal_body:print("installing '" .. name .. "'...")
 
     local success, exitcode, output
-    if config.handler.install then
+    if config.handler and config.handler.install then
         success, exitcode, output = config.handler.install(config)
     else
         success = false
@@ -97,7 +97,7 @@ function tools.uninstall_tool(name)
     terminal_body:print("uninstalling '" .. name .. "'...")
 
     local success, exitcode, output
-    if config.handler.uninstall then
+    if config.handler and config.handler.uninstall then
         success, exitcode, output = config.handler.uninstall(config)
     else
         success = false
@@ -146,7 +146,7 @@ function tools.upgrade_tool(name)
     terminal_body:print("upgrading '" .. name .. "'...")
 
     local success, exitcode, output
-    if config.handler.upgrade then
+    if config.handler and config.handler.upgrade then
         success, exitcode, output = config.handler.upgrade(config)
     else
         success = false
@@ -192,11 +192,17 @@ function tools.setup_tool(name)
         return false
     end
 
-    terminal_body:print("setting up '" .. name .. "' ")
+    local settup_text = terminal_body:print("setting up '" .. name .. "'...")
 
-    local success = true
+    local success, err_msg = true, nil
     if config.setup then
-        success = config.setup(config)
+        success, err_msg = config.setup(config)
+    end
+
+    if not success then
+        terminal_body:print("failed:\n" .. tostring(err_msg))
+    else
+        settup_text:remove()
     end
 
     return success

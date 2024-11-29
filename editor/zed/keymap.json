@@ -1,0 +1,40 @@
+// Zed keymap
+
+//
+
+// For information on binding keys, see the Zed
+
+// documentation: https://zed.dev/docs/key-bindings
+
+//
+
+// To see the default key bindings run `zed: open default keymap`
+
+// from the command palette.
+
+[
+  {
+    "context": "Workspace",
+    "use_layout_keys": true,
+    "bindings": {
+      "ctrl-e": "file_finder::Toggle",
+      "alt-e": "workspace::ToggleRightDock"
+    }
+  },
+  {
+    "context": "Editor",
+    "use_layout_keys": true,
+    "bindings": {
+      "alt-left": "pane::ActivatePrevItem",
+      "alt-right": "pane::ActivateNextItem",
+
+      "alt-shift-left": "pane::GoBack",
+      "alt-shift-right": "pane::GoForward",
+      "alt-shift-up": "editor::DuplicateLineUp",
+      "alt-shift-down": "editor::DuplicateLineDown",
+
+      "ctrl-shift-up": "editor::SelectUp",
+      "ctrl-shift-down": "editor::SelectDown"
+    }
+  }
+]

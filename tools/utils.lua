@@ -13,7 +13,9 @@ function utils.display_execute(command, display)
     display = display or terminal_body
     local handle = config.env.start_execute(command)
 
-    local stream = term.components.stream.new("execute", display, handle, {
+    local execute_group = term.components.group.new("<execute-group>", display)
+    execute_group:print("> " .. command)
+    local stream = term.components.stream.new("execute", execute_group, handle, {
         before = term.colors.foreground_24bit(100, 100, 100) .. "> ",
         after = tostring(term.colors.reset)
     })

@@ -96,6 +96,7 @@ tools.add_tool({
         end
     }
 })
+tools.use_choco("ninja")
 
 -- editor
 tools.add_tool({
@@ -107,7 +108,8 @@ tools.add_tool({
             return false, "unable to create config junction"
         end
 
-        local success, _, output = utils.display_execute("git clone https://github.com/wbthomason/packer.nvim '" .. config.env.get("LOCALAPPDATA") .. "/nvim-data/site/pack/packer/start/packer.nvim'")
+        local success, _, output = utils.display_execute("git clone https://github.com/wbthomason/packer.nvim '" ..
+        config.env.get("LOCALAPPDATA") .. "/nvim-data/site/pack/packer/start/packer.nvim'")
         return success, output
     end
 })

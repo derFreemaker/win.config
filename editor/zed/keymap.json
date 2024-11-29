@@ -1,40 +1,56 @@
 // Zed keymap
-
 //
-
 // For information on binding keys, see the Zed
-
 // documentation: https://zed.dev/docs/key-bindings
-
 //
-
 // To see the default key bindings run `zed: open default keymap`
-
 // from the command palette.
-
 [
   {
-    "context": "Workspace",
     "use_layout_keys": true,
     "bindings": {
+      // standard
       "ctrl-e": "file_finder::Toggle",
-      "alt-e": "workspace::ToggleRightDock"
+      "alt-e": "workspace::ToggleRightDock",
+      "alt-k": "outline::Toggle",
+      "alt-left": "pane::ActivatePrevItem",
+      "alt-right": "pane::ActivateNextItem"
     }
   },
   {
     "context": "Editor",
     "use_layout_keys": true,
     "bindings": {
-      "alt-left": "pane::ActivatePrevItem",
-      "alt-right": "pane::ActivateNextItem",
-
+      "ctrl-shift-up": "editor::SelectUp",
+      "ctrl-shift-down": "editor::SelectDown",
       "alt-shift-left": "pane::GoBack",
       "alt-shift-right": "pane::GoForward",
       "alt-shift-up": "editor::DuplicateLineUp",
       "alt-shift-down": "editor::DuplicateLineDown",
 
-      "ctrl-shift-up": "editor::SelectUp",
-      "ctrl-shift-down": "editor::SelectDown"
+      // actions
+      "ctrl-#": "editor::ToggleComments",
+      "ctrl-h": "editor::Hover",
+      "f12": "editor::GoToDefinition"
+    }
+  },
+  {
+    "context": "!Terminal",
+    "bindings": {
+      "ctrl-shift-c": null
+    }
+  },
+
+  // panels
+  {
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      "space": null,
+      "enter": "project_panel::Open",
+      "f2": "project_panel::Rename",
+
+      "ctrl-n": "project_panel::NewFile",
+      "ctrl-shift-n": "project_panel::NewDirectory"
     }
   }
 ]

@@ -12,11 +12,12 @@ local winget = {}
 ---@return string output
 local function execute(action, name, command)
     local group = term.components.group.new(action .. "-winget", terminal_body)
-    group:print(("%s '%s' with winget...\n> %s"):format(action, name, command))
+    group:print(("%s '%s' with winget..."):format(action, name))
     return utils.display_execute(command, group)
 end
 
-local install = "winget install --disable-interactivity --accept-source-agreements --accept-package-agreements --id \"%s\" -e"
+local install =
+"winget install --disable-interactivity --accept-source-agreements --accept-package-agreements --id \"%s\" -e"
 ---@param tool_config config.tool_config
 ---@return boolean success
 ---@return integer exitcode
@@ -42,7 +43,8 @@ function winget.uninstall(tool_config)
     )
 end
 
-local upgrade = "winget upgrade --disable-interactivity --accept-source-agreements --accept-package-agreements --id \"%s\" -e"
+local upgrade =
+"winget upgrade --disable-interactivity --accept-source-agreements --accept-package-agreements --id \"%s\" -e"
 ---@param tool_config config.tool_config
 ---@return boolean success
 ---@return integer exitcode

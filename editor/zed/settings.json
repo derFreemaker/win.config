@@ -7,30 +7,82 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "features": {
-    "copilot": false,
-    "inline_completion_provider": "none"
+  // panels
+  "assistant": {
+    "version": "2",
+    "button": false
+  },
+  "chat_panel": {
+    "button": false
+  },
+  "collaboration_panel": {
+    "button": false
+  },
+  "outline_panel": {
+    "button": false
+  },
+  "terminal": {
+    "button": false
   },
   "project_panel": {
     "dock": "right"
   },
+  "notification_panel": {
+    "dock": "right"
+  },
+
+  // search and scans
+  "use_smartcase_search": true,
+  "file_scan_exclusions": [
+    "**/.git",
+    "**/.svn",
+    "**/.hg",
+    "**/CVS",
+    "**/Thumbs.db",
+    "**/.DS_Store"
+  ],
+
+  // code stuff
+  "features": {
+    "inline_completion_provider": "none",
+    "copilot": false
+  },
+  "inlay_hints": {
+    "enabled": true
+  },
+  "languages": {
+    "Python": {
+      "indent_guides": {
+        "coloring": "disabled",
+        "background_coloring": "indent_aware"
+      }
+    }
+  },
+  "indent_guides": {
+    "active_line_width": 3,
+    "line_width": 1,
+    "coloring": "indent_aware"
+  },
+  "current_line_highlight": "all",
+  "lsp": {
+    "clangd": {
+      "arguments": ["-backgroud-index", "-compile-commands-dir=build/debug"]
+    }
+  },
+
+  // diagnositc data
   "telemetry": {
     "diagnostics": false,
     "metrics": false
   },
-  "base_keymap": "VSCode",
+
+  // ui
   "ui_font_size": 16,
   "buffer_font_size": 16,
   "theme": {
     "mode": "dark",
     "light": "One Light",
-    "dark": "Ayu Dark"
-  },
-  "terminal": {
-    "font_family": "JetBrainsMono Nerd Font"
-  },
-  "inlay_hints": {
-    "enabled": true
+    "dark": "Colorizer Pro"
   },
   "buffer_font_family": "JetBrainsMono Nerd Font",
   "ui_font_family": "JetBrainsMono Nerd Font",
@@ -40,5 +92,7 @@
   "buffer_font_features": {
     "calt": true
   },
+
+  // misc
   "ensure_final_newline_on_save": true
 }

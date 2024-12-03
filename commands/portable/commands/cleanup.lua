@@ -54,7 +54,6 @@ local function cleanup_tool(tool)
         print("tool '" .. tool .. "' cleanup failed with:\n"
             .. debug.traceback(tool_thread, setup_err_msg))
     end
-    coroutine.close(tool_thread)
 end
 
 for tool in lfs.dir(tools_dir) do

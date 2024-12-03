@@ -56,6 +56,7 @@ end
 ---@param tool string
 local function setup_tool(tool)
     local tool_path = tools_dir .. tool
+
     local attr = lfs.attributes(tool_path)
     if not attr
         or attr.mode ~= "directory"
@@ -75,6 +76,7 @@ local function setup_tool(tool)
 
     local disable_path = tool_config_path .. ".disable"
     if lfs.exists(disable_path) then
+        tool_seg:remove(false)
         print("tool '" .. tool .. "' is disabled")
         tool_seg:remove()
         return
@@ -82,6 +84,7 @@ local function setup_tool(tool)
 
     local tool_setup_path = tool_config_path .. "setup.lua"
     if not lfs.exists(tool_setup_path) then
+        tool_seg:remove()
         verbose("tool '" .. tool .. "' has no 'setup.lua' script in '.config' directory")
         tool_seg:remove()
         return
@@ -90,6 +93,7 @@ local function setup_tool(tool)
 
     local setup_func, load_err_msg = loadfile(tool_setup_path)
     if not setup_func then
+        tool_seg:remove(false)
         print("unable to load setup file for tool '" .. tool .. "'\n" .. load_err_msg)
         tool_seg:remove()
         return
@@ -102,7 +106,7 @@ local function setup_tool(tool)
 
     local tool_thread = coroutine.create(setup_func)
     local success, setup_err_msg = coroutine.resume(tool_thread)
-    
+
     tool_seg:remove(false)
     if not success then
         print("tool '" .. tool .. "' setup failed with:\n"

@@ -13,8 +13,10 @@
       "ctrl-e": "file_finder::Toggle",
       "alt-e": "workspace::ToggleRightDock",
       "alt-k": "outline::Toggle",
+      "ctrl-w": "pane::CloseActiveItem",
       "alt-left": "pane::ActivatePrevItem",
-      "alt-right": "pane::ActivateNextItem"
+      "alt-right": "pane::ActivateNextItem",
+      "ctrl-shift-c": "workspace::OpenTerminal"
     }
   },
   {
@@ -31,11 +33,22 @@
       // actions
       "ctrl-#": "editor::ToggleComments",
       "ctrl-h": "editor::Hover",
-      "f12": "editor::GoToDefinition"
+      "shift-f12": "editor::GoToDefinition",
+      "f12": "editor::GoToTypeDefinition"
+    }
+  },
+
+  // terminal
+  {
+    "context": "Terminal",
+    "use_layout_keys": true,
+    "bindings": {
+      "ctrl-shift-e": "terminal_panel::ToggleFocus"
     }
   },
   {
     "context": "!Terminal",
+    "use_layout_keys": true,
     "bindings": {
       "ctrl-shift-c": null
     }

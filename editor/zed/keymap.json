@@ -15,8 +15,7 @@
       "alt-k": "outline::Toggle",
       "ctrl-w": "pane::CloseActiveItem",
       "alt-left": "pane::ActivatePrevItem",
-      "alt-right": "pane::ActivateNextItem",
-      "ctrl-shift-c": "workspace::OpenTerminal"
+      "alt-right": "pane::ActivateNextItem"
     }
   },
   {

@@ -1251,7 +1251,8 @@ function loading:render()
 		return self.config.color_bg(string_rep(" ", self.config.length))
 	end
 
-	return self.config.color_fg(string_rep(" ", mark_tiles)) .. self.config.color_bg(string_rep(" ", self.config.length - mark_tiles))
+	return self.config.color_fg(string_rep(" ", mark_tiles)) ..
+	self.config.color_bg(string_rep(" ", self.config.length - mark_tiles))
 end
 
 ---@param state_percent integer | nil
@@ -1467,8 +1468,13 @@ end
 --- segment_parent ---
 ----------------------
 
+function line_class:update()
+	self.m_parent:update()
+end
+
+---@return lua-term.segment
 function line_class:print(...)
-	text_segment.print(self, ...)
+	return text_segment.print(self, ...)
 end
 
 function line_class:add_segment(id, segment)
@@ -1484,10 +1490,6 @@ function line_class:remove_child(child)
 	end
 
 	self.m_requested_update = true
-end
-
-function line_class:update()
-	self.m_parent:update()
 end
 
 return line_class
@@ -1817,7 +1819,7 @@ end
 function screen_class:to_string()
 	local pos_y = 0
 	local result = {}
-	for y, row in ipairs(self.m_screen) do
+	for y, row in pairs(self.m_screen) do
 		while pos_y < y do
 			pos_y = pos_y + 1
 			if not result[pos_y] then
@@ -1827,7 +1829,7 @@ function screen_class:to_string()
 
 		local pos_x = 0
 		local line = {}
-		for x, char in ipairs(row) do
+		for x, char in pairs(row) do
 			while pos_x < x do
 				pos_x = pos_x + 1
 				if not line[pos_x] then

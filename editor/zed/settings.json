@@ -21,9 +21,6 @@
   "outline_panel": {
     "button": false
   },
-  "terminal": {
-    "button": false
-  },
   "project_panel": {
     "dock": "right"
   },
@@ -93,6 +90,13 @@
     "calt": true
   },
 
-  // misc
+  // terminal
+  "terminal": {
+    "shell": {
+      "program": "pwsh"
+    }
+  },
+
+  // other
   "ensure_final_newline_on_save": true
 }

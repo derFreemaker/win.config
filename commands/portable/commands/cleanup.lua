@@ -15,7 +15,6 @@ cleanup_throbber:rotate()
 
 local function cleanup_tool(tool)
     local tool_path = tools_dir .. tool
-    local tool_seg = terminal_body:print("cleaning up tool '" .. tool .. "'")
 
     local attr = lfs.attributes(tool_path)
     if not attr or attr.mode ~= "directory" or tool == "." or tool == ".." then
@@ -28,8 +27,11 @@ local function cleanup_tool(tool)
         return
     end
 
+    local tool_seg = terminal_body:print("cleaning up tool '" .. tool .. "'")
+
     local disable_path = tool_config_path .. ".disable"
     if lfs.exists(disable_path) then
+        tool_seg:remove(false)
         print("tool '" .. tool .. "' is disabled")
         return
     end
@@ -37,11 +39,13 @@ local function cleanup_tool(tool)
 
     local tool_cleanup_path = tool_config_path .. "cleanup.lua"
     if not lfs.exists(tool_cleanup_path) then
+        tool_seg:remove()
         return
     end
 
     local cleanup_func, err_msg = loadfile(tool_cleanup_path)
     if not cleanup_func then
+        tool_seg:remove(false)
         print("unable to load cleanup file for tool '" .. tool .. "'\n" .. err_msg)
         return
     end
@@ -49,12 +53,12 @@ local function cleanup_tool(tool)
 
     local tool_thread = coroutine.create(cleanup_func)
     local success, setup_err_msg = coroutine.resume(tool_thread)
-    tool_seg:remove()
+
+    tool_seg:remove(false)
     if not success then
         print("tool '" .. tool .. "' cleanup failed with:\n"
             .. debug.traceback(tool_thread, setup_err_msg))
     end
-    coroutine.close(tool_thread)
 end
 
 for tool in lfs.dir(tools_dir) do

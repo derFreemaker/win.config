@@ -27,12 +27,11 @@ local function cleanup_tool(tool)
         return
     end
 
-    local tool_seg = terminal_body:print("cleaning up tool '" .. tool .. "'")
+    local tool_seg = term.components.text.new("<tool-state>", terminal_body, "cleaning up tool '" .. tool .. "'")
 
     local disable_path = tool_config_path .. ".disable"
     if lfs.exists(disable_path) then
-        tool_seg:remove(false)
-        print("tool '" .. tool .. "' is disabled")
+        tool_seg:change("tool '" .. tool .. "' is disabled")
         return
     end
     cleanup_throbber:rotate()
@@ -40,13 +39,13 @@ local function cleanup_tool(tool)
     local tool_cleanup_path = tool_config_path .. "cleanup.lua"
     if not lfs.exists(tool_cleanup_path) then
         tool_seg:remove()
+        verbose("tool '" .. tool .. "' has no 'cleanup.lua' script in '.config' directory")
         return
     end
 
     local cleanup_func, err_msg = loadfile(tool_cleanup_path)
     if not cleanup_func then
-        tool_seg:remove(false)
-        print("unable to load cleanup file for tool '" .. tool .. "'\n" .. err_msg)
+        tool_seg:change("unable to load cleanup file for tool '" .. tool .. "'\n" .. err_msg)
         return
     end
     cleanup_throbber:rotate()

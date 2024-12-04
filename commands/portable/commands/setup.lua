@@ -72,13 +72,11 @@ local function setup_tool(tool)
     end
     setup_throbber:rotate()
 
-    local tool_seg = terminal_body:print("tool '" .. tool .. "'...")
+    local tool_seg = term.components.text.new("<tool-state>", terminal_body, "tool '" .. tool "'...")
 
     local disable_path = tool_config_path .. ".disable"
     if lfs.exists(disable_path) then
-        tool_seg:remove(false)
-        print("tool '" .. tool .. "' is disabled")
-        tool_seg:remove()
+        tool_seg:change("tool '" .. tool .. "' is disabled")
         return
     end
 
@@ -86,16 +84,13 @@ local function setup_tool(tool)
     if not lfs.exists(tool_setup_path) then
         tool_seg:remove()
         verbose("tool '" .. tool .. "' has no 'setup.lua' script in '.config' directory")
-        tool_seg:remove()
         return
     end
     setup_throbber:rotate()
 
     local setup_func, load_err_msg = loadfile(tool_setup_path)
     if not setup_func then
-        tool_seg:remove(false)
-        print("unable to load setup file for tool '" .. tool .. "'\n" .. load_err_msg)
-        tool_seg:remove()
+        tool_seg:change("unable to load setup file for tool '" .. tool .. "'\n" .. load_err_msg)
         return
     end
     setup_throbber:rotate()

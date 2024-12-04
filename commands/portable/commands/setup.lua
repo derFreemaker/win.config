@@ -72,7 +72,7 @@ local function setup_tool(tool)
     end
     setup_throbber:rotate()
 
-    local tool_seg = term.components.text.new("<tool-state>", terminal_body, "tool '" .. tool "'...")
+    local tool_seg = term.components.text.new("<tool-state>", terminal_body, "tool '" .. tool .. "'...")
 
     local disable_path = tool_config_path .. ".disable"
     if lfs.exists(disable_path) then

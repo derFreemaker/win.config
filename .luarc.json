@@ -9,7 +9,8 @@
 
         "terminal",
         "terminal_body",
-        "terminal_footer"
+        "terminal_footer",
+        "terminal_status_bar"
     ],
     "workspace.library": [
         "lua-config"

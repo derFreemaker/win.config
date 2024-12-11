@@ -1,8 +1,8 @@
 ---@type lua-term
 local term = require("tools.term")
 
-terminal:print("setting up...")
-local setup_throbber = term.components.throbber.new("setup_throbber", terminal_footer)
+terminal_status_bar:print("setting up...")
+local setup_throbber = term.components.throbber.new("setup_throbber", terminal_status_bar)
 terminal:update()
 
 config.env.set("USERCONFIG_FREEMAKER_PORTABLE", config.root_path, "user")

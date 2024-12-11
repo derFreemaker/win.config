@@ -1,8 +1,8 @@
 ---@type lua-term
 local term = require("tools.term")
 
-terminal:print("cleaning up...")
-local cleanup_throbber = term.components.throbber.new("cleanup_throbber", terminal_footer)
+terminal_status_bar:print("cleaning up...")
+local cleanup_throbber = term.components.throbber.new("cleanup_throbber", terminal_status_bar)
 terminal:update()
 
 local pos = config.root_path:reverse():find("/", 2, true)
@@ -70,7 +70,5 @@ config.env.remove("PATH", tools_dir .. "bin;", "user")
 config.env.unset("TOOLS_FREEMAKER_PORTABLE", "user")
 config.env.unset("USERCONFIG_FREEMAKER_PORTABLE", "user")
 config.env.unset("DRIVE_FREEMAKER_PORTABLE", "user")
-
-cleanup_throbber:remove()
 
 print("done cleaning up!")

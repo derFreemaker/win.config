@@ -29,36 +29,34 @@ end
 
 config.parse_args()
 
+---@type lua-term
+local term = require("tools.term")
+terminal = term.terminal.stdout()
+terminal_body = term.components.group.new("body", terminal)
+terminal_footer = term.components.group.new("footer", terminal)
+terminal_status_bar = term.components.group.new("status_bar", terminal)
+
+function print(...)
+    terminal_body:print(...)
+end
+
 local _verbose = config.args.verbose
 ---@param ... any
 function verbose(...)
     if not _verbose then
         return
     end
-
-    terminal:update()
     print(...)
 end
 
 ---@param ... any
 function fatal(...)
-    terminal:update()
     print(...)
-
     os.exit(1)
 end
 
----@type lua-term
-local term = require("tools.term")
-terminal = term.terminal.stdout()
-terminal_body = term.components.group.new("body", terminal)
-terminal_footer = term.components.group.new("footer", terminal)
-
-function print(...)
-    terminal_body:print(...)
-end
 
 -- execute chosen command init
 commands[config.args.command]()
 
-print("finished")
+terminal_status_bar:remove()

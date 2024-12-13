@@ -138,7 +138,11 @@ for name, path in pairs(portable.paths) do
             goto continue
         end
 
-        batch_file:write(("@echo off\n start \"\" \"" .. path .. "\" %*"))
+        batch_file:write(([[
+@echo off
+start "" "]] .. path .. [[" %*
+exit
+]]))
         batch_file:close()
     end
 

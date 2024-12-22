@@ -210,12 +210,12 @@ keybindings:
     bindings: ['alt+shift+c']
 
   # Kill GlazeWM process safely.
-  - commands: ['wm-exit']
-    bindings: ['alt+shift+m']
+  # - commands: ['wm-exit']
+  #   bindings: ['alt+shift+m']
 
   # Re-evaluate configuration file.
-  - commands: ['wm-reload-config']
-    bindings: ['alt+shift+r']
+  # - commands: ['wm-reload-config']
+  #   bindings: ['alt+shift+r']
 
   # Redraw all windows.
   # - commands: ['wm-redraw']

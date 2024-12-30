@@ -48,9 +48,6 @@ tools.add_tool({
     }
 })
 
--- wezterm
-tools.use_winget("WezTerm", "wez.wezterm")
-
 -- powershell
 tools.add_tool({
     name = "powershell",

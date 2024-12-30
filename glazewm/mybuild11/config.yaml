@@ -130,8 +130,11 @@ window_rules:
   - commands: ['move --workspace 9']
     match:
       - window_title: { equals: 'Steam' }
-
       - window_process: { equals: 'Steam WebHelper Client' }
+
+  - commands: ['move --workspace 9']
+    match:
+      - window_process: { equals: 'EpicGamesLauncher' }
 
   - commands: ['move --workspace 0']
     match:

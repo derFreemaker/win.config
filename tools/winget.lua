@@ -11,7 +11,7 @@ local winget = {}
 ---@return integer exitcode
 ---@return string output
 local function execute(action, name, command)
-    local group = term.components.group.new(action .. "-winget", terminal_body)
+    local group = term.components.group(action .. "-winget", terminal_body)
     group:print(("%s '%s' with winget..."):format(action, name))
     return utils.display_execute(command, group)
 end

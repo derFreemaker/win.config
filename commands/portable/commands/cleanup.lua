@@ -2,7 +2,7 @@
 local term = require("tools.term")
 
 terminal_status_bar:print("cleaning up...")
-local cleanup_throbber = term.components.throbber.new("cleanup_throbber", terminal_status_bar)
+local cleanup_throbber = term.components.throbber("cleanup_throbber", terminal_status_bar)
 terminal:update()
 
 local pos = config.root_path:reverse():find("/", 2, true)
@@ -27,7 +27,7 @@ local function cleanup_tool(tool)
         return
     end
 
-    local tool_seg = term.components.text.new("<tool-state>", terminal_body, "cleaning up tool '" .. tool .. "'")
+    local tool_seg = term.components.text("<tool-state>", terminal_body, "cleaning up tool '" .. tool .. "'")
 
     local disable_path = tool_config_path .. ".disable"
     if lfs.exists(disable_path) then

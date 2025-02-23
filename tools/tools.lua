@@ -38,7 +38,7 @@ local tools = {
 }
 
 ---@param name string
----@param parent lua-term.segment_parent
+---@param parent lua-term.segment.parent
 ---@return boolean
 function tools.install_tool(name, parent)
     local config = tools.m_configs[name]
@@ -47,7 +47,8 @@ function tools.install_tool(name, parent)
         return false
     end
 
-    local state = term.components.text.new("install-state-" .. name, parent, "installing '" .. name .. "'...")
+    local state = term.components.text("install-state-" .. name, parent, "installing '" .. name .. "'...")
+    parent:update()
 
     local success, exitcode, output
     if config.handler and config.handler.install then
@@ -75,19 +76,20 @@ function tools.install_tool(name, parent)
 end
 
 function tools.install()
-    local install_loading = term.components.loading.new("install_loading", terminal_status_bar)
+    local install_loading = term.components.loading("install_loading", terminal_status_bar, {
+        count = #tools.m_configs
+    })
 
-    local one_item_percent = 100 / #tools.m_configs
     for name in pairs(tools.m_configs) do
         tools.install_tool(name, terminal_body)
-        install_loading:changed_relativ(one_item_percent)
+        install_loading:changed_relativ(1)
     end
 
     install_loading:remove()
 end
 
 ---@param name string
----@param parent lua-term.segment_parent
+---@param parent lua-term.segment.parent
 ---@return boolean
 function tools.uninstall_tool(name, parent)
     local config = tools.m_configs[name]
@@ -96,7 +98,8 @@ function tools.uninstall_tool(name, parent)
         return false
     end
 
-    local state = term.components.text.new("uninstall-state-" .. name, parent, "uninstalling '" .. name .. "'...")
+    local state = term.components.text("uninstall-state-" .. name, parent, "uninstalling '" .. name .. "'...")
+    parent:update()
 
     local success, exitcode, output
     if config.handler and config.handler.uninstall then
@@ -124,19 +127,20 @@ function tools.uninstall_tool(name, parent)
 end
 
 function tools.uninstall()
-    local uninstall_loading = term.components.loading.new("uninstall_loading", terminal_status_bar)
+    local uninstall_loading = term.components.loading("uninstall_loading", terminal_status_bar, {
+        count = #tools.m_configs
+    })
 
-    local one_item_percent = 100 / #tools.m_configs
     for name in pairs(tools.m_configs) do
         tools.uninstall_tool(name, terminal_body)
-        uninstall_loading:changed_relativ(one_item_percent)
+        uninstall_loading:changed_relativ(1)
     end
 
     uninstall_loading:remove()
 end
 
 ---@param name string
----@param parent lua-term.segment_parent
+---@param parent lua-term.segment.parent
 ---@return boolean
 function tools.upgrade_tool(name, parent)
     local config = tools.m_configs[name]
@@ -145,7 +149,8 @@ function tools.upgrade_tool(name, parent)
         return false
     end
 
-    local state = term.components.text.new("upgrade-state-" .. name, parent, "upgrading '" .. name .. "'...")
+    local state = term.components.text("upgrade-state-" .. name, parent, "upgrading '" .. name .. "'...")
+    parent:update()
 
     local success, exitcode, output
     if config.handler and config.handler.upgrade then
@@ -173,19 +178,20 @@ function tools.upgrade_tool(name, parent)
 end
 
 function tools.upgrade()
-    local upgrade_loading = term.components.loading.new("upgrade_loading", terminal_status_bar)
+    local upgrade_loading = term.components.loading("upgrade_loading", terminal_status_bar, {
+        count = #tools.m_configs
+    })
 
-    local one_item_percent = 100 / #tools.m_configs
     for name in pairs(tools.m_configs) do
         tools.upgrade_tool(name, terminal_body)
-        upgrade_loading:changed_relativ(one_item_percent)
+        upgrade_loading:changed_relativ(1)
     end
 
     upgrade_loading:remove()
 end
 
 ---@param name string
----@param parent lua-term.segment_parent
+---@param parent lua-term.segment.parent
 ---@return boolean
 function tools.setup_tool(name, parent)
     local config = tools.m_configs[name]
@@ -194,27 +200,32 @@ function tools.setup_tool(name, parent)
         return false
     end
 
-    local state = term.components.text.new("setup-state-" .. name, parent, "setting up '" .. name .. "'...")
+    local state = term.components.text("setup-state-" .. name, parent, "setting up '" .. name .. "'...")
+    parent:update()
 
-    local success, err_msg = true, nil
+    local success, err_msg_or_result = true, nil
     if config.setup then
-        success, err_msg = config.setup(config)
+        success, err_msg_or_result = pcall(config.setup, config)
+        if success and err_msg_or_result == false then
+            success = false
+        end
     end
 
     if not success then
-        state:change("setup for tool: '" .. name .. "' failed:\n" .. tostring(err_msg))
+        state:change("setup for tool: '" .. name .. "' failed:\n" .. tostring(err_msg_or_result))
     end
 
     return success
 end
 
 function tools.setup()
-    local setup_loading = term.components.loading.new("setup_loading", terminal_status_bar)
+    local setup_loading = term.components.loading("setup_loading", terminal_status_bar, {
+        count = #tools.m_configs
+    })
 
-    local one_item_percent = 100 / #tools.m_configs
     for name in pairs(tools.m_configs) do
         tools.setup_tool(name, terminal_body)
-        setup_loading:changed_relativ(one_item_percent)
+        setup_loading:changed_relativ(1)
     end
 
     setup_loading:remove()

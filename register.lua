@@ -5,7 +5,7 @@ local utils = require("tools.utils")
 tools.add_tool({
     name = "env",
     handler = {
-        install = function(tool_config)
+        install = function(_)
             if not config.env.set("USERCONFIG_FREEMAKER", config.root_path, "user") then
                 return false, 1, "unable to set environment variable"
             end
@@ -16,7 +16,7 @@ tools.add_tool({
 
             return true, 0, ""
         end,
-        uninstall = function(tool_config)
+        uninstall = function(_)
             if not config.env.unset("USERCONFIG_FREEMAKER", "user") then
                 return false, 1, "unable to remove environment variable"
             end
@@ -34,15 +34,15 @@ tools.add_tool({
 tools.add_tool({
     name = "chocolatey",
     handler = {
-        install = function(tool_config)
+        install = function(_)
             return config.env.execute("Set-ExecutionPolicy Bypass -Scope Process -Force;"
                 .. "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;"
                 .. "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))")
         end,
-        uninstall = function(tool_config)
+        uninstall = function(_)
             return config.env.execute("Remove-Item -Force -Recurse \"$env:ChocolateyInstall\" -ErrorAction Ignore")
         end,
-        upgrade = function(tool_config)
+        upgrade = function(_)
             return config.env.execute("choco upgrade chocolatey -y")
         end
     }
@@ -51,7 +51,7 @@ tools.add_tool({
 -- powershell
 tools.add_tool({
     name = "powershell",
-    setup = function(tool_config)
+    setup = function(_)
         local success = config.env.execute(
             "pwsh -Command \"New-Item -ItemType Directory -Path (Split-Path -Parent $PROFILE) -Force;"
             .. "Copy-Item -Path './pwsh/entry.ps1' -Destination $PROFILE -Force\"", true)
@@ -62,7 +62,7 @@ tools.use_choco("oh-my-posh")
 tools.add_tool({
     name = "powershell.modules",
     handler = {
-        install = function(tool_config)
+        install = function(_)
             return config.env.execute("PowerShell -ExecutionPolicy Bypass;"
                 .. "Import-Module PowerShellGet;"
                 .. "Install-Module -Name Terminal-Icons -Force;"
@@ -87,7 +87,7 @@ tools.add_tool({
     id = "cmake.install",
     handler = tools.chocolatey,
     after = {
-        install = function(tool_config)
+        install = function(_)
             config.env.add("PATH", config.env.get("PROGRAMFILES") .. "/CMake/bin", "machine", true)
             return true
         end
@@ -99,20 +99,20 @@ tools.use_choco("ninja")
 tools.add_tool({
     name = "neovim",
     handler = tools.chocolatey,
-    setup = function(tool_config)
+    setup = function(_)
         local config_folder_path = config.env.get("LOCALAPPDATA") .. "/nvim"
         if not config.path.create_junction(config_folder_path, config.root_path .. "/editor/nvim") then
             return false, "unable to create config junction"
         end
 
         local success, _, output = utils.display_execute("git clone https://github.com/wbthomason/packer.nvim '" ..
-        config.env.get("LOCALAPPDATA") .. "/nvim-data/site/pack/packer/start/packer.nvim'")
+            config.env.get("LOCALAPPDATA") .. "/nvim-data/site/pack/packer/start/packer.nvim'")
         return success, output
     end
 })
 tools.add_tool({
     name = "Zed",
-    setup = function(tool_config)
+    setup = function(_)
         if not config.path.create_junction(config.env.get("APPDATA") .. "/Zed", config.root_path .. "editor/zed") then
             return false, "unable to create config junction"
         end
@@ -145,7 +145,7 @@ tools.add_tool({
     id = "glzr-io.glazewm",
     handler = tools.winget,
     after = {
-        install = function(tool_config)
+        install = function(_)
             tools.winget.uninstall({ name = "zebar", id = "glzr-io.zebar" })
 
             local path = config.env.get("USERPROFILE") .. "/.glzr"
@@ -156,7 +156,7 @@ tools.add_tool({
             return true
         end
     },
-    setup = function(tool_config)
+    setup = function(_)
         local userprofile = config.env.get("USERPROFILE")
         local glzr_dir = userprofile .. "/.glzr"
         if not lfs.exists(glzr_dir) and not lfs.mkdir(glzr_dir) then
@@ -181,12 +181,32 @@ tools.add_tool({
 })
 
 tools.add_tool({
+    name = "flow_launcher",
+    setup = function(_)
+        local flow_launcher_path = config.env.get("APPDATA") .. "/FlowLauncher"
+
+        if not config.path.create_junction(flow_launcher_path .. "/Settings",
+                config.root_path .. "/flow_launcher/settings") then
+            return false
+        end
+
+        if not config.path.create_junction(flow_launcher_path .. "/Plugins",
+                config.root_path .. "/flow_launcher/plugins") then
+            return false
+        end
+
+        return config.path.create_junction(flow_launcher_path .. "/Themes",
+            config.root_path .. "/flow_launcher/themes")
+    end
+})
+
+tools.add_tool({
     name = "registry",
     handler = {
-        install = function(tool_config)
+        install = function(_)
             return config.env.execute("./registry/apply_regedits.ps1")
         end,
-        uninstall = function(tool_config)
+        uninstall = function(_)
             return config.env.execute("./registry/remove_regedits.ps1")
         end
     }

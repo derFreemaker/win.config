@@ -2,7 +2,7 @@
 local term = require("tools.term")
 
 terminal_status_bar:print("setting up...")
-local setup_throbber = term.components.throbber.new("setup_throbber", terminal_status_bar)
+local setup_throbber = term.components.throbber("setup_throbber", terminal_status_bar)
 terminal:update()
 
 config.env.set("USERCONFIG_FREEMAKER_PORTABLE", config.root_path, "user")
@@ -72,7 +72,7 @@ local function setup_tool(tool)
     end
     setup_throbber:rotate()
 
-    local tool_seg = term.components.text.new("<tool-state>", terminal_body, "tool '" .. tool .. "'...")
+    local tool_seg = term.components.text("<tool-state>", terminal_body, "tool '" .. tool .. "'...")
 
     local disable_path = tool_config_path .. ".disable"
     if lfs.exists(disable_path) then

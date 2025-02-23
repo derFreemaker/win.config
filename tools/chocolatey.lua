@@ -11,7 +11,7 @@ local choco = {}
 ---@return integer exitcode
 ---@return string output
 local function execute(action, name, command)
-    local group = term.components.group.new(action .. "-chocolatey", terminal_body)
+    local group = term.components.group(action .. "-chocolatey", terminal_body)
     group:print(("%s '%s' with cocolatey..."):format(action, name))
     return utils.display_execute(command, group)
 end

@@ -1,3 +1,5 @@
+local lfs = require("lua-config.third-party.lfs")
+
 if not config.env.is_windows then
     print("my config is windows only")
     os.exit(1)
@@ -31,10 +33,10 @@ config.parse_args()
 
 ---@type lua-term
 local term = require("tools.term")
-terminal = term.terminal.stdout()
-terminal_body = term.components.group.new("body", terminal)
-terminal_footer = term.components.group.new("footer", terminal)
-terminal_status_bar = term.components.group.new("status_bar", terminal)
+terminal = term.asci_terminal(io.stdout)
+terminal_body = term.components.group("body", terminal)
+terminal_footer = term.components.group("footer", terminal)
+terminal_status_bar = term.components.group("status_bar", terminal)
 
 function print(...)
     terminal_body:print(...)
@@ -55,8 +57,7 @@ function fatal(...)
     os.exit(1)
 end
 
-
 -- execute chosen command init
 commands[config.args.command]()
 
-terminal_status_bar:remove()
+terminal_status_bar:remove(true)

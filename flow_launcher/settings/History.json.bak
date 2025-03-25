@@ -335,6 +335,8 @@
     {
       "Query": "brave",
       "ExecutedDateTime": "2025-03-16T01:23:48.8830346+01:00"
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     },
     {
       "Query": "empt",
@@ -359,6 +361,10 @@
     {
       "Query": "empt",
       "ExecutedDateTime": "2025-03-19T17:49:36.1376434+01:00"
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     }
   ]
 }

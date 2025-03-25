@@ -335,30 +335,6 @@
     {
       "Query": "brave",
       "ExecutedDateTime": "2025-03-16T01:23:48.8830346+01:00"
-    },
-    {
-      "Query": "empt",
-      "ExecutedDateTime": "2025-03-19T15:15:23.1602211+01:00"
-    },
-    {
-      "Query": "brave",
-      "ExecutedDateTime": "2025-03-19T15:15:50.5845178+01:00"
-    },
-    {
-      "Query": "empt",
-      "ExecutedDateTime": "2025-03-19T15:16:42.4597078+01:00"
-    },
-    {
-      "Query": "qt",
-      "ExecutedDateTime": "2025-03-19T15:16:48.7932205+01:00"
-    },
-    {
-      "Query": "the fina",
-      "ExecutedDateTime": "2025-03-19T15:50:30.6352478+01:00"
-    },
-    {
-      "Query": "empt",
-      "ExecutedDateTime": "2025-03-19T17:49:36.1376434+01:00"
     }
   ]
 }

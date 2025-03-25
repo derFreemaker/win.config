@@ -128,7 +128,15 @@
   "CustomWindowTop": 0,
   "KeepMaxResults": false,
   "MaxResultsToShow": 5,
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   "ActivateTimes": 212,
+=======
+  "ActivateTimes": 204,
+>>>>>>> Stashed changes
+=======
+  "ActivateTimes": 204,
+>>>>>>> Stashed changes
   "CustomPluginHotkeys": [],
   "CustomShortcuts": [],
   "DontPromptUpdateMsg": false,

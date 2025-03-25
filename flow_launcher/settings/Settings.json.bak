@@ -122,33 +122,13 @@
   "AlwaysStartEn": false,
   "QuerySearchPrecision": "Regular",
   "AutoUpdates": false,
-  "WindowLeft": 692,
+  "WindowLeft": 1280,
   "WindowTop": 338,
   "CustomWindowLeft": 0,
   "CustomWindowTop": 0,
   "KeepMaxResults": false,
   "MaxResultsToShow": 5,
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-  "ActivateTimes": 212,
-=======
   "ActivateTimes": 204,
->>>>>>> Stashed changes
-=======
-  "ActivateTimes": 204,
->>>>>>> Stashed changes
-=======
-  "ActivateTimes": 204,
->>>>>>> Stashed changes
-=======
-  "ActivateTimes": 204,
->>>>>>> Stashed changes
-=======
-  "ActivateTimes": 204,
->>>>>>> Stashed changes
   "CustomPluginHotkeys": [],
   "CustomShortcuts": [],
   "DontPromptUpdateMsg": false,

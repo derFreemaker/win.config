@@ -127,6 +127,8 @@ window_rules:
       - window_process: { equals: 'Lively' }
         window_class: { regex: 'HwndWrapper' }
 
+      - window_class: { equals: "SunAwtDialog" }
+
 binding_modes:
   # When enabled, all keybindings are disabled except for alt+shift+p which
   # returns to default keybindings.

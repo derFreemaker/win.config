@@ -1,4 +1,4 @@
-function LoadColorScheme(color)
+local function load_color_scheme(color)
 	color = color or "tokyonight-storm"
 	vim.cmd.colorscheme(color)
 
@@ -6,5 +6,5 @@ function LoadColorScheme(color)
 	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
 
-LoadColorScheme()
+load_color_scheme()
 

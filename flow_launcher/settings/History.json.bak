@@ -11,6 +11,82 @@
     {
       "Query": "no mans",
       "ExecutedDateTime": "2025-03-30T00:05:02.9874784+01:00"
+    },
+    {
+      "Query": "brave",
+      "ExecutedDateTime": "2025-04-13T23:41:32.4238323+02:00"
+    },
+    {
+      "Query": "emp",
+      "ExecutedDateTime": "2025-04-15T22:49:37.5282328+02:00"
+    },
+    {
+      "Query": "hiber",
+      "ExecutedDateTime": "2025-04-15T22:49:44.2597149+02:00"
+    },
+    {
+      "Query": "toolbox",
+      "ExecutedDateTime": "2025-04-16T15:40:26.2747123+02:00"
+    },
+    {
+      "Query": "empt",
+      "ExecutedDateTime": "2025-04-16T16:10:12.4005391+02:00"
+    },
+    {
+      "Query": "brave",
+      "ExecutedDateTime": "2025-04-16T20:10:39.7438579+02:00"
+    },
+    {
+      "Query": "wooti",
+      "ExecutedDateTime": "2025-04-18T12:37:41.3848586+02:00"
+    },
+    {
+      "Query": "notepad",
+      "ExecutedDateTime": "2025-04-18T12:38:11.4520336+02:00"
+    },
+    {
+      "Query": "note",
+      "ExecutedDateTime": "2025-04-18T12:38:36.8404516+02:00"
+    },
+    {
+      "Query": "woot",
+      "ExecutedDateTime": "2025-04-18T18:06:11.5604842+02:00"
+    },
+    {
+      "Query": "woo",
+      "ExecutedDateTime": "2025-04-18T18:33:57.8398698+02:00"
+    },
+    {
+      "Query": "w",
+      "ExecutedDateTime": "2025-04-18T18:39:15.1572015+02:00"
+    },
+    {
+      "Query": "clion",
+      "ExecutedDateTime": "2025-04-18T20:47:45.3456608+02:00"
+    },
+    {
+      "Query": "\u003E ping 1.1.1.1",
+      "ExecutedDateTime": "2025-04-19T17:33:48.8448705+02:00"
+    },
+    {
+      "Query": "clion",
+      "ExecutedDateTime": "2025-04-19T19:13:03.1310032+02:00"
+    },
+    {
+      "Query": "code",
+      "ExecutedDateTime": "2025-04-19T21:05:19.2749818+02:00"
+    },
+    {
+      "Query": "recy",
+      "ExecutedDateTime": "2025-04-21T08:57:53.3104677+02:00"
+    },
+    {
+      "Query": "clion",
+      "ExecutedDateTime": "2025-04-21T09:10:12.046974+02:00"
+    },
+    {
+      "Query": "wool",
+      "ExecutedDateTime": "2025-04-21T20:05:09.2475145+02:00"
     }
   ]
 }

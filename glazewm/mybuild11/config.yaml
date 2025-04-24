@@ -1,9 +1,7 @@
 general:
   # Commands to run when the WM has started. This is useful for running a
   # script or launching another application.
-  startup_commands: [
-    'shell-exec %USERCONFIG_FREEMAKER%/glazewm/mybuild11/startup.bat'
-  ]
+  startup_commands: []
 
   # Commands to run just before the WM is shutdown.
   shutdown_commands: []
@@ -87,7 +85,7 @@ window_behavior:
       centered: true
 
       # Whether to show floating windows as always on top.
-      shown_on_top: false
+      shown_on_top: true
 
     fullscreen:
       # Maximize the window if possible. If the window doesn't have a
@@ -193,14 +191,14 @@ keybindings:
     bindings: ['alt+shift+s']
 
   # Resize focused window by a percentage or pixel amount.
-  - commands: ['resize --width -2%']
-    bindings: ['alt+u']
-  - commands: ['resize --width +2%']
-    bindings: ['alt+p']
-  - commands: ['resize --height +2%']
-    bindings: ['alt+o']
-  - commands: ['resize --height -2%']
-    bindings: ['alt+i']
+  # - commands: ['resize --width -2%']
+  #   bindings: ['alt+u']
+  # - commands: ['resize --width +2%']
+  #   bindings: ['alt+p']
+  # - commands: ['resize --height +2%']
+  #   bindings: ['alt+o']
+  # - commands: ['resize --height -2%']
+  #   bindings: ['alt+i']
 
   # Disables all keybindings until alt+shift+p is pressed again.
   - commands: ['wm-enable-binding-mode --name pause']
@@ -216,12 +214,12 @@ keybindings:
   #   bindings: ['alt+space']
 
   # Change the focused window to be floating.
-  - commands: ['toggle-floating --centered']
-    bindings: ['alt+shift+space']
+  # - commands: ['toggle-floating --centered']
+  #   bindings: ['alt+shift+space']
 
   # Change the focused window to be tiling.
-  #  - commands: ['toggle-tiling']
-  # bindings: ['alt+t']
+  # - commands: ['toggle-tiling']
+  #   bindings: ['alt+t']
 
   # Change the focused window to be fullscreen.
   - commands: ['toggle-fullscreen']

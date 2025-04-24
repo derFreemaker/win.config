@@ -46,7 +46,7 @@
   "TimeFormat": "HH:mm:ss",
   "DateFormat": "MM\u0027/\u0027dd ddd",
   "FirstLaunch": false,
-  "SettingWindowWidth": 2540,
+  "SettingWindowWidth": 1266,
   "SettingWindowHeight": 1372,
   "SettingWindowTop": 10,
   "SettingWindowLeft": 10,
@@ -123,12 +123,12 @@
   "QuerySearchPrecision": "Regular",
   "AutoUpdates": false,
   "WindowLeft": 1280,
-  "WindowTop": 338,
+  "WindowTop": 134,
   "CustomWindowLeft": 0,
   "CustomWindowTop": 0,
   "KeepMaxResults": false,
   "MaxResultsToShow": 5,
-  "ActivateTimes": 210,
+  "ActivateTimes": 251,
   "CustomPluginHotkeys": [],
   "CustomShortcuts": [],
   "DontPromptUpdateMsg": false,
@@ -184,7 +184,7 @@
           "*",
           "*",
           "*",
-          "!"
+          "?"
         ],
         "Priority": 0,
         "Disabled": false
@@ -194,7 +194,7 @@
         "Name": "Plugin Indicator",
         "Version": "3.0.7",
         "ActionKeywords": [
-          "?"
+          "/"
         ],
         "Priority": 0,
         "Disabled": false

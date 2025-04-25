@@ -81,6 +81,9 @@ tools.use_choco("mingw")
 tools.use_choco("make")
 tools.use_choco("gsudo")
 
+-- directory navigation
+tools.use_choco("zoxide")
+
 -- cmake
 tools.add_tool({
     name = "CMake",

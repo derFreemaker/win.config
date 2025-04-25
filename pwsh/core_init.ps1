@@ -14,5 +14,9 @@ if ([System.IO.File]::Exists("C:\Program Files\PowerToys\WinUI3Apps\..\WinGetCom
     Import-Module "C:\Program Files\PowerToys\WinUI3Apps\..\WinGetCommandNotFound.psd1"
 }
 
+if ($null -ne (Get-Command zoxide -ErrorAction SilentlyContinue)) {
+    Invoke-Expression (& { (zoxide init powershell | Out-String) })
+}
+
 oh-my-posh init pwsh --config "$env:USERCONFIG_FREEMAKER/pwsh/oh-my-posh.toml" | Invoke-Expression
 

@@ -9,6 +9,7 @@ Import-Module -Name Terminal-Icons
 if ($null -eq (Get-Module PSReadLine)) {
     Import-Module -Name PSReadLine
 }
+Set-PSReadLineOption -PredictionViewStyle ListView,InlineView
 
 if ([System.IO.File]::Exists("C:\Program Files\PowerToys\WinUI3Apps\..\WinGetCommandNotFound.psd1")) {
     Import-Module "C:\Program Files\PowerToys\WinUI3Apps\..\WinGetCommandNotFound.psd1"

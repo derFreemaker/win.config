@@ -87,6 +87,14 @@
     {
       "Query": "wool",
       "ExecutedDateTime": "2025-04-21T20:05:09.2475145+02:00"
+    },
+    {
+      "Query": "restart",
+      "ExecutedDateTime": "2025-04-26T09:39:53.562611+02:00"
+    },
+    {
+      "Query": "brave",
+      "ExecutedDateTime": "2025-05-01T17:34:08.5147817+02:00"
     }
   ]
 }

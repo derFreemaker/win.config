@@ -23,7 +23,7 @@ local term = require("tools.term")
 ---@field id string
 ---@field handler config.tool_handler | nil
 ---@field after config.tool_handler.after | nil
----@field setup (fun(tool_config: config.tool_config) : boolean) | nil
+---@field setup (fun(tool_config: config.tool_config) : boolean, string | nil) | nil
 
 ---@class config.tools
 ---@field winget config.winget
@@ -203,16 +203,16 @@ function tools.setup_tool(name, parent)
     local state = term.components.text("setup-state-" .. name, parent, "setting up '" .. name .. "'...")
     parent:update()
 
-    local success, err_msg_or_result = true, nil
+    local success, err_msg_or_result, message = true, nil, ""
     if config.setup then
-        success, err_msg_or_result = pcall(config.setup, config)
+        success, err_msg_or_result, message = pcall(config.setup, config)
         if success and err_msg_or_result == false then
             success = false
         end
     end
 
     if not success then
-        state:change("setup for tool: '" .. name .. "' failed:\n" .. tostring(err_msg_or_result))
+        state:change("setup for tool: '" .. name .. "' failed:\n" .. tostring(message))
     end
 
     return success

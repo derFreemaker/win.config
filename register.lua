@@ -175,12 +175,12 @@ tools.add_tool({
         local userprofile = config.env.get("USERPROFILE")
         local glzr_dir = userprofile .. "/.glzr"
         if not lfs.exists(glzr_dir) and not lfs.mkdir(glzr_dir) then
-            return false
+            return false, "unable to create ~/.glzr folder"
         end
 
         local glazewm_dir = config.path.add_hostname_if_found(config.root_path .. "/glazewm")
         if not config.path.create_junction(glzr_dir .. "/glazewm", glazewm_dir) then
-            return false
+            return false, "unable to create config folder junction"
         end
 
         local shortcut_path = config.env.get("APPDATA")
@@ -188,7 +188,7 @@ tools.add_tool({
         local shortcut_target = config.env.get("PROGRAMFILES")
             .. "/glzr.io/GlazeWM/glazewm.exe"
         if not config.path.create_shortcut(shortcut_path, shortcut_target) then
-            return false
+            return false, "unable to create glazewm shortcut for autostart"
         end
 
         return true

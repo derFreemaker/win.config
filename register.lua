@@ -70,6 +70,18 @@ tools.add_tool({
         end
     }
 })
+tools.add_tool({
+    name = "alacritty",
+    handler = tools.chocolatey,
+    setup = function(_)
+        local config_folder_path = config.env.get("APPDATA") .. "/alacritty"
+        if not config.path.create_junction(config_folder_path, config.root_path .. "/alacritty") then
+            return false, "unable to create config junction"
+        end
+
+        return true
+    end
+})
 
 -- Git & co
 tools.use_winget("Git", "Git.Git")

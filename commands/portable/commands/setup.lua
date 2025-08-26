@@ -22,12 +22,12 @@ end
 setup_throbber:rotate()
 
 ---@class config.portable
----@field package paths string[]
+---@field package file_infos { path: string, proxy: boolean? }[]
 ---
 ---@field package current_tool_path string
 ---@field package current_tool string
 portable = {
-    paths = {}
+    file_infos = {}
 }
 
 ---@return string
@@ -46,11 +46,20 @@ function portable.set_current_tool(tool)
     portable.current_tool_path = tools_dir .. tool .. "/"
 end
 
+--- Will invoke with 'start' on none admin right setup
 ---@param name string
 ---@param path string
 function portable.add_file_to_path(name, path)
     local windows_conform_path = (tools_dir .. portable.current_tool .. "/" .. path):gsub("/", "\\")
-    portable.paths[name] = windows_conform_path
+    portable.file_infos[name] = { path = windows_conform_path }
+end
+
+--- Will not create a new window.
+---@param name string
+---@param path string
+function portable.add_file_proxy_to_path(name, path)
+    local windows_conform_path = (tools_dir .. portable.current_tool .. "/" .. path):gsub("/", "\\")
+    portable.file_infos[name] = { path = windows_conform_path, proxy = true }
 end
 
 ---@param tool string
@@ -123,7 +132,8 @@ if not lfs.exists(bin_dir) then
 end
 setup_throbber:rotate()
 
-for name, path in pairs(portable.paths) do
+for name, file_info in pairs(portable.file_infos) do
+    local path = file_info.path
     if config.env.is_admin then
         local pos = path:reverse():find(".", nil, true)
         local ext = path:sub(path:len() - pos + 1)
@@ -138,11 +148,15 @@ for name, path in pairs(portable.paths) do
             goto continue
         end
 
-        batch_file:write(([[
-@echo off
-start "" "]] .. path .. [[" %*
-exit
-]]))
+        if file_info.proxy then
+            batch_file:write(path)
+        else
+            batch_file:write(([[
+                @echo off
+                start "" "]] .. path .. [[" %*
+                exit
+            ]]))
+        end
         batch_file:close()
     end
 

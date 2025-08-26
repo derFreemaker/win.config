@@ -58,9 +58,9 @@ window_effects:
     # Change the corner style of the window's frame.
     # ** Exclusive to Windows 11 due to API limitations.
     corner_style:
-      enabled: false
+      enabled: true
       # Allowed values: 'square', 'rounded', 'small_rounded'.
-      style: 'square'
+      style: 'rounded'
 
   # Visual effects to apply to non-focused windows.
   other_windows:
@@ -190,12 +190,12 @@ keybindings:
   #   bindings: ['alt+space']
 
   # Change the focused window to be floating.
-  - commands: ['toggle-floating --centered']
-    bindings: ['alt+shift+space']
+  # - commands: ['toggle-floating --centered']
+  #   bindings: ['alt+shift+space']
 
   # Change the focused window to be tiling.
-  - commands: ['toggle-tiling']
-    bindings: ['alt+t']
+  # - commands: ['toggle-tiling']
+  #   bindings: ['alt+t']
 
   # Change the focused window to be fullscreen.
   - commands: ['toggle-fullscreen']
@@ -224,7 +224,7 @@ keybindings:
   # Launch CMD terminal. Alternatively, use `shell-exec wt` or
   # `shell-exec %ProgramFiles%/Git/git-bash.exe` to start Windows
   # Terminal and Git Bash respectively.
-  - commands: ['shell-exec powershell']
+  - commands: ['shell-exec alacritty']
     bindings: ['alt+q']
 
   # Focus the next/previous workspace defined in `workspaces` config.

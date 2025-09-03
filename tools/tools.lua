@@ -203,6 +203,7 @@ function tools.setup_tool(name, parent)
     local state = term.components.text("setup-state-" .. name, parent, "setting up '" .. name .. "'...")
     parent:update()
 
+    ---@type boolean, string | boolean, string?
     local success, err_msg_or_result, message = true, nil, ""
     if config.setup then
         success, err_msg_or_result, message = pcall(config.setup, config)

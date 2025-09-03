@@ -1,7 +1,0 @@
-#!/bin/bash
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-export PATH="${SCRIPT_DIR}/lua:$PATH"
-
-${SCRIPT_DIR}/lua-config/bin/lua-config "$@"

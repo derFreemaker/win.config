@@ -8,5 +8,5 @@ if not config.args.tools or #config.args.tools == 0 then
 end
 
 for _, tool in ipairs(config.args.tools) do
-    tools.install_tool(tool, terminal_body)
+    tools.install_tool(tool)
 end

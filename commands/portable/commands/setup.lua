@@ -1,9 +1,4 @@
----@type lua-term
-local term = require("tools.term")
-
-terminal_status_bar:print("setting up...")
-local setup_throbber = term.components.throbber("setup_throbber", terminal_status_bar)
-terminal:update()
+print("setting up...")
 
 config.env.set("USERCONFIG_FREEMAKER_PORTABLE", config.root_path, "user")
 local tools_dir
@@ -18,8 +13,6 @@ end
 if not lfs.exists(tools_dir) or lfs.attributes(tools_dir).mode ~= "directory" then
     fatal("no tools directory found: " .. tools_dir)
 end
-
-setup_throbber:rotate()
 
 ---@class config.portable
 ---@field package file_infos { path: string, proxy: boolean? }[]
@@ -79,31 +72,26 @@ local function setup_tool(tool)
         verbose("tool '" .. tool .. "' has no '.config' directory")
         return
     end
-    setup_throbber:rotate()
-
-    local tool_seg = term.components.text("<tool-state>", terminal_body, "tool '" .. tool .. "'...")
 
     local disable_path = tool_config_path .. ".disable"
     if lfs.exists(disable_path) then
-        tool_seg:change("tool '" .. tool .. "' is disabled")
+        print("tool '" .. tool .. "' is disabled")
         return
     end
 
     local tool_setup_path = tool_config_path .. "setup.lua"
     if not lfs.exists(tool_setup_path) then
-        tool_seg:remove()
         verbose("tool '" .. tool .. "' has no 'setup.lua' script in '.config' directory")
         return
     end
-    setup_throbber:rotate()
 
     local setup_func, load_err_msg = loadfile(tool_setup_path)
     if not setup_func then
-        tool_seg:change("unable to load setup file for tool '" .. tool .. "'\n" .. load_err_msg)
+        print("unable to load setup file for tool '" .. tool .. "'\n" .. load_err_msg)
         return
     end
-    setup_throbber:rotate()
 
+    print(("tool '%s'..."):format(tool))
     portable.set_current_tool(tool)
     -- change into tool dir for easy relativ pathing
     lfs.chdir(portable.current_tool_path)
@@ -111,7 +99,6 @@ local function setup_tool(tool)
     local tool_thread = coroutine.create(setup_func)
     local success, setup_err_msg = coroutine.resume(tool_thread)
 
-    tool_seg:remove(false)
     if not success then
         print("tool '" .. tool .. "' setup failed with:\n"
             .. debug.traceback(tool_thread, setup_err_msg))
@@ -120,7 +107,6 @@ end
 
 for tool in lfs.dir(tools_dir) do
     setup_tool(tool)
-    setup_throbber:rotate()
 end
 
 -- get back to config dir
@@ -130,7 +116,6 @@ local bin_dir = tools_dir .. "bin/"
 if not lfs.exists(bin_dir) then
     lfs.mkdir(bin_dir)
 end
-setup_throbber:rotate()
 
 for name, file_info in pairs(portable.file_infos) do
     local path = file_info.path
@@ -161,7 +146,6 @@ for name, file_info in pairs(portable.file_infos) do
     end
 
     ::continue::
-    setup_throbber:rotate()
 end
 
 local bin_path = tools_dir:gsub("/", "\\") .. "bin"
@@ -169,5 +153,4 @@ config.env.add("PATH", bin_path, "user", true, ";")
 
 config.env.set("PATH_FREEMAKER_PORTABLE", bin_path, "user")
 
-setup_throbber:remove()
 print("done setting up!")

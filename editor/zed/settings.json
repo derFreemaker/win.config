@@ -60,7 +60,7 @@
     "line_width": 1,
     "coloring": "indent_aware"
   },
-  "current_line_highlight": "all",
+  "current_line_highlight": "gutter",
   "lsp": {
     "clangd": {
       "arguments": ["-backgroud-index", "-compile-commands-dir=build/debug"]

@@ -31,17 +31,6 @@ end
 
 config.parse_args()
 
----@type lua-term
-local term = require("tools.term")
-terminal = term.asci_terminal(io.stdout)
-terminal_body = term.components.group("body", terminal)
-terminal_footer = term.components.group("footer", terminal)
-terminal_status_bar = term.components.group("status_bar", terminal)
-
-function print(...)
-    terminal_body:print(...)
-end
-
 local _verbose = config.args.verbose
 ---@param ... any
 function verbose(...)
@@ -59,5 +48,3 @@ end
 
 -- execute chosen command init
 commands[config.args.command]()
-
-terminal_status_bar:remove(true)

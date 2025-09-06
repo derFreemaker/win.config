@@ -1,18 +1,6 @@
 {
-    "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
-    "runtime.version": "Lua 5.3",
-    "diagnostics.globals": [
-        "vim",
-        "fatal",
-        "portable",
-        "verbose",
-
-        "terminal",
-        "terminal_body",
-        "terminal_footer",
-        "terminal_status_bar"
-    ],
-    "workspace.library": [
-        "lua-config"
-    ]
+  "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  "runtime.version": "Lua 5.3",
+  "diagnostics.globals": ["fatal", "portable", "verbose"],
+  "workspace.library": ["lua-config"]
 }

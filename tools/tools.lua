@@ -1,6 +1,3 @@
----@type lua-term
-local term = require("tools.term")
-
 ---@class config.tool_handler
 ---@field install (fun(tool_config: config.tool_config) : boolean, integer, string) | nil
 ---@field uninstall (fun(tool_config: config.tool_config) : boolean, integer, string) | nil
@@ -38,36 +35,32 @@ local tools = {
 }
 
 ---@param name string
----@param parent lua-term.segment.parent
 ---@return boolean
-function tools.install_tool(name, parent)
+function tools.install_tool(name)
     local config = tools.m_configs[name]
     if not config then
-        parent:print("no config for '" .. name .. "'")
+        print("no config for '" .. name .. "'")
         return false
     end
 
-    local state = term.components.text("install-state-" .. name, parent, "installing '" .. name .. "'...")
-    parent:update()
-
-    local success, exitcode, output
-    if config.handler and config.handler.install then
-        success, exitcode, output = config.handler.install(config)
-    else
-        success = true
-        exitcode = 0
-        state:change("no install handler found for tool '" .. name .. "'")
+    if not config.handler or not config.handler.install then
+        print(("'%s' has no install handler"):format(name))
+        return true
     end
 
+    print(("installing '%s'..."):format(name))
+    local success, exitcode, output = config.handler.install(config)
+
     if not success then
-        state:change("failed to install tool '" .. name .. "'")
-        parent:print("exitcode: " .. tostring(exitcode))
-        parent:print(output)
+        print("failed to install")
+        print("exitcode: " .. tostring(exitcode))
+        print(output)
         return false
     end
 
     if config.after then
         if config.after.install then
+            print("running after install handler...")
             success = config.after.install(config)
         end
     end
@@ -76,49 +69,38 @@ function tools.install_tool(name, parent)
 end
 
 function tools.install()
-    local install_loading = term.components.loading("install_loading", terminal_status_bar, {
-        count = #tools.m_configs
-    })
-
     for name in pairs(tools.m_configs) do
-        tools.install_tool(name, terminal_body)
-        install_loading:changed_relativ(1)
+        tools.install_tool(name)
     end
-
-    install_loading:remove()
 end
 
 ---@param name string
----@param parent lua-term.segment.parent
 ---@return boolean
-function tools.uninstall_tool(name, parent)
+function tools.uninstall_tool(name)
     local config = tools.m_configs[name]
     if not config then
-        parent:print("no config for '" .. name .. "'")
+        print("no config for '" .. name .. "'")
         return false
     end
 
-    local state = term.components.text("uninstall-state-" .. name, parent, "uninstalling '" .. name .. "'...")
-    parent:update()
-
-    local success, exitcode, output
-    if config.handler and config.handler.uninstall then
-        success, exitcode, output = config.handler.uninstall(config)
-    else
-        success = true
-        exitcode = 0
-        state:change("no uninstall handler found for tool '" .. name .. "'")
+    if not config.handler or not config.handler.uninstall then
+        print(("'%s' has no uninstall handler"):format(name))
+        return true
     end
 
+    print(("uninstalling '%s'..."):format(name))
+    local success, exitcode, output = config.handler.uninstall(config)
+
     if not success then
-        state:change("failed to uninstall tool '" .. name "'")
-        parent:print("exitcode: " .. tostring(exitcode))
-        parent:print(output)
+        print("failed to uninstall")
+        print("exitcode: " .. tostring(exitcode))
+        print(output)
         return false
     end
 
     if config.after then
         if config.after.uninstall then
+            print("running after unsintall handler...")
             success = config.after.uninstall(config)
         end
     end
@@ -127,49 +109,37 @@ function tools.uninstall_tool(name, parent)
 end
 
 function tools.uninstall()
-    local uninstall_loading = term.components.loading("uninstall_loading", terminal_status_bar, {
-        count = #tools.m_configs
-    })
-
     for name in pairs(tools.m_configs) do
-        tools.uninstall_tool(name, terminal_body)
-        uninstall_loading:changed_relativ(1)
+        tools.uninstall_tool(name)
     end
-
-    uninstall_loading:remove()
 end
 
 ---@param name string
----@param parent lua-term.segment.parent
 ---@return boolean
-function tools.upgrade_tool(name, parent)
+function tools.upgrade_tool(name)
     local config = tools.m_configs[name]
     if not config then
-        parent:print("no config for '" .. name .. "'")
+        print("no config for '" .. name .. "'")
         return false
     end
 
-    local state = term.components.text("upgrade-state-" .. name, parent, "upgrading '" .. name .. "'...")
-    parent:update()
-
-    local success, exitcode, output
-    if config.handler and config.handler.upgrade then
-        success, exitcode, output = config.handler.upgrade(config)
-    else
-        success = true
-        exitcode = 0
-        state:change("no upgrade handler found for tool '" .. name .. "'")
+    if not config.handler or config.handler.upgrade then
+        print(("'%s' has no upgrade handler"):format(name))
+        return true
     end
 
+    local success, exitcode, output = config.handler.upgrade(config)
+
     if not success then
-        state:change("failed to upgrade tool '" .. name .. "'")
-        parent:print("exitcode: " .. tostring(exitcode))
-        parent:print(output)
+        print("failed to upgrade")
+        print("exitcode: " .. tostring(exitcode))
+        print(output)
         return false
     end
 
     if config.after then
         if config.after.upgrade then
+            print("running after upgrade handler...")
             success = config.after.upgrade(config)
         end
     end
@@ -178,58 +148,43 @@ function tools.upgrade_tool(name, parent)
 end
 
 function tools.upgrade()
-    local upgrade_loading = term.components.loading("upgrade_loading", terminal_status_bar, {
-        count = #tools.m_configs
-    })
-
     for name in pairs(tools.m_configs) do
-        tools.upgrade_tool(name, terminal_body)
-        upgrade_loading:changed_relativ(1)
+        tools.upgrade_tool(name)
     end
-
-    upgrade_loading:remove()
 end
 
 ---@param name string
----@param parent lua-term.segment.parent
 ---@return boolean
-function tools.setup_tool(name, parent)
+function tools.setup_tool(name)
     local config = tools.m_configs[name]
     if not config then
-        parent:print("no config for '" .. name .. "'")
+        print("no config for '" .. name .. "'")
         return false
     end
 
-    local state = term.components.text("setup-state-" .. name, parent, "setting up '" .. name .. "'...")
-    parent:update()
+    if not config.setup then
+        print(("'%s' has no setup handler"):format(name))
+        return true;
+    end
 
+    print(("setting up '%s'..."):format(name))
     ---@type boolean, string | boolean, string?
-    local success, err_msg_or_result, message = true, nil, ""
-    if config.setup then
-        success, err_msg_or_result, message = pcall(config.setup, config)
-        if success and err_msg_or_result == false then
-            success = false
-        end
+    local success, err_msg_or_result, message = pcall(config.setup, config)
+    if success and err_msg_or_result == false then
+        success = false
     end
 
     if not success then
-        state:change("setup for tool: '" .. name .. "' failed:\n" .. tostring(message))
+        print("failed:\n" .. tostring(message))
     end
 
     return success
 end
 
 function tools.setup()
-    local setup_loading = term.components.loading("setup_loading", terminal_status_bar, {
-        count = #tools.m_configs
-    })
-
     for name in pairs(tools.m_configs) do
-        tools.setup_tool(name, terminal_body)
-        setup_loading:changed_relativ(1)
+        tools.setup_tool(name)
     end
-
-    setup_loading:remove()
 end
 
 ---@param tool_config config.tool_config.create

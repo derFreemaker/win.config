@@ -1,7 +1,3 @@
----@type lua-term
-local term = require("tools.term")
-local utils = require("tools.utils")
-
 ---@class config.chocolatey : config.tool_handler
 local choco = {}
 
@@ -11,9 +7,8 @@ local choco = {}
 ---@return integer exitcode
 ---@return string output
 local function execute(action, name, command)
-    local group = term.components.group(action .. "-chocolatey", terminal_body)
-    group:print(("%s '%s' with cocolatey..."):format(action, name))
-    return utils.display_execute(command, group)
+    print(("%s '%s' with cocolatey..."):format(action, name))
+    return config.env.execute(command)
 end
 
 local install = "choco install \"%s\" -y"

@@ -84,10 +84,10 @@ tools.add_tool({
 })
 
 -- Git & co
-tools.use_winget("Git", "Git.Git")
-tools.use_winget("Github Desktop", "GitHub.GitHubDesktop")
+tools.use_winget("git", "Git.Git")
+tools.use_winget("github-desktop", "GitHub.GitHubDesktop")
 -- tools.use_winget("Axosoft.GitKraken")
-tools.use_winget("Github CLI", "GitHub.cli")
+tools.use_winget("github-cli", "GitHub.cli")
 
 tools.use_choco("mingw")
 tools.use_choco("make")
@@ -98,7 +98,7 @@ tools.use_choco("zoxide")
 
 -- cmake
 tools.add_tool({
-    name = "CMake",
+    name = "cmake",
     id = "cmake.install",
     handler = tools.chocolatey,
     after = {
@@ -125,38 +125,25 @@ tools.add_tool({
         return success, output
     end
 })
-tools.add_tool({
-    name = "Zed",
-    setup = function(_)
-        if not config.path.create_junction(config.env.get("APPDATA") .. "/Zed", config.root_path .. "editor/zed") then
-            return false, "unable to create config junction"
-        end
-        return true
-    end
-})
+-- tools.add_tool({
+--     name = "Zed",
+--     setup = function(_)
+--         if not config.path.create_junction(config.env.get("APPDATA") .. "/Zed", config.root_path .. "editor/zed") then
+--             return false, "unable to create config junction"
+--         end
+--         return true
+--     end
+-- })
 
 -- powertoys & co
-tools.use_winget("Powertoys", "microsoft.powertoys")
-tools.use_choco("everythingpowertoys")
-tools.add_tool({
-    name = "chatgptpowertoys",
-    handler = {
-        install = function(tool_config)
-            print("installing powertoys plugin for " .. tool_config.name)
-
-            local command =
-            "$temp = New-TemporaryFile;Invoke-WebRequest -Uri \"https://github.com/ferraridavide/ChatGPTPowerToys/releases/download/v0.85.1/Community.PowerToys.Run.Plugin.ChatGPT.x64.zip\" -OutFile $temp;Invoke-Expression \"7z e $temp -o'$env:LOCALAPPDATA/Microsoft/PowerToys/PowerToys Run/Plugins/ChatGPT'\""
-            return config.env.execute(command)
-        end
-    }
-})
+tools.use_winget("powertoys", "microsoft.powertoys")
 
 -- everything
-tools.use_winget("Everything", "voidtools.Everything")
+tools.use_winget("everything", "voidtools.Everything")
 
 -- glazewm
 tools.add_tool({
-    name = "Glazewm",
+    name = "glazewm",
     id = "glzr-io.glazewm",
     handler = tools.winget,
     after = {
@@ -196,26 +183,6 @@ tools.add_tool({
 })
 
 tools.add_tool({
-    name = "flow_launcher",
-    setup = function(_)
-        local flow_launcher_path = config.env.get("APPDATA") .. "/FlowLauncher"
-
-        if not config.path.create_junction(flow_launcher_path .. "/Settings",
-                config.root_path .. "/flow_launcher/settings") then
-            return false
-        end
-
-        if not config.path.create_junction(flow_launcher_path .. "/Plugins",
-                config.root_path .. "/flow_launcher/plugins") then
-            return false
-        end
-
-        return config.path.create_junction(flow_launcher_path .. "/Themes",
-            config.root_path .. "/flow_launcher/themes")
-    end
-})
-
-tools.add_tool({
     name = "registry",
     handler = {
         install = function(_)
@@ -229,18 +196,17 @@ tools.add_tool({
 
 -- some other Programs
 tools.use_winget("7zip", "7zip.7zip")
-tools.use_winget("Brave", "Brave.Brave")
-tools.use_winget("Notepad++", "Notepad++.Notepad++")
-tools.use_winget("BalenaEtcher", "Balena.Etcher")
-tools.use_winget("Anydesk", "AnyDeskSoftwareGmbH.Anydesk")
-tools.use_winget("WinToys", "9p8ltpgcbzxd")
+tools.use_winget("brave", "Brave.Brave")
+tools.use_winget("notepad++", "Notepad++.Notepad++")
+tools.use_winget("balena-etcher", "Balena.Etcher")
+tools.use_winget("anydesk", "AnyDeskSoftwareGmbH.Anydesk")
+tools.use_winget("wintoys", "9p8ltpgcbzxd")
 
-tools.use_winget("Zen", "Zen-Team.Zen-Browser")
-tools.use_winget("Rust", "Rustlang.Rustup")
+tools.use_winget("zen", "Zen-Team.Zen-Browser")
+tools.use_winget("rust", "Rustlang.Rustup")
 
--- tools.use_winget("Postman", "Postman.Postman")
--- tools.use_winget("Docker.DockerDesktop")
--- tools.use_winget("LocalSend.LocalSend")
+tools.use_winget("postman", "Postman.Postman")
+-- tools.use_winget("docker", "Docker.DockerDesktop")
 
 -- tools
 tools.use_choco("wget", "wget")

@@ -124,6 +124,7 @@ window_rules:
   - commands: ['move --workspace 1']
     match:
       - window_process: { equals: 'Discord' }
+      - window_process: { equals: 'ClickUp' }
 
   - commands: ['move --workspace 9']
     match:

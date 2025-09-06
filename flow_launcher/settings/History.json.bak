@@ -154,7 +154,19 @@
     },
     {
       "Query": "empty",
-      "ExecutedDateTime": "2025-08-04T14:52:25.6593691+02:00"
+      "ExecutedDateTime": "2025-08-29T23:42:50.7537005+02:00"
+    },
+    {
+      "Query": "disc",
+      "ExecutedDateTime": "2025-08-29T23:42:58.1602132+02:00"
+    },
+    {
+      "Query": "amd",
+      "ExecutedDateTime": "2025-09-02T18:09:22.3702879+02:00"
+    },
+    {
+      "Query": "every",
+      "ExecutedDateTime": "2025-09-04T20:46:57.6716256+02:00"
     }
   ]
 }

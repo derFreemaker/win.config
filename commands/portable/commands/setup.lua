@@ -14,52 +14,48 @@ if not lfs.exists(tools_dir) or lfs.attributes(tools_dir).mode ~= "directory" th
     fatal("no tools directory found: " .. tools_dir)
 end
 
+---@class config.portable.tool
+---@field name string
+---@field path string
+
 ---@class config.portable
----@field package file_infos { path: string, proxy: boolean? }[]
+---@field package file_infos { path: string, args: string[]?, proxy: boolean? }[]
 ---
----@field package current_tool_path string
----@field package current_tool string
+---@field package current_tool config.portable.tool
 portable = {
     file_infos = {}
 }
 
----@return string
+---@return config.portable.tool
 function portable.get_current_tool()
     return portable.current_tool
 end
 
-function portable.get_current_tool_path()
-    return portable.current_tool_path
-end
-
 ---@package
----@param tool string
+---@param tool config.portable.tool
 function portable.set_current_tool(tool)
     portable.current_tool = tool
-    portable.current_tool_path = tools_dir .. tool .. "/"
 end
 
---- Will invoke with 'start' on none admin right setup
----@param name string
----@param path string
-function portable.add_file_to_path(name, path)
-    local windows_conform_path = (tools_dir .. portable.current_tool .. "/" .. path):gsub("/", "\\")
-    portable.file_infos[name] = { path = windows_conform_path }
+---@class config.portable.file_path_options
+---@field name string
+---@field path string
+---@field proxy boolean? will invoke with 'start' on none admin right setup when false
+---@field args string[]?
+
+---@param opt config.portable.file_path_options
+function portable.add_file_to_path(opt)
+    if opt.proxy and opt.args then
+        error("a proxy file cannot have args")
+    end
+
+    local windows_conform_path = (tools_dir .. portable.current_tool .. "/" .. opt.path):gsub("/", "\\")
+    portable.file_infos[opt.name] = { path = windows_conform_path, args = opt.args, proxy = opt.proxy or not opt.args }
 end
 
---- Will not create a new window.
----@param name string
----@param path string
-function portable.add_file_proxy_to_path(name, path)
-    local windows_conform_path = (tools_dir .. portable.current_tool .. "/" .. path):gsub("/", "\\")
-    portable.file_infos[name] = { path = windows_conform_path, proxy = true }
-end
-
----@param tool string
+---@param tool config.portable.tool
 local function setup_tool(tool)
-    local tool_path = tools_dir .. tool
-
-    local attr = lfs.attributes(tool_path)
+    local attr = lfs.attributes(tool.path)
     if not attr
         or attr.mode ~= "directory"
         or tool == "."
@@ -67,7 +63,7 @@ local function setup_tool(tool)
         return
     end
 
-    local tool_config_path = tool_path .. "/.config/"
+    local tool_config_path = tool.path .. "/.config/"
     if not lfs.exists(tool_config_path) then
         verbose("tool '" .. tool .. "' has no '.config' directory")
         return
@@ -93,8 +89,9 @@ local function setup_tool(tool)
 
     print(("tool '%s'..."):format(tool))
     portable.set_current_tool(tool)
+
     -- change into tool dir for easy relativ pathing
-    lfs.chdir(portable.current_tool_path)
+    lfs.chdir(portable.current_tool.path)
 
     local tool_thread = coroutine.create(setup_func)
     local success, setup_err_msg = coroutine.resume(tool_thread)
@@ -106,7 +103,10 @@ local function setup_tool(tool)
 end
 
 for tool in lfs.dir(tools_dir) do
-    setup_tool(tool)
+    setup_tool({
+        name = tool,
+        path = tools_dir .. tool,
+    })
 end
 
 -- get back to config dir
@@ -117,33 +117,27 @@ if not lfs.exists(bin_dir) then
     lfs.mkdir(bin_dir)
 end
 
-for name, file_info in pairs(portable.file_infos) do
-    local path = file_info.path
-    if config.env.is_admin then
-        local pos = path:reverse():find(".", nil, true)
-        local ext = path:sub(path:len() - pos + 1)
-
-        print(bin_dir .. name .. ext, path)
-        config.path.create_symlink(bin_dir .. name .. ext, path)
-    else
-        local batch_file_path = bin_dir .. name .. ".bat"
-        local batch_file = io.open(batch_file_path, "w")
-        if not batch_file then
-            print(("unable to open file '%s'"):format(batch_file_path))
-            goto continue
-        end
-
-        if file_info.proxy then
-            batch_file:write(path)
-        else
-            batch_file:write(([[
-                @echo off
-                start "" "]] .. path .. [[" %*
-                exit
-            ]]))
-        end
-        batch_file:close()
+for file_name, file_info in pairs(portable.file_infos) do
+    local batch_file_path = bin_dir .. file_name .. ".bat"
+    local batch_file = io.open(batch_file_path, "w")
+    if not batch_file then
+        print(("unable to open file '%s'"):format(batch_file_path))
+        goto continue
     end
+
+    if file_info.proxy then
+        verbose("creating proxy for '" .. file_info.path .. "'")
+        if config.env.is_admin then
+            config.path.create_symlink(file_name .. ".exe", file_info.path)
+        else
+            batch_file:write(("\"%s\" %*"):format(file_info.path))
+        end
+    else
+        verbose("creating batch file for '" .. file_info.path .. "'")
+        batch_file:write(("start \"\" \"%s\" %s"):format(file_info.path, table.concat(file_info.args, " ")))
+        batch_file:write(" %*")
+    end
+    batch_file:close()
 
     ::continue::
 end

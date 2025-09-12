@@ -8,13 +8,6 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   // panels
-  "assistant": {
-    "version": "2",
-    "button": false
-  },
-  "chat_panel": {
-    "button": false
-  },
   "collaboration_panel": {
     "button": false
   },
@@ -40,10 +33,6 @@
   ],
 
   // code stuff
-  "features": {
-    "inline_completion_provider": "none",
-    "copilot": false
-  },
   "inlay_hints": {
     "enabled": true
   },
@@ -61,11 +50,6 @@
     "coloring": "indent_aware"
   },
   "current_line_highlight": "gutter",
-  "lsp": {
-    "clangd": {
-      "arguments": ["-backgroud-index", "-compile-commands-dir=build/debug"]
-    }
-  },
 
   // diagnositc data
   "telemetry": {

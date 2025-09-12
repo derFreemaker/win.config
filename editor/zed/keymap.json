@@ -7,20 +7,18 @@
 // from the command palette.
 [
   {
-    "use_layout_keys": true,
     "bindings": {
       // standard
       "ctrl-e": "file_finder::Toggle",
       "alt-e": "workspace::ToggleRightDock",
       "alt-k": "outline::Toggle",
       "ctrl-w": "pane::CloseActiveItem",
-      "alt-left": "pane::ActivatePrevItem",
+      "alt-left": "pane::ActivatePreviousItem",
       "alt-right": "pane::ActivateNextItem"
     }
   },
   {
     "context": "Editor",
-    "use_layout_keys": true,
     "bindings": {
       "ctrl-shift-up": "editor::SelectUp",
       "ctrl-shift-down": "editor::SelectDown",
@@ -40,14 +38,12 @@
   // terminal
   {
     "context": "Terminal",
-    "use_layout_keys": true,
     "bindings": {
       "ctrl-shift-e": "terminal_panel::ToggleFocus"
     }
   },
   {
     "context": "!Terminal",
-    "use_layout_keys": true,
     "bindings": {
       "ctrl-shift-c": null
     }

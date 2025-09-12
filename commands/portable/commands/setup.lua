@@ -20,10 +20,12 @@ end
 
 ---@class config.portable
 ---@field package file_infos { path: string, args: string[]?, proxy: boolean? }[]
+---@field package run_after_funcs { tool: config.portable.tool, func: function }[]
 ---
 ---@field package current_tool config.portable.tool
 portable = {
-    file_infos = {}
+    file_infos = {},
+    run_after_funcs = {},
 }
 
 ---@return config.portable.tool
@@ -51,6 +53,14 @@ function portable.add_file_to_path(opt)
 
     local windows_conform_path = (tools_dir .. portable.current_tool .. "/" .. opt.path):gsub("/", "\\")
     portable.file_infos[opt.name] = { path = windows_conform_path, args = opt.args, proxy = opt.proxy or not opt.args }
+end
+
+---@param func function
+function portable.run_after(func)
+    table.insert(portable.run_after_funcs, {
+        tool = portable.get_current_tool(),
+        func = func,
+    })
 end
 
 ---@param tool config.portable.tool
@@ -146,5 +156,10 @@ local bin_path = tools_dir:gsub("/", "\\") .. "bin"
 config.env.add("PATH", bin_path, "user", true, ";")
 
 config.env.set("PATH_FREEMAKER_PORTABLE", bin_path, "user")
+
+for _, func in pairs(portable.run_after_funcs) do
+    portable.set_current_tool(func.tool)
+    pcall(func.func)
+end
 
 print("done setting up!")

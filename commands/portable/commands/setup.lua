@@ -128,11 +128,15 @@ if not lfs.exists(bin_dir) then
 end
 
 for file_name, file_info in pairs(portable.file_infos) do
-    local batch_file_path = bin_dir .. file_name .. ".bat"
-    local batch_file = io.open(batch_file_path, "w")
-    if not batch_file then
-        print(("unable to open file '%s'"):format(batch_file_path))
-        goto continue
+    local function open_batch_file()
+        local batch_file_path = bin_dir .. file_name .. ".bat"
+        local batch_file = io.open(batch_file_path, "w")
+        if not batch_file then
+            print(("unable to open file '%s'"):format(batch_file_path))
+            return nil
+        end
+
+        return batch_file
     end
 
     if file_info.proxy then
@@ -140,14 +144,26 @@ for file_name, file_info in pairs(portable.file_infos) do
         if config.env.is_admin then
             config.path.create_symlink(file_name .. ".exe", file_info.path)
         else
+            local batch_file = open_batch_file()
+            if not batch_file then
+                goto continue
+            end
+
             batch_file:write(("\"%s\" %*"):format(file_info.path))
+            batch_file:close()
         end
     else
         verbose("creating batch file for '" .. file_info.path .. "'")
-        batch_file:write(("start \"\" \"%s\" %s"):format(file_info.path, table.concat(file_info.args, " ")))
+        local batch_file = open_batch_file()
+        if not batch_file then
+            goto continue
+        end
+
+        batch_file:write(("start \"\" \"%s\" %s")
+            :format(file_info.path, table.concat(file_info.args, " ")))
         batch_file:write(" %*")
+        batch_file:close()
     end
-    batch_file:close()
 
     ::continue::
 end

@@ -1,31 +1,39 @@
-if ($Global:USERCONFIG_FREEMAKER_INIT -eq 1) {
-    exit
-}
+. "$env:USERCONFIG_FREEMAKER/scripts/Update-SessionEnvironment.ps1"
 
-if ($null -ne $env:USERCONFIG_FREEMAKER_PORTABLE) {
-    if (!(Test-Path -Path $env:DRIVE_FREEMAKER_PORTABLE)) {
-        Write-Warning "portable mode was still active!"
-        . "$PSScriptRoot/../portable/cleanup.ps1"
-        $cleanup = "executed"
-    }
-}
+# Neovim alias
+New-Alias -Name vim -Value nvim -Force
 
-if ($null -ne $env:ChocolateyInstall) {
-    Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-}
-else {
-    . "$env:USERCONFIG_FREEMAKER/scripts/Update-SessionEnvironment.ps1"
-}
-
-if ($null -ne $cleanup) {
-    Update-SessionEnvironment
-}
-
-if ($null -ne $env:USERCONFIG_FREEMAKER_PORTABLE) {
-    Write-Warning "portable mode is active!"
-    . "$PSScriptRoot/portable/init.ps1"
+# Load Terminal-Icons if available
+if (Get-Module -ListAvailable Terminal-Icons -ErrorAction SilentlyContinue) {
+    Import-Module Terminal-Icons
 } else {
-    . "$PSScriptRoot/core_init.ps1"
+    Write-Warning "Terminal-Icons module not found - install with: Install-Module -Name Terminal-Icons -Repository PSGallery"
 }
 
-$Global:USERCONFIG_FREEMAKER_INIT = 1
+# Load and configure PSReadLine if available
+if (Get-Module -ListAvailable PSReadLine -ErrorAction SilentlyContinue) {
+    Import-Module PSReadLine
+    Set-PSReadLineOption -PredictionViewStyle ListView
+} else {
+    Write-Warning "PSReadLine module not found - install with: Install-Module -Name PSReadLine -Repository PSGallery"
+}
+
+# Load posh-git for Git integration if available
+if (Get-Module -ListAvailable posh-git -ErrorAction SilentlyContinue) {
+    Import-Module posh-git
+} else {
+    Write-Warning "posh-git module not found - install with: Install-Module -Name posh-git -Repository PSGallery"
+}
+
+# Initialize zoxide if available
+if (Get-Command zoxide -ErrorAction SilentlyContinue) {
+    Invoke-Expression (& zoxide init --cmd cd powershell | Out-String)
+} else {
+    Write-Warning "zoxide command not found - install with: winget install ajeetdsouza.zoxide"
+}
+
+if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
+    oh-my-posh init pwsh --config "$env:USERCONFIG_FREEMAKER/pwsh/oh-my-posh.toml" | Invoke-Expression
+} else {
+    Write-Warning "oh-my-posh command not found - install with: winget install JanDeDobbeleer.OhMyPosh"
+}

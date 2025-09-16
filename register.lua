@@ -64,9 +64,20 @@ tools.add_tool({
     handler = {
         install = function(_)
             return config.env.execute("PowerShell -ExecutionPolicy Bypass;"
-                .. "Import-Module PowerShellGet;"
-                .. "Install-Module -Name Terminal-Icons -Force;"
-                .. "Install-Module -Name PSReadLine -Force;")
+                .. "Install-Module -Name Terminal-Icons -Repository PSGallery -Force;"
+                .. "Install-Module -Name PSReadLine -Repository PSGallery -Force;")
+        end,
+        uninstall = function(_)
+            return config.env.execute("PowerShell -ExecutionPolicy Bypass;"
+                .. "Uninstall-Module -Name Terminal-Icons;"
+                .. "Uninstall-Module -Name PSReadLine;"
+            )
+        end,
+        upgrade = function(_)
+            return config.env.execute("PowerShell -ExecutionPolicy Bypass;"
+                .. "Update-Module -Name Terminal-Icons -Force;"
+                .. "Update-Module -Name PSReadLine -Force;"
+            )
         end
     }
 })
@@ -125,15 +136,15 @@ tools.add_tool({
         return success, output
     end
 })
--- tools.add_tool({
---     name = "Zed",
---     setup = function(_)
---         if not config.path.create_junction(config.env.get("APPDATA") .. "/Zed", config.root_path .. "editor/zed") then
---             return false, "unable to create config junction"
---         end
---         return true
---     end
--- })
+tools.add_tool({
+    name = "Zed",
+    setup = function(_)
+        if not config.path.create_junction(config.env.get("APPDATA") .. "/Zed", config.root_path .. "editor/zed") then
+            return false, "unable to create config junction"
+        end
+        return true
+    end
+})
 
 -- powertoys & co
 tools.use_winget("powertoys", "microsoft.powertoys")
@@ -196,14 +207,14 @@ tools.add_tool({
 
 -- some other Programs
 tools.use_winget("7zip", "7zip.7zip")
-tools.use_winget("brave", "Brave.Brave")
+-- tools.use_winget("brave", "Brave.Brave")
 tools.use_winget("notepad++", "Notepad++.Notepad++")
 tools.use_winget("balena-etcher", "Balena.Etcher")
-tools.use_winget("anydesk", "AnyDeskSoftwareGmbH.Anydesk")
+-- tools.use_winget("anydesk", "AnyDeskSoftwareGmbH.Anydesk")
 tools.use_winget("wintoys", "9p8ltpgcbzxd")
 
-tools.use_winget("zen", "Zen-Team.Zen-Browser")
-tools.use_winget("rust", "Rustlang.Rustup")
+-- tools.use_winget("zen", "Zen-Team.Zen-Browser")
+-- tools.use_winget("rust", "Rustlang.Rustup")
 
 tools.use_winget("postman", "Postman.Postman")
 -- tools.use_winget("docker", "Docker.DockerDesktop")

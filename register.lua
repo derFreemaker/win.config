@@ -102,7 +102,7 @@ tools.use_winget("github-cli", "GitHub.cli")
 
 tools.use_choco("mingw")
 tools.use_choco("make")
-tools.use_choco("gsudo")
+-- tools.use_choco("gsudo")
 
 -- directory navigation
 tools.use_choco("zoxide")

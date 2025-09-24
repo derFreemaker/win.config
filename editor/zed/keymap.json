@@ -30,8 +30,8 @@
       // actions
       "ctrl-#": "editor::ToggleComments",
       "ctrl-h": "editor::Hover",
-      "shift-f12": "editor::GoToDefinition",
-      "f12": "editor::GoToTypeDefinition"
+      "f12": "editor::GoToDefinition",
+      "shift-f12": "editor::GoToTypeDefinition"
     }
   },
 

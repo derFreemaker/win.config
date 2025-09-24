@@ -37,3 +37,7 @@ if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
 } else {
     Write-Warning "oh-my-posh command not found - install with: winget install JanDeDobbeleer.OhMyPosh"
 }
+
+if ("MYBUILD11" -eq $env:COMPUTERNAME -and $null -ne $env:SSH_CLIENT) {
+    . "$env:USERCONFIG_FREEMAKER/scripts/TurnOffMonitors.ps1"
+}

@@ -32,6 +32,9 @@ if (Get-Command zoxide -ErrorAction SilentlyContinue) {
     Write-Warning "zoxide command not found - install with: winget install ajeetdsouza.zoxide"
 }
 
+# Load Completions
+. "$env:USERCONFIG_FREEMAKER/completion/pwsh/tailscale.ps1"
+
 if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
     oh-my-posh init pwsh --config "$env:USERCONFIG_FREEMAKER/pwsh/oh-my-posh.toml" | Invoke-Expression
 } else {

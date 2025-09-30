@@ -1,18 +1,26 @@
 print("setting up...")
 
-config.env.set("USERCONFIG_FREEMAKER_PORTABLE", config.root_path, "user")
+if not config.env.set("USERCONFIG_FREEMAKER_PORTABLE", config.root_path, "user") then
+    fatal("unable to set userconfig env variable")
+end
+
 local tools_dir
 do
     local pos = config.root_path:reverse():find("/", 2, true)
     local drive = config.root_path:sub(0, config.root_path:len() - pos + 1)
-    config.env.set("DRIVE_FREEMAKER_PORTABLE", drive, "user")
+    if not config.env.set("DRIVE_FREEMAKER_PORTABLE", drive, "user") then
+        fatal("unable to set drive env variable")
+    end
 
     tools_dir = drive .. "tools/"
-    config.env.set("TOOLS_FREEMAKER_PORTABLE", tools_dir:gsub("/", "\\"), "user")
+    if not config.env.set("TOOLS_FREEMAKER_PORTABLE", tools_dir:gsub("/", "\\"), "user") then
+        fatal("unable to set tools env variable")
+    end
 end
 if not lfs.exists(tools_dir) or lfs.attributes(tools_dir).mode ~= "directory" then
     fatal("no tools directory found: " .. tools_dir)
 end
+
 
 ---@class config.portable.tool
 ---@field name string
@@ -51,7 +59,7 @@ function portable.add_file_to_path(opt)
         error("a proxy file cannot have args")
     end
 
-    local windows_conform_path = (tools_dir .. portable.current_tool.path .. "/" .. opt.path):gsub("/", "\\")
+    local windows_conform_path = (portable.current_tool.path .. opt.path):gsub("/", "\\")
     portable.file_infos[opt.name] = { path = windows_conform_path, args = opt.args, proxy = opt.proxy or not opt.args }
 end
 
@@ -65,6 +73,8 @@ end
 
 ---@param tool config.portable.tool
 local function setup_tool(tool)
+    print("test 1")
+
     local attr = lfs.attributes(tool.path)
     if not attr
         or attr.mode ~= "directory"
@@ -105,18 +115,22 @@ local function setup_tool(tool)
 
     local tool_thread = coroutine.create(setup_func)
     local success, setup_err_msg = coroutine.resume(tool_thread)
-	coroutine.close(tool_thread)
 
     if not success then
         print("tool '" .. tool.name .. "' setup failed with:\n"
             .. debug.traceback(tool_thread, setup_err_msg))
+
+        coroutine.close(tool_thread)
+        return
     end
+
+    coroutine.close(tool_thread)
 end
 
 for tool in lfs.dir(tools_dir) do
     setup_tool({
         name = tool,
-        path = tools_dir .. tool,
+        path = tools_dir .. tool .. "/",
     })
 end
 
@@ -153,7 +167,7 @@ for file_name, file_info in pairs(portable.file_infos) do
             end
 
             batch_file:write(("\"%s\""):format(file_info.path))
-			batch_file:write(" %*")
+            batch_file:write(" %*")
             batch_file:close()
         end
     else
@@ -175,13 +189,18 @@ end
 verbose("done creating links")
 
 local bin_path = tools_dir:gsub("/", "\\") .. "bin"
-print("bin path: " .. bin_path)
-config.env.add("PATH", bin_path, "user", true, ";")
+verbose("bin path: " .. bin_path)
 
-config.env.set("PATH_FREEMAKER_PORTABLE", bin_path, "user")
+if not config.env.add("PATH", bin_path, "user", true, ";") then
+    fatal("unable to add bin path to PATH")
+end
+
+if not config.env.set("PATH_FREEMAKER_PORTABLE", bin_path, "user") then
+    fatal("unable to set PATH_FREEMAKER_PORTABLE")
+end
 
 for _, func in pairs(portable.run_after_funcs) do
-	portable.set_current_tool(func.tool)
+    portable.set_current_tool(func.tool)
     pcall(func.func)
 end
 

@@ -51,7 +51,7 @@ function portable.add_file_to_path(opt)
         error("a proxy file cannot have args")
     end
 
-    local windows_conform_path = (tools_dir .. portable.current_tool .. "/" .. opt.path):gsub("/", "\\")
+    local windows_conform_path = (tools_dir .. portable.current_tool.path .. "/" .. opt.path):gsub("/", "\\")
     portable.file_infos[opt.name] = { path = windows_conform_path, args = opt.args, proxy = opt.proxy or not opt.args }
 end
 
@@ -68,36 +68,36 @@ local function setup_tool(tool)
     local attr = lfs.attributes(tool.path)
     if not attr
         or attr.mode ~= "directory"
-        or tool == "."
-        or tool == ".." then
+        or tool.name == "."
+        or tool.name == ".." then
         return
     end
 
     local tool_config_path = tool.path .. "/.config/"
     if not lfs.exists(tool_config_path) then
-        verbose("tool '" .. tool .. "' has no '.config' directory")
+        verbose("tool '" .. tool.name .. "' has no '.config' directory")
         return
     end
 
     local disable_path = tool_config_path .. ".disable"
     if lfs.exists(disable_path) then
-        print("tool '" .. tool .. "' is disabled")
+        print("tool '" .. tool.name .. "' is disabled")
         return
     end
 
     local tool_setup_path = tool_config_path .. "setup.lua"
     if not lfs.exists(tool_setup_path) then
-        verbose("tool '" .. tool .. "' has no 'setup.lua' script in '.config' directory")
+        verbose("tool '" .. tool.name .. "' has no 'setup.lua' script in '.config' directory")
         return
     end
 
     local setup_func, load_err_msg = loadfile(tool_setup_path)
     if not setup_func then
-        print("unable to load setup file for tool '" .. tool .. "'\n" .. load_err_msg)
+        print("unable to load setup file for tool '" .. tool.name .. "'\n" .. load_err_msg)
         return
     end
 
-    print(("tool '%s'..."):format(tool))
+    print(("tool '%s'..."):format(tool.name))
     portable.set_current_tool(tool)
 
     -- change into tool dir for easy relativ pathing
@@ -105,9 +105,10 @@ local function setup_tool(tool)
 
     local tool_thread = coroutine.create(setup_func)
     local success, setup_err_msg = coroutine.resume(tool_thread)
+	coroutine.close(tool_thread)
 
     if not success then
-        print("tool '" .. tool .. "' setup failed with:\n"
+        print("tool '" .. tool.name .. "' setup failed with:\n"
             .. debug.traceback(tool_thread, setup_err_msg))
     end
 end
@@ -126,6 +127,8 @@ local bin_dir = tools_dir .. "bin/"
 if not lfs.exists(bin_dir) then
     lfs.mkdir(bin_dir)
 end
+
+verbose("creating links...")
 
 for file_name, file_info in pairs(portable.file_infos) do
     local function open_batch_file()
@@ -149,7 +152,8 @@ for file_name, file_info in pairs(portable.file_infos) do
                 goto continue
             end
 
-            batch_file:write(("\"%s\" %*"):format(file_info.path))
+            batch_file:write(("\"%s\""):format(file_info.path))
+			batch_file:write(" %*")
             batch_file:close()
         end
     else
@@ -168,13 +172,16 @@ for file_name, file_info in pairs(portable.file_infos) do
     ::continue::
 end
 
+verbose("done creating links")
+
 local bin_path = tools_dir:gsub("/", "\\") .. "bin"
+print("bin path: " .. bin_path)
 config.env.add("PATH", bin_path, "user", true, ";")
 
 config.env.set("PATH_FREEMAKER_PORTABLE", bin_path, "user")
 
 for _, func in pairs(portable.run_after_funcs) do
-    portable.set_current_tool(func.tool)
+	portable.set_current_tool(func.tool)
     pcall(func.func)
 end
 

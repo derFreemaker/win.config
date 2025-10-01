@@ -73,8 +73,6 @@ end
 
 ---@param tool config.portable.tool
 local function setup_tool(tool)
-    print("test 1")
-
     local attr = lfs.attributes(tool.path)
     if not attr
         or attr.mode ~= "directory"

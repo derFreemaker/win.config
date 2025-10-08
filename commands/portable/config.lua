@@ -15,14 +15,20 @@ function t.config(command)
     command:command_target("portable_command")
 
     local device_commands_path = "./commands/portable/commands/"
-    for file in lfs.dir(device_commands_path) do
-        local attr = lfs.attributes(device_commands_path .. file)
-        if attr and attr.mode == "file" then
-            file = file:match("(.+)%..+$") or file
-            command:command(file, "run " .. file .. " scripts")
-        end
+    for file in config.fs.dir(device_commands_path) do
+        --//TODO: maybe check if it's a file
+        -- local attr = config.fs.attributes(device_commands_path .. file)
+        -- if not attr or attr.mode ~= "file" then
+        --     goto continue
+        -- end
+
+        file = file:match("(.+)%..+$") or file
+        command:command(file, "run " .. file .. " scripts")
+
+        ::continue::
     end
 end
+
 function t.execute()
     print("running in portable mode")
 

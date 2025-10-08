@@ -162,7 +162,7 @@ tools.add_tool({
             tools.winget.uninstall({ name = "zebar", id = "glzr-io.zebar" })
 
             local path = config.env.get("USERPROFILE") .. "/.glzr"
-            if lfs.exists(path) then
+            if config.fs.exists(path) then
                 config.env.execute("Remove-Item -Path \"" .. path .. "\" -Recurse -Force")
             end
 
@@ -172,7 +172,7 @@ tools.add_tool({
     setup = function(_)
         local userprofile = config.env.get("USERPROFILE")
         local glzr_dir = userprofile .. "/.glzr"
-        if not lfs.exists(glzr_dir) and not lfs.mkdir(glzr_dir) then
+        if not config.fs.exists(glzr_dir) and not config.fs.mkdir(glzr_dir) then
             return false, "unable to create ~/.glzr folder"
         end
 

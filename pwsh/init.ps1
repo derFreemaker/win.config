@@ -1,4 +1,4 @@
-. "$env:USERCONFIG_FREEMAKER/scripts/Update-SessionEnvironment.ps1"
+. "$env:USERCONFIG_FREEMAKER/scripts/load.ps1"
 
 # Neovim alias
 New-Alias -Name vim -Value nvim -Force

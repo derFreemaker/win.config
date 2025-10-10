@@ -1,6 +1,6 @@
 print("setting up...")
 
-if not config.env.set("USERCONFIG_FREEMAKER_PORTABLE", config.root_path, "user") then
+if not config.env.set("USERCONFIG_FREEMAKER_PORTABLE", config.root_path, config.env.scope.user) then
     fatal("unable to set userconfig env variable")
 end
 
@@ -8,18 +8,17 @@ local tools_dir
 do
     local pos = config.root_path:reverse():find("/", 2, true)
     local drive = config.root_path:sub(0, config.root_path:len() - pos + 1)
-    if not config.env.set("DRIVE_FREEMAKER_PORTABLE", drive, "user") then
+    if not config.env.set("DRIVE_FREEMAKER_PORTABLE", drive, config.env.scope.user) then
         fatal("unable to set drive env variable")
     end
 
     tools_dir = drive .. "tools/"
-    if not config.env.set("TOOLS_FREEMAKER_PORTABLE", tools_dir:gsub("/", "\\"), "user") then
+    if not config.env.set("TOOLS_FREEMAKER_PORTABLE", tools_dir:gsub("/", "\\"), config.env.scope.user) then
         fatal("unable to set tools env variable")
     end
 end
-if not config.fs.exists(tools_dir) then
-    --//TODO: maybe check if it's a directory
-    -- or lfs.attributes(tools_dir).mode ~= "directory"
+if not lfs.exists(tools_dir)
+    or lfs.attributes(tools_dir).mode ~= "directory" then
     fatal("no tools directory found: " .. tools_dir)
 end
 
@@ -75,26 +74,25 @@ end
 
 ---@param tool config.portable.tool
 local function setup_tool(tool)
-    --//TODO: maybe check if it's a directory
-    -- local attr = config.fs.attributes(tool.path)
-    -- if not attr or attr.mode ~= "directory" then
-    --     return
-    -- end
+    local attr = lfs.attributes(tool.path)
+    if not attr or attr.mode ~= "directory" then
+        return
+    end
 
     local tool_config_path = tool.path .. "/.config/"
-    if not config.fs.exists(tool_config_path) then
+    if not lfs.exists(tool_config_path) then
         verbose("tool '" .. tool.name .. "' has no '.config' directory")
         return
     end
 
     local disable_path = tool_config_path .. ".disable"
-    if config.fs.exists(disable_path) then
+    if lfs.exists(disable_path) then
         print("tool '" .. tool.name .. "' is disabled")
         return
     end
 
     local tool_setup_path = tool_config_path .. "setup.lua"
-    if not config.fs.exists(tool_setup_path) then
+    if not lfs.exists(tool_setup_path) then
         verbose("tool '" .. tool.name .. "' has no 'setup.lua' script in '.config' directory")
         return
     end
@@ -108,8 +106,8 @@ local function setup_tool(tool)
     print(("tool '%s'..."):format(tool.name))
     portable.set_current_tool(tool)
 
-    -- change into tool dir for easy relativ pathing
-    config.fs.chdir(portable.current_tool.path)
+    -- change into tool dir for easy relative pathing
+    lfs.chdir(portable.current_tool.path)
 
     local tool_thread = coroutine.create(setup_func)
     local success, setup_err_msg = coroutine.resume(tool_thread)
@@ -125,19 +123,25 @@ local function setup_tool(tool)
     coroutine.close(tool_thread)
 end
 
-for tool in config.fs.dir(tools_dir) do
+for tool in lfs.dir(tools_dir) do
+    if tool ~= "." and tool ~= ".." then
+        goto continue
+    end
+
     setup_tool({
         name = tool,
         path = tools_dir .. tool .. "/",
     })
+
+    ::continue::
 end
 
 -- get back to config dir
-config.fs.chdir(config.root_path)
+lfs.chdir(config.root_path)
 
 local bin_dir = tools_dir .. "bin/"
-if not config.fs.exists(bin_dir) then
-    config.fs.mkdir(bin_dir)
+if not lfs.exists(bin_dir) then
+    lfs.mkdir(bin_dir)
 end
 
 verbose("creating links...")
@@ -156,7 +160,7 @@ for file_name, file_info in pairs(portable.file_infos) do
 
     if file_info.proxy then
         verbose("creating proxy for '" .. file_info.path .. "'")
-        if config.env.is_admin then
+        if config.env.is_root then
             config.path.create_symlink(file_name .. ".exe", file_info.path)
         else
             local batch_file = open_batch_file()
@@ -189,11 +193,11 @@ verbose("done creating links")
 local bin_path = tools_dir:gsub("/", "\\") .. "bin"
 verbose("bin path: " .. bin_path)
 
-if not config.env.add("PATH", bin_path, "user", true, ";") then
+if not config.env.add("PATH", bin_path, config.env.scope.user, true, ";") then
     fatal("unable to add bin path to PATH")
 end
 
-if not config.env.set("PATH_FREEMAKER_PORTABLE", bin_path, "user") then
+if not config.env.set("PATH_FREEMAKER_PORTABLE", bin_path, config.env.scope.user) then
     fatal("unable to set PATH_FREEMAKER_PORTABLE")
 end
 

@@ -2,16 +2,16 @@
 local choco = {}
 
 ---@param action string
----@param command string
+---@param args string[]
 ---@return boolean success
 ---@return integer exitcode
 ---@return string output
-local function execute(action, name, command)
+local function execute(action, name, args)
     print(("%s '%s' with cocolatey..."):format(action, name))
-    return config.env.execute(command)
+    local result = config.env.execute("choco", args)
+    return result.success, result.exitcode, result.stdout .. result.stderr
 end
 
-local install = "choco install \"%s\" -y"
 ---@param tool_config config.tool_config
 ---@return boolean success
 ---@return integer exitcode
@@ -20,11 +20,10 @@ function choco.install(tool_config)
     return execute(
         "installing",
         tool_config.name,
-        install:format(tool_config.id)
+        { "install", tool_config.id, "-y" }
     )
 end
 
-local uninstall = "choco uninstall \"%s\" -y"
 ---@param tool_config config.tool_config
 ---@return boolean success
 ---@return integer exitcode
@@ -33,11 +32,10 @@ function choco.uninstall(tool_config)
     return execute(
         "uninstalling",
         tool_config.name,
-        uninstall:format(tool_config.id)
+        { "uninstall", tool_config.id, "-y" }
     )
 end
 
-local upgrade = "choco upgrade \"%s\" -y"
 ---@param tool_config config.tool_config
 ---@return boolean success
 ---@return integer exitcode
@@ -46,7 +44,7 @@ function choco.upgrade(tool_config)
     return execute(
         "upgrading",
         tool_config.name,
-        upgrade:format(tool_config.id)
+        { "upgrade", tool_config.id, "-y" }
     )
 end
 

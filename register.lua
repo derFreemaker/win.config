@@ -6,22 +6,22 @@ tools.add_tool({
     name = "env",
     handler = {
         install = function(_)
-            if not config.env.set("USERCONFIG_FREEMAKER", config.root_path, "user") then
+            if not config.env.set("USERCONFIG_FREEMAKER", config.root_path, config.env.scope.user) then
                 return false, 1, "unable to set environment variable"
             end
 
-            if not config.env.add("PATH", config.root_path .. "bin", "user", true, ";") then
+            if not config.env.add("PATH", config.root_path .. "bin", config.env.scope.user, true, ";") then
                 return false, 1, "unable to add '.../.config/bin' to PATH env var"
             end
 
             return true, 0, ""
         end,
         uninstall = function(_)
-            if not config.env.unset("USERCONFIG_FREEMAKER", "user") then
+            if not config.env.unset("USERCONFIG_FREEMAKER", config.env.scope.user) then
                 return false, 1, "unable to remove environment variable"
             end
 
-            if not config.env.remove("PATH", config.root_path .. "bin;", "user") then
+            if not config.env.remove("PATH", config.root_path .. "bin;", config.env.scope.user) then
                 return false, 1, "unable to remove '.../.config/bin' from PATH env var"
             end
 
@@ -35,15 +35,20 @@ tools.add_tool({
     name = "chocolatey",
     handler = {
         install = function(_)
-            return config.env.execute("Set-ExecutionPolicy Bypass -Scope Process -Force;"
+            local result = config.env.execute("Set-ExecutionPolicy Bypass -Scope Process -Force;"
                 .. "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;"
-                .. "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))")
+                .. "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
+                , nil, true)
+            return result.success, result.exitcode, result.stdout .. result.stderr
         end,
         uninstall = function(_)
-            return config.env.execute("Remove-Item -Force -Recurse \"$env:ChocolateyInstall\" -ErrorAction Ignore")
+            local result = config.env.execute(
+                "Remove-Item -Force -Recurse \"$env:ChocolateyInstall\" -ErrorAction Ignore", nil, true)
+            return result.success, result.exitcode, result.stdout .. result.stderr
         end,
         upgrade = function(_)
-            return config.env.execute("choco upgrade chocolatey -y")
+            local result = config.env.execute("choco", { "upgrade", "chocolatey", "-y" })
+            return result.success, result.exitcode, result.stdout .. result.stderr
         end
     }
 })
@@ -52,10 +57,10 @@ tools.add_tool({
 tools.add_tool({
     name = "powershell",
     setup = function(_)
-        local success = config.env.execute(
+        local result = config.env.execute(
             "pwsh -Command \"New-Item -ItemType Directory -Path (Split-Path -Parent $PROFILE) -Force;"
-            .. "Copy-Item -Path './pwsh/entry.ps1' -Destination $PROFILE -Force\"", true)
-        return success
+            .. "Copy-Item -Path './pwsh/entry.ps1' -Destination $PROFILE -Force\"", nil, true)
+        return result.success
     end
 })
 tools.use_choco("oh-my-posh")
@@ -63,21 +68,25 @@ tools.add_tool({
     name = "powershell.modules",
     handler = {
         install = function(_)
-            return config.env.execute("PowerShell -ExecutionPolicy Bypass;"
+            local result = config.env.execute("PowerShell -ExecutionPolicy Bypass;"
                 .. "Install-Module -Name Terminal-Icons -Repository PSGallery -Force;"
-                .. "Install-Module -Name PSReadLine -Repository PSGallery -Force;")
+                .. "Install-Module -Name PSReadLine -Repository PSGallery -Force;",
+                nil, true)
+            return result.success, result.exitcode, result.stdout .. result.stderr
         end,
         uninstall = function(_)
-            return config.env.execute("PowerShell -ExecutionPolicy Bypass;"
+            local result = config.env.execute("PowerShell -ExecutionPolicy Bypass;"
                 .. "Uninstall-Module -Name Terminal-Icons;"
-                .. "Uninstall-Module -Name PSReadLine;"
-            )
+                .. "Uninstall-Module -Name PSReadLine;",
+                nil, true)
+            return result.success, result.exitcode, result.stdout .. result.stderr
         end,
         upgrade = function(_)
-            return config.env.execute("PowerShell -ExecutionPolicy Bypass;"
+            local result = config.env.execute("PowerShell -ExecutionPolicy Bypass;"
                 .. "Update-Module -Name Terminal-Icons -Force;"
-                .. "Update-Module -Name PSReadLine -Force;"
-            )
+                .. "Update-Module -Name PSReadLine -Force;",
+                nil, true)
+            return result.success, result.exitcode, result.stdout .. result.stderr
         end
     }
 })
@@ -114,7 +123,7 @@ tools.add_tool({
     handler = tools.chocolatey,
     after = {
         install = function(_)
-            config.env.add("PATH", config.env.get("PROGRAMFILES") .. "/CMake/bin", "machine", true)
+            config.env.add("PATH", config.env.get("PROGRAMFILES") .. "/CMake/bin", config.env.scope.machine, true)
             return true
         end
     }
@@ -162,8 +171,8 @@ tools.add_tool({
             tools.winget.uninstall({ name = "zebar", id = "glzr-io.zebar" })
 
             local path = config.env.get("USERPROFILE") .. "/.glzr"
-            if config.fs.exists(path) then
-                config.env.execute("Remove-Item -Path \"" .. path .. "\" -Recurse -Force")
+            if lfs.exists(path) then
+                config.env.execute("Remove-Item -Path \"" .. path .. "\" -Recurse -Force", nil, true)
             end
 
             return true
@@ -172,7 +181,7 @@ tools.add_tool({
     setup = function(_)
         local userprofile = config.env.get("USERPROFILE")
         local glzr_dir = userprofile .. "/.glzr"
-        if not config.fs.exists(glzr_dir) and not config.fs.mkdir(glzr_dir) then
+        if not lfs.exists(glzr_dir) and not lfs.mkdir(glzr_dir) then
             return false, "unable to create ~/.glzr folder"
         end
 
@@ -197,10 +206,12 @@ tools.add_tool({
     name = "registry",
     handler = {
         install = function(_)
-            return config.env.execute("./registry/apply_regedits.ps1")
+            local result = config.env.execute("./registry/apply_regedits.ps1", nil, true)
+            return result.success, result.exitcode, result.stdout .. result.stderr
         end,
         uninstall = function(_)
-            return config.env.execute("./registry/remove_regedits.ps1")
+            local result = config.env.execute("./registry/remove_regedits.ps1", nil, true)
+            return result.success, result.exitcode, result.stdout .. result.stderr
         end
     }
 })

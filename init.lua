@@ -1,3 +1,5 @@
+lfs = require("lua-config.third-party.lfs")
+
 if not config.env.is_windows then
     print("my config is windows only")
     os.exit(1)
@@ -8,14 +10,15 @@ config.args_parser:flag("-v --verbose")
 
 ---@type table<string, fun()>
 local commands = {}
-for dir in config.fs.dir("./commands") do
-    --//TODO: maybe check if it's a directory
-    -- local attr = config.fs.attributes("./commands/" .. dir)
-    -- if not attr or attr.mode ~= "directory" then
-    --     goto continue
-    -- end
+for dir in lfs.dir("./commands") do
+    local attr = lfs.attributes("./commands/" .. dir)
+    if not attr or attr.mode ~= "directory"
+        or dir == "."
+        or dir == ".." then
+        goto continue
+    end
 
-    if not config.fs.exists("./commands/" .. dir .. "/config.lua") then
+    if not lfs.exists("./commands/" .. dir .. "/config.lua") then
         print("missing config file for command: " .. dir)
         goto continue
     end

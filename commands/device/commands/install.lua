@@ -1,4 +1,4 @@
-config.env.check_admin()
+config.env.check_root()
 
 local tools = require("tools.tools")
 

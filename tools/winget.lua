@@ -2,17 +2,17 @@
 local winget = {}
 
 ---@param action string
----@param command string
+---@param name string
+---@param args string[]
 ---@return boolean success
 ---@return integer exitcode
 ---@return string output
-local function execute(action, name, command)
+local function execute(action, name, args)
     print(("%s '%s' with winget..."):format(action, name))
-    return config.env.execute(command)
+    local result = config.env.execute("winget", args)
+    return result.success, result.exitcode, result.stdout .. result.stderr
 end
 
-local install =
-"winget install --disable-interactivity --accept-source-agreements --accept-package-agreements --id \"%s\" -e"
 ---@param tool_config config.tool_config
 ---@return boolean success
 ---@return integer exitcode
@@ -21,11 +21,17 @@ function winget.install(tool_config)
     return execute(
         "installing",
         tool_config.name,
-        install:format(tool_config.id)
+        {
+            "install",
+            "--disable-interactivity",
+            "--accept-source-aggreements",
+            "--accept-package-agreements",
+            "--id", tool_config.id,
+            "-e",
+        }
     )
 end
 
-local uninstall = "winget uninstall --disable-interactivity --id \"%s\" -e"
 ---@param tool_config config.tool_config
 ---@return boolean success
 ---@return integer exitcode
@@ -34,12 +40,15 @@ function winget.uninstall(tool_config)
     return execute(
         "uninstalling",
         tool_config.name,
-        uninstall:format(tool_config.id)
+        {
+            "uninstall",
+            "--disable-interactivity",
+            "--id", tool_config.id,
+            "-e"
+        }
     )
 end
 
-local upgrade =
-"winget upgrade --disable-interactivity --accept-source-agreements --accept-package-agreements --id \"%s\" -e"
 ---@param tool_config config.tool_config
 ---@return boolean success
 ---@return integer exitcode
@@ -48,7 +57,14 @@ function winget.upgrade(tool_config)
     return execute(
         "upgrading",
         tool_config.name,
-        upgrade:format(tool_config.id)
+        {
+            "upgrade",
+            "--disable-interactivity",
+            "--accept-source-aggreements",
+            "--accept-package-agreements",
+            "--id", tool_config.id,
+            "-e"
+        }
     )
 end
 

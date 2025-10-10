@@ -9,3 +9,6 @@ jgit
 # binaries
 # normally builded or installed from scripts
 bin
+
+# scoop
+scoop

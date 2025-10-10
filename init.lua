@@ -10,15 +10,15 @@ config.args_parser:flag("-v --verbose")
 
 ---@type table<string, fun()>
 local commands = {}
-for dir in lfs.dir("./commands") do
-    local attr = lfs.attributes("./commands/" .. dir)
+for dir in lfs.dir("commands") do
+    local attr = lfs.attributes("commands/" .. dir)
     if not attr or attr.mode ~= "directory"
         or dir == "."
         or dir == ".." then
         goto continue
     end
 
-    if not lfs.exists("./commands/" .. dir .. "/config.lua") then
+    if not lfs.exists("commands/" .. dir .. "/config.lua") then
         print("missing config file for command: " .. dir)
         goto continue
     end

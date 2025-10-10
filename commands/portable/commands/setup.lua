@@ -12,16 +12,16 @@ do
         fatal("unable to set drive env variable")
     end
 
-    tools_dir = drive .. "tools/"
+    tools_dir = drive .. "tools"
     if not config.env.set("TOOLS_FREEMAKER_PORTABLE", tools_dir:gsub("/", "\\"), config.env.scope.user) then
         fatal("unable to set tools env variable")
     end
 end
+
 if not lfs.exists(tools_dir)
     or lfs.attributes(tools_dir).mode ~= "directory" then
     fatal("no tools directory found: " .. tools_dir)
 end
-
 
 ---@class config.portable.tool
 ---@field name string
@@ -45,6 +45,11 @@ end
 ---@package
 ---@param tool config.portable.tool
 function portable.set_current_tool(tool)
+    local windows_conform_path = tool.path:gsub("/", "\\")
+    if not lfs.chdir(windows_conform_path) then
+        error("unable to change directory to '" .. windows_conform_path .. "'")
+    end
+
     portable.current_tool = tool
 end
 
@@ -60,8 +65,12 @@ function portable.add_file_to_path(opt)
         error("a proxy file cannot have args")
     end
 
-    local windows_conform_path = (portable.current_tool.path .. opt.path):gsub("/", "\\")
-    portable.file_infos[opt.name] = { path = windows_conform_path, args = opt.args, proxy = opt.proxy or not opt.args }
+    portable.file_infos[opt.name] = {
+        path = portable.current_tool.path .. "/" .. opt.path,
+        args = opt.args,
+        proxy = opt
+            .proxy or not opt.args
+    }
 end
 
 ---@param func function
@@ -74,24 +83,19 @@ end
 
 ---@param tool config.portable.tool
 local function setup_tool(tool)
-    local attr = lfs.attributes(tool.path)
-    if not attr or attr.mode ~= "directory" then
-        return
-    end
-
-    local tool_config_path = tool.path .. "/.config/"
+    local tool_config_path = tool.path .. "/.config"
     if not lfs.exists(tool_config_path) then
         verbose("tool '" .. tool.name .. "' has no '.config' directory")
         return
     end
 
-    local disable_path = tool_config_path .. ".disable"
+    local disable_path = tool_config_path .. "/.disable"
     if lfs.exists(disable_path) then
         print("tool '" .. tool.name .. "' is disabled")
         return
     end
 
-    local tool_setup_path = tool_config_path .. "setup.lua"
+    local tool_setup_path = tool_config_path .. "/setup.lua"
     if not lfs.exists(tool_setup_path) then
         verbose("tool '" .. tool.name .. "' has no 'setup.lua' script in '.config' directory")
         return
@@ -105,9 +109,6 @@ local function setup_tool(tool)
 
     print(("tool '%s'..."):format(tool.name))
     portable.set_current_tool(tool)
-
-    -- change into tool dir for easy relative pathing
-    lfs.chdir(portable.current_tool.path)
 
     local tool_thread = coroutine.create(setup_func)
     local success, setup_err_msg = coroutine.resume(tool_thread)
@@ -124,22 +125,28 @@ local function setup_tool(tool)
 end
 
 for tool in lfs.dir(tools_dir) do
-    if tool ~= "." and tool ~= ".." then
+    local attr = lfs.attributes(tools_dir .. "/" .. tool)
+    if not attr
+        or attr.mode ~= "directory"
+        or tool == "."
+        or tool == ".." then
         goto continue
     end
 
     setup_tool({
         name = tool,
-        path = tools_dir .. tool .. "/",
+        path = tools_dir .. "/" .. tool,
     })
 
     ::continue::
 end
 
 -- get back to config dir
-lfs.chdir(config.root_path)
+if not lfs.chdir(config.root_path) then
+    error("unable to change directory to '" .. config.root_path .. "'")
+end
 
-local bin_dir = tools_dir .. "bin/"
+local bin_dir = tools_dir .. "/bin"
 if not lfs.exists(bin_dir) then
     lfs.mkdir(bin_dir)
 end
@@ -148,7 +155,7 @@ verbose("creating links...")
 
 for file_name, file_info in pairs(portable.file_infos) do
     local function open_batch_file()
-        local batch_file_path = bin_dir .. file_name .. ".bat"
+        local batch_file_path = bin_dir .. "/" .. file_name .. ".bat"
         local batch_file = io.open(batch_file_path, "w")
         if not batch_file then
             print(("unable to open file '%s'"):format(batch_file_path))
@@ -158,17 +165,19 @@ for file_name, file_info in pairs(portable.file_infos) do
         return batch_file
     end
 
+    local windows_conform_path = file_info.path:gsub("/", "\\")
+
     if file_info.proxy then
         verbose("creating proxy for '" .. file_info.path .. "'")
         if config.env.is_root then
-            config.path.create_symlink(file_name .. ".exe", file_info.path)
+            config.path.create_symlink(file_name .. ".exe", windows_conform_path)
         else
             local batch_file = open_batch_file()
             if not batch_file then
                 goto continue
             end
 
-            batch_file:write(("\"%s\""):format(file_info.path))
+            batch_file:write(("\"%s\""):format(windows_conform_path))
             batch_file:write(" %*")
             batch_file:close()
         end
@@ -180,7 +189,7 @@ for file_name, file_info in pairs(portable.file_infos) do
         end
 
         batch_file:write(("start \"\" \"%s\" %s")
-            :format(file_info.path, table.concat(file_info.args, " ")))
+            :format(windows_conform_path, table.concat(file_info.args, " ")))
         batch_file:write(" %*")
         batch_file:close()
     end
@@ -190,7 +199,7 @@ end
 
 verbose("done creating links")
 
-local bin_path = tools_dir:gsub("/", "\\") .. "bin"
+local bin_path = tools_dir:gsub("/", "\\") .. "\\bin"
 verbose("bin path: " .. bin_path)
 
 if not config.env.add("PATH", bin_path, config.env.scope.user, true, ";") then

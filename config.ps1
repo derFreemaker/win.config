@@ -1,2 +1,1 @@
-$env:Path = "$PSScriptRoot\lua;$env:Path"
-. "$PSScriptRoot/lua-config/bin/lua-config.bat" @args
+. "$PSScriptRoot/lua-config/bin/lua-config.ps1" @args

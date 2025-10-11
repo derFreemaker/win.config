@@ -200,14 +200,10 @@ end
 verbose("done creating links")
 
 local bin_path = tools_dir:gsub("/", "\\") .. "\\bin"
-verbose("bin path: " .. bin_path)
+verbose("adding '" .. bin_path .. "' to PATH")
 
 if not config.env.add("PATH", bin_path, config.env.scope.user, true, ";") then
     fatal("unable to add bin path to PATH")
-end
-
-if not config.env.set("PATH_FREEMAKER_PORTABLE", bin_path, config.env.scope.user) then
-    fatal("unable to set PATH_FREEMAKER_PORTABLE")
 end
 
 for _, func in pairs(portable.run_after_funcs) do

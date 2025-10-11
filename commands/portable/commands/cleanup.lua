@@ -56,9 +56,19 @@ for tool in lfs.dir(tools_dir) do
 end
 
 local bin_dir = tools_dir .. "/bin"
-local windows_conform_path = bin_dir:gsub("/", "\\")
+local win_bin_dir = bin_dir:gsub("/", "\\")
 
-config.env.remove("PATH", windows_conform_path, config.env.scope.user)
+verbose("removing '" .. bin_dir .. "'")
+config.env.remove("PATH", win_bin_dir, config.env.scope.user)
+if lfs.exists(bin_dir) then
+    local result = config.env.execute("rm", { "-r", win_bin_dir }, true)
+    if not result.success then
+        print("unable to remove '" .. bin_dir .. "'")
+        print(result.exitcode)
+        print(result.stdout)
+        print(result.stderr)
+    end
+end
 
 config.env.unset("TOOLS_FREEMAKER_PORTABLE", config.env.scope.user)
 config.env.unset("USERCONFIG_FREEMAKER_PORTABLE", config.env.scope.user)

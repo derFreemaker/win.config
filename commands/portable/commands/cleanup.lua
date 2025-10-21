@@ -1,15 +1,14 @@
+local constants = require("commands.portable.commands.constants")
+
 print("cleaning up...")
 
-local pos = config.root_path:reverse():find("/", 2, true)
-local drive = config.root_path:sub(0, config.root_path:len() - pos + 1)
-local tools_dir = drive .. "tools"
-if not lfs.exists(tools_dir)
-    or lfs.attributes(tools_dir).mode ~= "directory" then
-    fatal("no tools directory found: " .. tools_dir)
+if not lfs.exists(constants.tools_dir)
+    or lfs.attributes(constants.tools_dir).mode ~= "directory" then
+    fatal("no tools directory found: " .. constants.tools_dir)
 end
 
 local function cleanup_tool(tool)
-    local tool_path = tools_dir .. "/" .. tool
+    local tool_path = constants.tools_dir .. "/" .. tool
 
     local attr = lfs.attributes(tool_path)
     if not attr or attr.mode ~= "directory" then
@@ -51,19 +50,18 @@ local function cleanup_tool(tool)
     end
 end
 
-for tool in lfs.dir(tools_dir) do
+for tool in lfs.dir(constants.tools_dir) do
     cleanup_tool(tool)
 end
 
-local bin_dir = tools_dir .. "/bin"
-local win_bin_dir = bin_dir:gsub("/", "\\")
+local win_bin_dir = constants.bin_dir:gsub("/", "\\")
 
-verbose("removing '" .. bin_dir .. "'")
+verbose("removing '" .. constants.bin_dir .. "'")
 config.env.remove("PATH", win_bin_dir, config.env.scope.user)
-if lfs.exists(bin_dir) then
+if lfs.exists(constants.bin_dir) then
     local result = config.env.execute("rm", { "-r", win_bin_dir }, true)
     if not result.success then
-        print("unable to remove '" .. bin_dir .. "'")
+        print("unable to remove '" .. constants.bin_dir .. "'")
         print(result.exitcode)
         print(result.stdout)
         print(result.stderr)

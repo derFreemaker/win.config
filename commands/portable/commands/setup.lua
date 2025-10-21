@@ -1,26 +1,23 @@
+local constants = require("commands.portable.commands.constants")
+
 print("setting up...")
 
 if not config.env.set("USERCONFIG_FREEMAKER_PORTABLE", config.root_path, config.env.scope.user) then
     fatal("unable to set userconfig env variable")
 end
 
-local tools_dir
-do
-    local pos = config.root_path:reverse():find("/", 2, true)
-    local drive = config.root_path:sub(0, config.root_path:len() - pos + 1)
-    if not config.env.set("DRIVE_FREEMAKER_PORTABLE", drive, config.env.scope.user) then
-        fatal("unable to set drive env variable")
-    end
-
-    tools_dir = drive .. "tools"
-    if not config.env.set("TOOLS_FREEMAKER_PORTABLE", tools_dir:gsub("/", "\\"), config.env.scope.user) then
-        fatal("unable to set tools env variable")
-    end
+if not config.env.set("DRIVE_FREEMAKER_PORTABLE", constants.drive .. "\\", config.env.scope.user) then
+    fatal("unable to set drive env variable")
 end
 
-if not lfs.exists(tools_dir)
-    or lfs.attributes(tools_dir).mode ~= "directory" then
-    fatal("no tools directory found: " .. tools_dir)
+
+if not config.env.set("TOOLS_FREEMAKER_PORTABLE", constants.tools_dir:gsub("/", "\\"), config.env.scope.user) then
+    fatal("unable to set tools env variable")
+end
+
+if not lfs.exists(constants.tools_dir)
+    or lfs.attributes(constants.tools_dir).mode ~= "directory" then
+    fatal("no tools directory found: " .. constants.tools_dir)
 end
 
 ---@class config.portable.tool
@@ -124,8 +121,8 @@ local function setup_tool(tool)
     coroutine.close(tool_thread)
 end
 
-for tool in lfs.dir(tools_dir) do
-    local attr = lfs.attributes(tools_dir .. "/" .. tool)
+for tool in lfs.dir(constants.tools_dir) do
+    local attr = lfs.attributes(constants.tools_dir .. "/" .. tool)
     if not attr
         or attr.mode ~= "directory"
         or tool == "."
@@ -135,7 +132,7 @@ for tool in lfs.dir(tools_dir) do
 
     setup_tool({
         name = tool,
-        path = tools_dir .. "/" .. tool,
+        path = constants.tools_dir .. "/" .. tool,
     })
 
     ::continue::
@@ -146,16 +143,15 @@ if not lfs.chdir(config.root_path) then
     error("unable to change directory to '" .. config.root_path .. "'")
 end
 
-local bin_dir = tools_dir .. "/bin"
-if not lfs.exists(bin_dir) then
-    lfs.mkdir(bin_dir)
+if not lfs.exists(constants.bin_dir) then
+    lfs.mkdir(constants.bin_dir)
 end
 
 verbose("creating links...")
 
 for file_name, file_info in pairs(portable.file_infos) do
     local function open_batch_file()
-        local batch_file_path = bin_dir .. "/" .. file_name .. ".bat"
+        local batch_file_path = constants.bin_dir .. "/" .. file_name .. ".bat"
         local batch_file = io.open(batch_file_path, "w")
         if not batch_file then
             print(("unable to open file '%s'"):format(batch_file_path))
@@ -199,10 +195,9 @@ end
 
 verbose("done creating links")
 
-local bin_path = tools_dir:gsub("/", "\\") .. "\\bin"
-verbose("adding '" .. bin_path .. "' to PATH")
+verbose("adding '" .. constants.bin_dir .. "' to PATH")
 
-if not config.env.add("PATH", bin_path, config.env.scope.user, true, ";") then
+if not config.env.add("PATH", constants.bin_dir, config.env.scope.user, true, ";") then
     fatal("unable to add bin path to PATH")
 end
 

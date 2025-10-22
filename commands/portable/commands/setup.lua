@@ -197,7 +197,7 @@ verbose("done creating links")
 
 verbose("adding '" .. constants.bin_dir .. "' to PATH")
 
-if not config.env.add("PATH", constants.bin_dir, config.env.scope.user, true, ";") then
+if not config.env.add("PATH", (constants.bin_dir .. "/"):gsub("/", "\\"), config.env.scope.user, true, ";") then
     fatal("unable to add bin path to PATH")
 end
 

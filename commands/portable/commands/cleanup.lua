@@ -54,7 +54,7 @@ for tool in lfs.dir(constants.tools_dir) do
     cleanup_tool(tool)
 end
 
-local win_bin_dir = constants.bin_dir:gsub("/", "\\")
+local win_bin_dir = (constants.bin_dir .. "/"):gsub("/", "\\")
 
 verbose("removing '" .. constants.bin_dir .. "'")
 config.env.remove("PATH", win_bin_dir, config.env.scope.user)

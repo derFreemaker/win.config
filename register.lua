@@ -1,5 +1,4 @@
 local tools = require("tools.tools")
-local utils = require("tools.utils")
 
 -- environment variables
 tools.add_tool({
@@ -140,9 +139,9 @@ tools.add_tool({
             return false, "unable to create config junction"
         end
 
-        local success, _, output = utils.display_execute("git clone https://github.com/wbthomason/packer.nvim '" ..
-            config.env.get("LOCALAPPDATA") .. "/nvim-data/site/pack/packer/start/packer.nvim'")
-        return success, output
+        local result = config.env.execute("git", { "clone", "https://github.com/wbthomason/packer.nvim '" ..
+            config.env.get("LOCALAPPDATA") .. "/nvim-data/site/pack/packer/start/packer.nvim'" })
+        return result.success, result.stderr
     end
 })
 tools.add_tool({

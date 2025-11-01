@@ -24,7 +24,7 @@ function winget.install(tool_config)
         {
             "install",
             "--disable-interactivity",
-            "--accept-source-aggreements",
+            "--accept-source-agreements",
             "--accept-package-agreements",
             "--id", tool_config.id,
             "-e",
@@ -60,7 +60,7 @@ function winget.upgrade(tool_config)
         {
             "upgrade",
             "--disable-interactivity",
-            "--accept-source-aggreements",
+            "--accept-source-agreements",
             "--accept-package-agreements",
             "--id", tool_config.id,
             "-e"

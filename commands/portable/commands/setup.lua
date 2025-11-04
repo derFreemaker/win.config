@@ -150,8 +150,8 @@ end
 verbose("creating links...")
 
 for file_name, file_info in pairs(portable.file_infos) do
-    local function open_batch_file()
-        local batch_file_path = constants.bin_dir .. "/" .. file_name .. ".bat"
+    local function open_cmd_file()
+        local batch_file_path = constants.bin_dir .. "/" .. file_name .. ".cmd"
         local batch_file = io.open(batch_file_path, "w")
         if not batch_file then
             print(("unable to open file '%s'"):format(batch_file_path))
@@ -166,9 +166,9 @@ for file_name, file_info in pairs(portable.file_infos) do
     if file_info.proxy then
         verbose("creating proxy for '" .. file_info.path .. "'")
         if config.env.is_root then
-            config.path.create_symlink(file_name .. ".exe", windows_conform_path)
+            config.path.create_symlink(constants.bin_dir .. "/" .. file_name .. ".exe", windows_conform_path)
         else
-            local batch_file = open_batch_file()
+            local batch_file = open_cmd_file()
             if not batch_file then
                 goto continue
             end
@@ -178,14 +178,14 @@ for file_name, file_info in pairs(portable.file_infos) do
             batch_file:close()
         end
     else
-        verbose("creating batch file for '" .. file_info.path .. "'")
-        local batch_file = open_batch_file()
+        verbose("creating '.cmd' file for '" .. file_info.path .. "'")
+        local batch_file = open_cmd_file()
         if not batch_file then
             goto continue
         end
 
-        batch_file:write(("start \"\" \"%s\" %s")
-            :format(windows_conform_path, table.concat(file_info.args, " ")))
+        batch_file:write(("\"%s\" %s")
+            :format(windows_conform_path, table.concat(file_info.args or {}, " ")))
         batch_file:write(" %*")
         batch_file:close()
     end

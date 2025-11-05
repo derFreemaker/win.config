@@ -25,7 +25,7 @@ end
 ---@field path string
 
 ---@class config.portable
----@field package file_infos { path: string, args: string[]?, proxy: boolean? }[]
+---@field package file_infos { prefix: string?, path: string, args: string[]?, proxy: boolean? }[]
 ---@field package run_after_funcs { tool: config.portable.tool, func: function }[]
 ---
 ---@field package current_tool config.portable.tool
@@ -132,7 +132,7 @@ for tool in lfs.dir(constants.tools_dir) do
 
     setup_tool({
         name = tool,
-        path = constants.tools_dir .. "/" .. tool,
+        path = (constants.tools_dir .. "/" .. tool .. "/"):gsub("/", "\\"),
     })
 
     ::continue::
@@ -163,7 +163,7 @@ for file_name, file_info in pairs(portable.file_infos) do
 
     local windows_conform_path = file_info.path:gsub("/", "\\")
 
-    if file_info.proxy then
+    if file_info.proxy and not file_info.prefix then
         verbose("creating proxy for '" .. file_info.path .. "'")
         if config.env.is_root then
             config.path.create_symlink(constants.bin_dir .. "/" .. file_name .. ".exe", windows_conform_path)
@@ -184,8 +184,9 @@ for file_name, file_info in pairs(portable.file_infos) do
             goto continue
         end
 
-        batch_file:write(("\"%s\" %s")
-            :format(windows_conform_path, table.concat(file_info.args or {}, " ")))
+
+        batch_file:write(("%s \"\" \"%s\" %s")
+            :format(file_info.prefix or "", windows_conform_path, table.concat(file_info.args, " ")))
         batch_file:write(" %*")
         batch_file:close()
     end

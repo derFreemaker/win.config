@@ -187,7 +187,7 @@ for file_name, file_info in pairs(portable.file_infos) do
 
 
         batch_file:write(("%s\"%s\" %s")
-            :format(file_info.prefix or "", windows_conform_path, table.concat(file_info.args, " ")))
+            :format(file_info.prefix or "", windows_conform_path, table.concat(file_info.args or {}, " ")))
         batch_file:write(" %*")
         batch_file:close()
     end

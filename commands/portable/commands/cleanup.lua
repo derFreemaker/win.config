@@ -2,11 +2,9 @@ local constants = require("commands.portable.commands.constants")
 
 print("cleaning up...")
 
-if not lfs.exists(constants.tools_dir)
-    or lfs.attributes(constants.tools_dir).mode ~= "directory" then
-    fatal("no tools directory found: " .. constants.tools_dir)
-end
+require("commands.portable.commands.helper")
 
+---@param tool config.portable.tool
 local function cleanup_tool(tool)
     local tool_path = constants.tools_dir .. "/" .. tool
 
@@ -50,13 +48,32 @@ local function cleanup_tool(tool)
     end
 end
 
-for tool in lfs.dir(constants.tools_dir) do
+for tool_name in lfs.dir(constants.tools_dir) do
+    local attr = lfs.attributes(constants.tools_dir .. "/" .. tool_name)
+    if not attr
+        or attr.mode ~= "directory"
+        or tool_name == "."
+        or tool_name == ".." then
+        goto continue
+    end
+
+    ---@type config.portable.tool
+    local tool = {
+        name = tool_name,
+        path = (constants.tools_dir .. "/" .. tool_name .. "/"):gsub("/", "\\"),
+    }
+
+    print(("tool '%s'..."):format(tool.name))
+    portable.set_current_tool(tool)
+
     cleanup_tool(tool)
+
+    ::continue::
 end
 
-local win_bin_dir = (constants.bin_dir .. "/"):gsub("/", "\\")
-
 verbose("removing '" .. constants.bin_dir .. "'")
+
+local win_bin_dir = (constants.bin_dir .. "/"):gsub("/", "\\")
 config.env.remove("PATH", win_bin_dir, config.env.scope.user)
 if lfs.exists(constants.bin_dir) then
     local result = config.env.execute("rm", { "-r", win_bin_dir }, true)
@@ -71,5 +88,7 @@ end
 config.env.unset("TOOLS_FREEMAKER_PORTABLE", config.env.scope.user)
 config.env.unset("USERCONFIG_FREEMAKER_PORTABLE", config.env.scope.user)
 config.env.unset("DRIVE_FREEMAKER_PORTABLE", config.env.scope.user)
+
+portable.execute_queued_actions()
 
 print("done cleaning up!")

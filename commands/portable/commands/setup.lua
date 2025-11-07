@@ -53,20 +53,15 @@ end
 ---@class config.portable.file_path_options
 ---@field name string
 ---@field path string
----@field proxy boolean? will invoke with 'start' on none admin right setup when false
 ---@field args string[]?
 ---@field prefix string?
 
 ---@param opt config.portable.file_path_options
 function portable.add_file_to_path(opt)
-    if opt.proxy and opt.args then
-        error("a proxy file cannot have args")
-    end
-
     portable.file_infos[opt.name] = {
         path = portable.current_tool.path .. "/" .. opt.path,
         args = opt.args,
-        proxy = opt.proxy or not opt.args,
+        proxy = not opt.args and not opt.prefix,
         prefix = opt.prefix,
     }
 end

@@ -20,18 +20,30 @@ if not lfs.exists(constants.tools_dir)
     fatal("no tools directory found: " .. constants.tools_dir)
 end
 
+if not lfs.exists(constants.bin_dir) then
+    if not lfs.mkdir(constants.bin_dir) then
+        fatal("unable to create: " .. constants.bin_dir)
+    end
+end
+
+verbose("adding '" .. constants.bin_dir .. "' to PATH")
+
+if not config.env.add("PATH", (constants.bin_dir .. "/"):gsub("/", "\\"), config.env.scope.user, true, ";") then
+    fatal("unable to add bin path to PATH")
+end
+
 ---@class config.portable.tool
 ---@field name string
 ---@field path string
 
 ---@class config.portable
----@field package file_infos { prefix: string?, path: string, args: string[]?, proxy: boolean? }[]
----@field package run_after_funcs { tool: config.portable.tool, func: function }[]
+---@field package path_files table<string, boolean?>
+---@field package queued_actions { tool: config.portable.tool, func: function }[]
 ---
 ---@field package current_tool config.portable.tool
 portable = {
-    file_infos = {},
-    run_after_funcs = {},
+    path_files = {},
+    queued_actions = {},
 }
 
 ---@return config.portable.tool
@@ -50,25 +62,90 @@ function portable.set_current_tool(tool)
     portable.current_tool = tool
 end
 
----@class config.portable.file_path_options
+---@class config.portable.path_file_options
 ---@field name string
 ---@field path string
 ---@field args string[]?
 ---@field prefix string?
 
----@param opt config.portable.file_path_options
+---@param opt config.portable.path_file_options
 function portable.add_file_to_path(opt)
-    portable.file_infos[opt.name] = {
-        path = portable.current_tool.path .. "/" .. opt.path,
-        args = opt.args,
-        proxy = not opt.args and not opt.prefix,
-        prefix = opt.prefix,
-    }
+    if portable.path_files[opt.name] then
+        error("file already exists: " .. opt.name)
+    end
+    portable.path_files[opt.name] = true
+
+    ---@return file*
+    local function open_cmd_file()
+        local batch_file_path = constants.bin_dir .. "/" .. opt.name .. ".cmd"
+        local batch_file = io.open(batch_file_path, "w+")
+        if not batch_file then
+            error(("unable to open file '%s'"):format(batch_file_path))
+        end
+
+        return batch_file
+    end
+
+    local reverse = opt.path:reverse()
+    local pos = reverse:find(".", 0, true)
+    local ext = reverse:sub(0, pos or 0)
+
+    local path = (portable.current_tool.path .. opt.path):gsub("/", "\\")
+    if not opt.args and not opt.prefix then
+        if config.env.is_root then
+            verbose("creating symlink for '" .. opt.name .. "'")
+            config.path.create_symlink(constants.bin_dir .. "/" .. opt.name .. ext, path)
+        else
+            verbose("creating indirect '.cmd' file as symlink fallback for '" .. opt.name .. "'")
+            local file = open_cmd_file()
+
+            file:write(("\"%s\""):format(path))
+            file:write(" %*")
+            file:close()
+        end
+    else
+        verbose("creating '.cmd' file for '" .. opt.name .. "'")
+        local file = open_cmd_file()
+
+        file:write(("%s\"%s\" %s")
+            :format(opt.prefix or "", path, table.concat(opt.args or {}, " ")))
+        file:write(" %*")
+        file:close()
+    end
+end
+
+---@class config.portable.custom_path_file_options
+---@field filename string
+---@field content string
+
+---@param opt config.portable.custom_path_file_options
+function portable.add_custom_file_to_path(opt)
+    local pos = opt.filename:find(".", 0, true)
+    local name
+    if pos then
+        name = opt.filename:sub(0, pos - 1)
+    else
+        name = opt.filename
+    end
+
+    if portable.path_files[name] then
+        error("file already exists: " .. name)
+    end
+    portable.path_files[name] = true
+
+    local path = (constants.bin_dir .. "/" .. opt.filename):gsub("/", "\\")
+    local file = io.open(path, "w+")
+    if not file then
+        error("unable to open file: ")
+    end
+
+    file:write(opt.content)
+    file:close()
 end
 
 ---@param func function
-function portable.run_after(func)
-    table.insert(portable.run_after_funcs, {
+function portable.queue_action(func)
+    table.insert(portable.queued_actions, {
         tool = portable.get_current_tool(),
         func = func,
     })
@@ -139,68 +216,24 @@ if not lfs.chdir(config.root_path) then
     error("unable to change directory to '" .. config.root_path .. "'")
 end
 
-if not lfs.exists(constants.bin_dir) then
-    lfs.mkdir(constants.bin_dir)
+if not config.env.broadcast_change_message() then
+    fatal("unable to broadcast environment change")
 end
 
-verbose("creating links...")
+verbose("running queued actions...")
 
-for file_name, file_info in pairs(portable.file_infos) do
-    local function open_cmd_file()
-        local batch_file_path = constants.bin_dir .. "/" .. file_name .. ".cmd"
-        local batch_file = io.open(batch_file_path, "w")
-        if not batch_file then
-            print(("unable to open file '%s'"):format(batch_file_path))
-            return nil
-        end
+for _, action in pairs(portable.queued_actions) do
+    portable.set_current_tool(action.tool)
 
-        return batch_file
+    local thread = coroutine.create(action.func)
+    local success, action_err_msg = coroutine.resume(thread)
+
+    if not success then
+        warn("tool '" .. action.tool.name .. "' queued action failed with:\n"
+            .. debug.traceback(thread, action_err_msg))
     end
 
-    local windows_conform_path = file_info.path:gsub("/", "\\")
-
-    if file_info.proxy and not file_info.prefix then
-        verbose("creating proxy for '" .. file_info.path .. "'")
-        if config.env.is_root then
-            config.path.create_symlink(constants.bin_dir .. "/" .. file_name .. ".exe", windows_conform_path)
-        else
-            local batch_file = open_cmd_file()
-            if not batch_file then
-                goto continue
-            end
-
-            batch_file:write(("\"%s\""):format(windows_conform_path))
-            batch_file:write(" %*")
-            batch_file:close()
-        end
-    else
-        verbose("creating '.cmd' file for '" .. file_info.path .. "'")
-        local batch_file = open_cmd_file()
-        if not batch_file then
-            goto continue
-        end
-
-
-        batch_file:write(("%s\"%s\" %s")
-            :format(file_info.prefix or "", windows_conform_path, table.concat(file_info.args or {}, " ")))
-        batch_file:write(" %*")
-        batch_file:close()
-    end
-
-    ::continue::
-end
-
-verbose("done creating links")
-
-verbose("adding '" .. constants.bin_dir .. "' to PATH")
-
-if not config.env.add("PATH", (constants.bin_dir .. "/"):gsub("/", "\\"), config.env.scope.user, true, ";") then
-    fatal("unable to add bin path to PATH")
-end
-
-for _, func in pairs(portable.run_after_funcs) do
-    portable.set_current_tool(func.tool)
-    pcall(func.func)
+    coroutine.close(thread)
 end
 
 print("done setting up!")

@@ -55,6 +55,7 @@ end
 ---@field path string
 ---@field proxy boolean? will invoke with 'start' on none admin right setup when false
 ---@field args string[]?
+---@field prefix string?
 
 ---@param opt config.portable.file_path_options
 function portable.add_file_to_path(opt)
@@ -65,8 +66,8 @@ function portable.add_file_to_path(opt)
     portable.file_infos[opt.name] = {
         path = portable.current_tool.path .. "/" .. opt.path,
         args = opt.args,
-        proxy = opt
-            .proxy or not opt.args
+        proxy = opt.proxy or not opt.args,
+        prefix = opt.prefix,
     }
 end
 
@@ -185,7 +186,7 @@ for file_name, file_info in pairs(portable.file_infos) do
         end
 
 
-        batch_file:write(("%s \"\" \"%s\" %s")
+        batch_file:write(("%s\"%s\" %s")
             :format(file_info.prefix or "", windows_conform_path, table.concat(file_info.args, " ")))
         batch_file:write(" %*")
         batch_file:close()

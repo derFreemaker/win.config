@@ -6,14 +6,12 @@ require("commands.portable.commands.helper")
 
 ---@param tool config.portable.tool
 local function cleanup_tool(tool)
-    local tool_path = constants.tools_dir .. "/" .. tool.name
-
-    local attr = lfs.attributes(tool_path)
+    local attr = lfs.attributes(tool.path)
     if not attr or attr.mode ~= "directory" then
         return
     end
 
-    local tool_config_path = tool_path .. "/.config"
+    local tool_config_path = tool.path .. "/.config"
     if not lfs.exists(tool_config_path) then
         return
     end
@@ -21,29 +19,28 @@ local function cleanup_tool(tool)
 
     local disable_path = tool_config_path .. "/.disable"
     if lfs.exists(disable_path) then
-        print(("tool '%s' is disabled"):format(tool))
+        print("is disabled")
         return
     end
 
 
     local tool_cleanup_path = tool_config_path .. "/cleanup.lua"
     if not lfs.exists(tool_cleanup_path) then
-        verbose("tool '" .. tool .. "' has no 'cleanup.lua' script in '.config' directory")
+        verbose("has no 'cleanup.lua' script in '.config' directory")
         return
     end
 
     local cleanup_func, err_msg = loadfile(tool_cleanup_path)
     if not cleanup_func then
-        print(("unable to load cleanup file for tool '%s'\n%s"):format(tool, err_msg))
+        print(("unable to load cleanup file\n%s"):format(tool, err_msg))
         return
     end
 
-    print(("cleaning up tool '%s'..."):format(tool))
     local tool_thread = coroutine.create(cleanup_func)
     local success, setup_err_msg = coroutine.resume(tool_thread)
 
     if not success then
-        print("tool '" .. tool .. "' cleanup failed with:\n"
+        print("cleanup failed with:\n"
             .. debug.traceback(tool_thread, setup_err_msg))
     end
 end

@@ -6,7 +6,7 @@ require("commands.portable.commands.helper")
 
 ---@param tool config.portable.tool
 local function cleanup_tool(tool)
-    local tool_path = constants.tools_dir .. "/" .. tool
+    local tool_path = constants.tools_dir .. "/" .. tool.name
 
     local attr = lfs.attributes(tool_path)
     if not attr or attr.mode ~= "directory" then

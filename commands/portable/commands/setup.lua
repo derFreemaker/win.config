@@ -18,7 +18,7 @@ if not config.env.set("TOOLS_FREEMAKER_PORTABLE", constants.tools_dir:gsub("/", 
     fatal("unable to set tools env variable")
 end
 
-if not config.env.add("PATH", (constants.bin_dir .. "/"):gsub("/", "\\"), config.env.scope.user, true, ";") then
+if not config.env.add("PATH", (constants.bin_dir .. "/"):gsub("/", "\\"), config.env.scope.user, true) then
     fatal("unable to add bin path to PATH")
 end
 

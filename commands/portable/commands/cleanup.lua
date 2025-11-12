@@ -68,6 +68,8 @@ for tool_name in lfs.dir(constants.tools_dir) do
     ::continue::
 end
 
+portable.execute_queued_actions()
+
 verbose("removing '" .. constants.bin_dir .. "'")
 
 local win_bin_dir = (constants.bin_dir .. "/"):gsub("/", "\\")
@@ -86,6 +88,9 @@ config.env.unset("TOOLS_FREEMAKER_PORTABLE", config.env.scope.user)
 config.env.unset("USERCONFIG_FREEMAKER_PORTABLE", config.env.scope.user)
 config.env.unset("DRIVE_FREEMAKER_PORTABLE", config.env.scope.user)
 
-portable.execute_queued_actions()
+verbose("broadcast environment change...")
+if not config.env.broadcast_change_message() then
+    fatal("unable to broadcast environment change")
+end
 
 print("done cleaning up!")

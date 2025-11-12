@@ -89,6 +89,7 @@ if not lfs.chdir(config.root_path) then
     error("unable to change directory to '" .. config.root_path .. "'")
 end
 
+verbose("broadcast environment change...")
 if not config.env.broadcast_change_message() then
     fatal("unable to broadcast environment change")
 end

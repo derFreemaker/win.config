@@ -140,12 +140,14 @@ tools.add_tool({
         end
 
         local result = config.env.execute("git", { "clone", "https://github.com/wbthomason/packer.nvim '" ..
-            config.env.get("LOCALAPPDATA") .. "/nvim-data/site/pack/packer/start/packer.nvim'" })
+        config.env.get("LOCALAPPDATA") .. "/nvim-data/site/pack/packer/start/packer.nvim'" })
         return result.success, result.stderr
     end
 })
 tools.add_tool({
     name = "Zed",
+    id = "ZedIndustries.Zed",
+    handler = tools.winget,
     setup = function(_)
         if not config.path.create_junction(config.env.get("APPDATA") .. "/Zed", config.root_path .. "editor/zed") then
             return false, "unable to create config junction"

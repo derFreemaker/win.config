@@ -1,3 +1,5 @@
+$env:COLORTERM = "truecolor"
+
 . "$env:USERCONFIG_FREEMAKER/scripts/load.ps1"
 
 # Neovim alias

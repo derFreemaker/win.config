@@ -7,6 +7,7 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "lsp_document_colors": "inlay",
   "disable_ai": true,
 
   // panels
@@ -39,6 +40,7 @@
 
   // code stuff
   "inlay_hints": {
+    "show_parameter_hints": true,
     "enabled": true,
   },
   "languages": {
@@ -88,4 +90,34 @@
 
   // other
   "ensure_final_newline_on_save": true,
+  "theme_overrides": {
+    "Colorizer Pro": {
+      "syntax": {
+        "attribute": {
+          "color": "#c47bb8",
+        },
+        "boolean": {
+          "color": "#e98fd9",
+        },
+        "comment": {
+          "color": "#787c83",
+        },
+        "function": {
+          "color": "#7af0e0",
+        },
+        "keyword": {
+          "color": "#ff8943",
+        },
+        "number": {
+          "color": "#26a8b4",
+        },
+        "type": {
+          "color": "#b4b4df",
+        },
+        "string": {
+          "color": "#5caa66",
+        },
+      },
+    },
+  },
 }

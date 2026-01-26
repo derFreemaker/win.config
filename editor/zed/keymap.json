@@ -60,5 +60,18 @@
       "ctrl-n": "project_panel::NewFile",
       "ctrl-shift-n": "project_panel::NewDirectory"
     }
-  }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-shift-h": null,
+    }
+  },
+  {
+    "context": "Pane",
+    "bindings": {
+      "ctrl-shift-h": null,
+      "ctrl-r": "search::ToggleReplace"
+    }
+  },
 ]

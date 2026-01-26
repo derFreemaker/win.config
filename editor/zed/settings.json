@@ -106,7 +106,7 @@
           "color": "#787c83",
         },
         "function": {
-          "color": "#7af0e0",
+          "color": "#54a6f2",
         },
         "keyword": {
           "color": "#ff8943",
@@ -119,6 +119,9 @@
         },
         "string": {
           "color": "#5caa66",
+        },
+        "variable": {
+          "color": "#27e4dd",
         },
       },
     },
